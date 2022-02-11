@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>基于Hexo框架搭建个人网站的实现记录</title>
+    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
     <url>/2022/02/10/1-blogsetupnotes/</url>
     <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细）">枫叶</a>的详细教程成功搭建本博客网站的一些心得体会。</p>
 <h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
@@ -38,7 +38,7 @@
 <h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的Butterfly，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容，之后我会将配置主题时遇到的一些问题以及解决方法另外发一个Post。</p>
 ]]></content>
       <categories>
-        <category>经验记录</category>
+        <category>博客维护</category>
       </categories>
       <tags>
         <tag>Blog</tag>
