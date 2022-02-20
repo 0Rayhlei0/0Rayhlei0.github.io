@@ -9,7 +9,7 @@
     <atom:link href="http://raylei.space/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>一个给保险公司做数据分析的人</description>
-    <pubDate>Sun, 20 Feb 2022 13:12:33 GMT</pubDate>
+    <pubDate>Sun, 20 Feb 2022 14:03:35 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -18,7 +18,7 @@
       <guid>http://raylei.space/2022/02/19/3-excel-tool-develop-1/</guid>
       <pubDate>Sat, 19 Feb 2022 05:03:53 GMT</pubDate>
       
-      <description>记录最近工作中设计的一个Excel模板，目的是将导出的月度数据直接按产品YTD保费量排行并以不同时间维度(如季度, 半年度等)分组展示，其中涉及的一些Excel小技巧可以应用至不同目的的报告。</description>
+      <description>记录最近工作中设计的一个Excel模板的设计到实现方法，工具目的是将导出的月度数据直接按产品YTD保费量排行展示。</description>
       
       
       

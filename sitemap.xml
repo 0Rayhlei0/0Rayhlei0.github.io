@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://raylei.space/2022/02/10/1-blog_setup_notes/</loc>
+    <loc>http://raylei.space/about/index.html</loc>
     
     <lastmod>2022-02-20</lastmod>
     
@@ -20,18 +20,18 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/2022/02/12/2-typora_picgo_config/</loc>
+    <loc>http://raylei.space/2022/02/10/1-blog_setup_notes/</loc>
     
-    <lastmod>2022-02-19</lastmod>
+    <lastmod>2022-02-20</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://raylei.space/about/index.html</loc>
+    <loc>http://raylei.space/2022/02/12/2-typora_picgo_config/</loc>
     
-    <lastmod>2022-02-12</lastmod>
+    <lastmod>2022-02-19</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -93,20 +93,6 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/tags/Excel/</loc>
-    <lastmod>2022-02-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/tags/%E5%B7%A5%E4%BD%9C%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2022-02-20</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://raylei.space/tags/Typora/</loc>
     <lastmod>2022-02-20</lastmod>
     <changefreq>weekly</changefreq>
@@ -115,6 +101,20 @@
   
   <url>
     <loc>http://raylei.space/tags/PicGo/</loc>
+    <lastmod>2022-02-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/Excel/</loc>
+    <lastmod>2022-02-20</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/%E5%B7%A5%E4%BD%9C%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2022-02-20</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
