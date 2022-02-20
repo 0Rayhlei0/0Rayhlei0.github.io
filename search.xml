@@ -1,71 +1,196 @@
 <?xml version="1.0" encoding="utf-8"?>
-<search> 
-  
-  
-    
-    <entry>
-      <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
-      <link href="/2022/02/12/2-typora_picgo_config/"/>
-      <url>/2022/02/12/2-typora_picgo_config/</url>
-      
-        <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p><h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="创建博文"><a href="#创建博文" class="headerlink" title="创建博文"></a>创建博文</h2><p>先介绍一些在Hexo中发文的基础知识。</p><h3 id="Hexo框架下博文的保存"><a href="#Hexo框架下博文的保存" class="headerlink" title="Hexo框架下博文的保存"></a>Hexo框架下博文的保存</h3><p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p><ul><li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li><li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li><li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li><li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li></ul><p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p><h3 id="Hexo新建页面-x2F-博文命令"><a href="#Hexo新建页面-x2F-博文命令" class="headerlink" title="Hexo新建页面&#x2F;博文命令"></a>Hexo新建页面&#x2F;博文命令</h3><p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure><p>hexo命令创建三类文件的方式分别如下：</p><ul><li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li><li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li><li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li></ul><h2 id="使用Typora和PicGo编辑博文"><a href="#使用Typora和PicGo编辑博文" class="headerlink" title="使用Typora和PicGo编辑博文"></a>使用Typora和PicGo编辑博文</h2><p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p><h3 id="Typora是什么"><a href="#Typora是什么" class="headerlink" title="Typora是什么"></a>Typora是什么</h3><p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p><h3 id="PicGo是什么"><a href="#PicGo是什么" class="headerlink" title="PicGo是什么"></a>PicGo是什么</h3><p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p><h3 id="具体如何配置"><a href="#具体如何配置" class="headerlink" title="具体如何配置"></a>具体如何配置</h3><p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p><h4 id="配置Typora"><a href="#配置Typora" class="headerlink" title="配置Typora"></a>配置Typora</h4><p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p><p><img src="https://raw.githubusercontent.com/0Rayhlei0/Pics/main/post_img/image-20220214215927465.png" alt="按图中方式配置"></p><p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p><h4 id="配置图床"><a href="#配置图床" class="headerlink" title="配置图床"></a>配置图床</h4><p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p><p><img src="https://raw.githubusercontent.com/0Rayhlei0/Pics/main/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p><p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure><p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p><p><img src="https://raw.githubusercontent.com/0Rayhlei0/Pics/main/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p><h4 id="使用图床"><a href="#使用图床" class="headerlink" title="使用图床"></a>使用图床</h4><p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p><h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>]]></content>
-      
-      
+<search>
+  <entry>
+    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
+    <url>/2022/02/10/1-blog_setup_notes/</url>
+    <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
+<h2 id="关于第二篇Git安装的问题"><a href="#关于第二篇Git安装的问题" class="headerlink" title="关于第二篇Git安装的问题"></a>关于第二篇Git安装的问题</h2><p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
+<ul>
+<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
+<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
+<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
+</ul>
+<h2 id="关于第三篇绑定GitHub并提交文件"><a href="#关于第三篇绑定GitHub并提交文件" class="headerlink" title="关于第三篇绑定GitHub并提交文件"></a>关于第三篇绑定GitHub并提交文件</h2><p>跟随步骤进行时有两点需要注意：</p>
+<h3 id="Git的username和email的配置"><a href="#Git的username和email的配置" class="headerlink" title="Git的username和email的配置"></a>Git的username和email的配置</h3><p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记”, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
+<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
+
+<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
+<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
+<h3 id="从Master换成Main的掩耳盗铃"><a href="#从Master换成Main的掩耳盗铃" class="headerlink" title="从Master换成Main的掩耳盗铃"></a>从Master换成Main的掩耳盗铃</h3><p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
+<h4 id="push文件时的命令"><a href="#push文件时的命令" class="headerlink" title="push文件时的命令"></a>push文件时的命令</h4><p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
+
+<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
+<h4 id="初始化本地仓库时要做的修改"><a href="#初始化本地仓库时要做的修改" class="headerlink" title="初始化本地仓库时要做的修改"></a>初始化本地仓库时要做的修改</h4><p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
+<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么要提交到GitHub"><a href="#为什么要提交到GitHub" class="headerlink" title="为什么要提交到GitHub?"></a>为什么要提交到GitHub?</h3><p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
+<h2 id="关于第五篇安装node-js和Hexo"><a href="#关于第五篇安装node-js和Hexo" class="headerlink" title="关于第五篇安装node.js和Hexo"></a>关于第五篇安装node.js和Hexo</h2><p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
+<h3 id="设置文件夹权限"><a href="#设置文件夹权限" class="headerlink" title="设置文件夹权限"></a>设置文件夹权限</h3><p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
+<h3 id="Hexo是什么？"><a href="#Hexo是什么？" class="headerlink" title="Hexo是什么？"></a>Hexo是什么？</h3><p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
+<p>关于Hexo相关的命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
+<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
+]]></content>
       <categories>
-          
-          <category> 博客维护 </category>
-          
+        <category>博客维护</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Blog </tag>
-            
-            <tag> GitHub </tag>
-            
-            <tag> 日常学习 </tag>
-            
-            <tag> Typora </tag>
-            
-            <tag> PicGo </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
-      <link href="/2022/02/10/1-blog_setup_notes/"/>
-      <url>/2022/02/10/1-blog_setup_notes/</url>
-      
-        <content type="html"><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p><h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p><h2 id="关于第二篇Git安装的问题"><a href="#关于第二篇Git安装的问题" class="headerlink" title="关于第二篇Git安装的问题"></a>关于第二篇Git安装的问题</h2><p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p><ul><li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li><li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li><li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li></ul><h2 id="关于第三篇绑定GitHub并提交文件"><a href="#关于第三篇绑定GitHub并提交文件" class="headerlink" title="关于第三篇绑定GitHub并提交文件"></a>关于第三篇绑定GitHub并提交文件</h2><p>跟随步骤进行时有两点需要注意：</p><h3 id="Git的username和email的配置"><a href="#Git的username和email的配置" class="headerlink" title="Git的username和email的配置"></a>Git的username和email的配置</h3><p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure><p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记”, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p><p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure><p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p><p><img src="https://raw.githubusercontent.com/0Rayhlei0/Pics/main/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p><p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p><h3 id="从Master换成Main的掩耳盗铃"><a href="#从Master换成Main的掩耳盗铃" class="headerlink" title="从Master换成Main的掩耳盗铃"></a>从Master换成Main的掩耳盗铃</h3><p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p><h4 id="push文件时的命令"><a href="#push文件时的命令" class="headerlink" title="push文件时的命令"></a>push文件时的命令</h4><p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure><p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p><h4 id="初始化本地仓库时要做的修改"><a href="#初始化本地仓库时要做的修改" class="headerlink" title="初始化本地仓库时要做的修改"></a>初始化本地仓库时要做的修改</h4><p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p><p><img src="https://raw.githubusercontent.com/0Rayhlei0/Pics/main/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p><p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure><h3 id="为什么要提交到GitHub"><a href="#为什么要提交到GitHub" class="headerlink" title="为什么要提交到GitHub?"></a>为什么要提交到GitHub?</h3><p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p><h2 id="关于第五篇安装node-js和Hexo"><a href="#关于第五篇安装node-js和Hexo" class="headerlink" title="关于第五篇安装node.js和Hexo"></a>关于第五篇安装node.js和Hexo</h2><p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p><h3 id="设置文件夹权限"><a href="#设置文件夹权限" class="headerlink" title="设置文件夹权限"></a>设置文件夹权限</h3><p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p><p><img src="https://raw.githubusercontent.com/0Rayhlei0/Pics/main/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p><h3 id="Hexo是什么？"><a href="#Hexo是什么？" class="headerlink" title="Hexo是什么？"></a>Hexo是什么？</h3><p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p><p>关于Hexo相关的命令有：</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure><h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p><p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>]]></content>
-      
-      
+      <tags>
+        <tag>Blog</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
+    <url>/2022/02/19/3-excel-tool-develop-1/</url>
+    <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
+<mark class="hl-label default">本文中的出现的数据均经过随机扭曲处理，仅工具排版，逻辑与公式可供参考。</mark> 
+
+<hr>
+<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>上周为公司的月度保费报告做了一些升级调整，主要是涉及产品保费量展示部分由以前的<code>静态展示固定产品保费</code>改为<code>按保费量动态展示产品排行</code>。其中涉及的Excel公式技巧包括但不限于<code>OFFSET应用</code>，<code>动态排名展示</code>，<code>合并单元格文字</code>等。</p>
+<p>原工具中有三张表格，其中有互相参考验证数据正确性的<code>Tracking cells</code>，这里面我只讲稍微复杂一些的最后一张，且数据经过随机数扭曲，所以本文中展示的表格中的<code>Tracking cells</code>不会正常显示。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>该工具的最终目的是使用系统中生成的原始数据利用excel的公式功能自动整理计算数据并以要求形式展示。工具的目的是为了减少人力成本，因此一个原则是尽最大可能减少工具使用人在工具定板后使用时投入的成本，在此原则之上再尽力减少制作工具本身需要的时间和精力成本。本篇中我会分别介绍这个工具的版面设计以及从已有数据结构到需求的展示样式的逐步实现方法以及其中设计的一些可以广泛应用的小技巧。</p>
+<h2 id="工具版面设计"><a href="#工具版面设计" class="headerlink" title="工具版面设计"></a>工具版面设计</h2><p>我设计Excel工具时一个习惯的guideline是将数据分为至少三个部分：</p>
+<ol>
+<li>不改变原数据的结构，以所得即所用的原则组成一个<code>数据输入区</code>，用这样的数据做成的工具可以减少该工具在后续使用中对使用人<code>“调整原数据”</code>的需求，从而降低使用成本。</li>
+<li>将数据以标准形式整理并计算的<code>数据处理区</code>，这个部分通常会包含标准化的数据分类，这样做的目的是将原数据在该区域内透明地以标准化方式整理计算，以方便后续数据展示，并使各部分公式易于阅读和后续维护修改。</li>
+<li>最后是数据的输出形式，即<code>数据展示区</code>，这个部分通常是按<code>数据使用人</code>的需求调整，也即在工具制作期间制作人通常不能控制的部分，我们最后的目的就是将处理好的数据按使用人需求展示。</li>
+</ol>
+<p>本工具的版面既是根据上述习惯排版：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/img_20220220131551.png" alt="工具版面分为“数据输入区”，“数据处理区”和“数据展示区”三个部分"></p>
+<h2 id="工具设计思路"><a href="#工具设计思路" class="headerlink" title="工具设计思路"></a>工具设计思路</h2><p>在开始设计工具之前需要理清最重要的两点，第一是到手的原数据结构，第二就是最终需要展示的信息。在这个案例中，我们提取出来的原数据为月度数据，包含信息有4列，分别是<code>险种</code>，<code>新/续业务</code>，<code>本/上年信息</code>以及<code>保费</code>本身。其中每个险种分别会有本&#x2F;上年的新&#x2F;续业务保费，这样2x2&#x3D;4种的组合。因此可以知道标准格式中只需要包含<code>所有可能险种数x4</code>行既可以展示所有可能的输入组合。</p>
+<p>此时开始分析需要展示的信息，所需展示的信息可以分为3部分：首先是将险种按当前年度总保费的大小排名并展示前8个险种，将此之外的保费信息加总归入Other类。其次将各月保费按需求的时间维度分组加总展示(如月度，季度，半年度，当前合计等)。最后只需要动态地将未展示出来的险种名合并展示作为备注即可。</p>
+<p>为满足该需求，我的设计是将保费性质信息作为标准化维度放在数据处理区的最左边并以月份为列名排列所有数据输入区的数据，排列后在处理区将各险种按当年保费(新续业务加总)排出大小并标识，最后在展示区以OFFSET为引用处理区不同月度数据的方法，以降低制作工具本身所需的时间，提高公示的可读性和修改弹性。</p>
+<h2 id="实现方法"><a href="#实现方法" class="headerlink" title="实现方法"></a>实现方法</h2><p>此章中我不会事无巨细介绍所有出现的技巧，如何想要详细了解建议在最后链接中下载该工具样本自己研究，我的公式应该都是trackable的，这里我只会分别介绍几个可以广泛应用到其他需求中的方法和公式。</p>
+<h3 id="如何跳行-x2F-列引用数据"><a href="#如何跳行-x2F-列引用数据" class="headerlink" title="如何跳行&#x2F;列引用数据"></a>如何跳行&#x2F;列引用数据</h3><p>这是制作该工具时我使用的第一个小技巧，答案非常简单，既是<code>OFFSET</code>。在工具中可以看到，原数据中每月数据有4列信息，而数据处理区中我们只希望每1列展示一个月信息，这样导致的问题是如果不使用OFFSET而将处理区中的<code>SUMIFS</code>公式直接向右复制，则会使每个引用信息仅向右移动1列，从而导致<code>引用区域错位</code>。因此我们需要左边处理区每向右移动1列，公式中的引用区同步向右移动4列，才能将所有引用信息移动至原数据中的<code>下月中相应区域</code>。</p>
+<p>以处理区中最左上角的公式为例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220151308158.png" alt="image-20220220151308158"></p>
+<blockquote>
+<p>&#x3D;SUMIFS(OFFSET($V$30:$V$177,,E$28,,),OFFSET($U$30:$U$177,,E$28,,),$D30,OFFSET($T$30:$T$177,,E$28,,),$C30,OFFSET($S$30:$S$177,,E$28,,),$B30)&#x2F;1000000</p>
+</blockquote>
+<p>该公式除去OFFSET便是非常简单的SUMIF公式如下，即将原数据中的信息按标准模板加总排列：</p>
+<blockquote>
+<p>&#x3D;SUMIFS($V$30:$V$177,$U$30:$U$177,$D30,$T$30:$T$177,$C30,$S$30:$S$177,$B30)&#x2F;1000000</p>
+</blockquote>
+<p>那么OFFSET是怎么用的呢？OFFSET函数本身的作用就是以公式参数的方法来移动改变引用区域，他的参数如下：</p>
+<blockquote>
+<p>&#x3D;OFFSET(Reference, rows, cols, [height],[width])</p>
+</blockquote>
+<p>其中<code>Reference</code>为引用的区域，后面的四个参数分别代表在<code>Reference</code>的基础上要移动的<code>行数</code>，<code>列数</code>，<code>高度</code>，<code>宽度</code>，正数代表向右&#x2F;向下，负数反之。</p>
+<p>以我们的公式为例，<code>OFFSET($V$30:$V$177,,E$28,,)</code>即代表将<code>$V$30:$V$177</code>移动<code>E$28</code>标注的列数(此处为0，即不移动)，其他参数未设置则用<code>,</code>隔开。到这里我只需要将每个月的列上以等差数列向右排列引用所需移动的列数，即可以一个公式为每个月需要引用的原数据找到正确的引用位置。同样的方法在<code>数据展示区</code>也大量的使用，因此可以用一个公式以改变最少参数的方法来填入表格中。</p>
+<p>OFFSET这样的公式非常明显，是为了减轻工具制作和维护的成本而存在的，因为用到不同的公式越少，后期维护时就越简单，毕竟这里你也可以选择人手将不同月份的引用区域拖动到他们合适的位置，不过制作和维护的成本将大大增加。</p>
+<h3 id="仅对当前第一次出现的元素计算"><a href="#仅对当前第一次出现的元素计算" class="headerlink" title="仅对当前第一次出现的元素计算"></a>仅对当前第一次出现的元素计算</h3><p>我们想要将产品按当前合计保费量排名，也即将当年的新&#x2F;续保费加总并排名，但我们却不能直接使用SUMIF加总，因为按照我的版面设计，如果直接全部加总排行时每个产品会有两个相同的保费，从而影响排行名次。因此我们要想办法使每个产品名后仅出现一个加总保费。好在我们的数据处理区是标准化设计，上半部分全部是当年数据且每个险种按NB-RN的顺序规律排列。因此我们可以是用公式从上至下仅仅对该元素第一次出现时进行计算。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220152214570.png" alt="image-20220220152214570"></p>
+<blockquote>
+<p>&#x3D;IF(COUNTIF($B$30:$B30,$B30)&#x3D;1,SUM(OFFSET(E30:P30,,,2,)),0)</p>
+</blockquote>
+<p>这个公式分为两个部分，其中<code>IF</code>部分为重点，即判断语句<code>COUNTIF($B$30:$B30,$B30)=1</code>。需要注意其中<code>$B$30:$B30</code>中<code>:</code>后的<code>B30</code>仅仅固定了列数，因此该公式在下拉时该引用区域也会相应拉长。这就使得这个<code>COUNTIF</code>公式可以实现计算<code>从上到下到目前为止B列改行的元素出现过的次数</code>。而此时将判断语句写为<code>该COUNTIF为1</code>则表示从上到下第一次出现这个元素时，则计算后面的<code>SUM(OFFSET(E30:P30,,,2,))</code>，否则返回0。</p>
+<p>这个<code>SUM</code>函数中的<code>OFFSET</code> 的<code>height</code>参数被设置为<code>2</code>，因此加总包括该引用处在内的向下共<code>2</code>个单元格。以此实现每个出现的产品进行一次BN和RN的数值加总。</p>
+<h3 id="将出现过的数字按大小排名"><a href="#将出现过的数字按大小排名" class="headerlink" title="将出现过的数字按大小排名"></a>将出现过的数字按大小排名</h3><p>上一步中我们已经得到了每一个产品的当年总保费，那么使用<code>RANK.EQ</code>函数既可以对保费量进行排名从而使每个险种得到一个相应的排名。本来此时在展示区左边我只需要手动输入1,2,3便可以自动展示排名为1,2,3的产品名，但此处有一个特殊需求，那就是由于下架，要将PAM这个产品的除出排名，直接并入Other分类。但由于PAM还是有续保保费，因此它每个月的保费量也并不是固定的，虽然我可以使用<code>IF</code>函数将<code>PAM</code>的排名直接设定为<code>999</code>，但我们依然需要一个可以动态将已有数字从小到大排列的方法，否则会出现的问题是假设<code>PAM</code>实际排名是<code>6</code>，但它被公式设定为排名<code>999</code>，这会导致手动输入的<code>6</code>后面将没有可以引用的数据，我们需要自动将上方排列设置为4,5,7来跳过排名为<code>6</code>的<code>PAM</code>。</p>
+<p>我想到的办法是SMALL公式：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220153736776.png" alt="image-20220220153736776"></p>
+<blockquote>
+<p>&#x3D;SMALL($A$30:$A$103,ROW(A2)&#x2F;2)</p>
+</blockquote>
+<p>该公式可用参数为<code>SMALL(array,k)</code>，其作用既是返回该数据中第<code>K</code>个最小值，同理的还有<code>LARGE</code>函数。</p>
+<p>在这里的使用方法既是展示<code>在数据处理区中出现的排行数中排行第ROW(A2)/2的最小值</code>，使用<code>ROW(A2)</code>就可以使该<code>K</code>值随着公式的下拉而增加，<code>ROW(A2)</code>返回的是<code>A2</code>单元格的行数，也即<code>2</code>。该数值<code>/2</code>则可以使每个数值出现两次，以此匹配每个险种名显示两次以匹配NB和RN这两行数据，因为<code>A2</code>和<code>A3</code>两行的计算结果分别是<code>1</code>和<code>1.5</code>，都会被公式向下取整认定为<code>1</code>，同理如果希望数值重复<code>N</code>次，则<code>/N</code>即可实现，注意不要让商小于<code>1</code>。</p>
+<h3 id="IF公式的数组应用"><a href="#IF公式的数组应用" class="headerlink" title="IF公式的数组应用"></a>IF公式的数组应用</h3><p>最后的一个展示要求是将Other分类中，也即保费排名未在前八位但本年有保费收入的产品名备注出来:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220170737896.png" alt="image-20220220170737896"></p>
+<blockquote>
+<p>&#x3D;CONCAT(“<em>The Other Products contains “,IF(($Q$30:$Q$103&lt;&gt;0)</em>($A$30:$A$103&gt;MAX($A$6:$A$21)),LEFT($B$30:$B$103,3)&amp;”, “,””))</p>
+</blockquote>
+<p>这个公式中的主要知识点便是<strong>IF公式的数组应用</strong></p>
+<blockquote>
+<p>IF(($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;MAX($A$6:$A$21)),LEFT($B$30:$B$103,3)&amp;”, “,””)</p>
+</blockquote>
+<p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;9)</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有满足这两个条件的行，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
+<p>该工具的一个副本放在这里，有想看看的可以下载来看看：[下载链接](&#x2F;attachment&#x2F;Product ranking.xlsx)</p>
+]]></content>
       <categories>
-          
-          <category> 博客维护 </category>
-          
+        <category>MS Office</category>
       </categories>
-      
-      
-        <tags>
-            
-            <tag> Blog </tag>
-            
-            <tag> Hexo </tag>
-            
-            <tag> GitHub </tag>
-            
-            <tag> 日常学习 </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-  
-  
+      <tags>
+        <tag>Excel</tag>
+        <tag>工作学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
+    <url>/2022/02/12/2-typora_picgo_config/</url>
+    <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="创建博文"><a href="#创建博文" class="headerlink" title="创建博文"></a>创建博文</h2><p>先介绍一些在Hexo中发文的基础知识。</p>
+<h3 id="Hexo框架下博文的保存"><a href="#Hexo框架下博文的保存" class="headerlink" title="Hexo框架下博文的保存"></a>Hexo框架下博文的保存</h3><p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
+<ul>
+<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
+<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
+<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
+<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
+</ul>
+<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
+<h3 id="Hexo新建页面-x2F-博文命令"><a href="#Hexo新建页面-x2F-博文命令" class="headerlink" title="Hexo新建页面&#x2F;博文命令"></a>Hexo新建页面&#x2F;博文命令</h3><p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
+
+<p>hexo命令创建三类文件的方式分别如下：</p>
+<ul>
+<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
+<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
+<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
+</ul>
+<h2 id="使用Typora和PicGo编辑博文"><a href="#使用Typora和PicGo编辑博文" class="headerlink" title="使用Typora和PicGo编辑博文"></a>使用Typora和PicGo编辑博文</h2><p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
+<h3 id="Typora是什么"><a href="#Typora是什么" class="headerlink" title="Typora是什么"></a>Typora是什么</h3><p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
+<h3 id="PicGo是什么"><a href="#PicGo是什么" class="headerlink" title="PicGo是什么"></a>PicGo是什么</h3><p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
+<h3 id="具体如何配置"><a href="#具体如何配置" class="headerlink" title="具体如何配置"></a>具体如何配置</h3><p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
+<h4 id="配置Typora"><a href="#配置Typora" class="headerlink" title="配置Typora"></a>配置Typora</h4><p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
+<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
+<h4 id="配置图床"><a href="#配置图床" class="headerlink" title="配置图床"></a>配置图床</h4><p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
+<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
+<h4 id="使用图床"><a href="#使用图床" class="headerlink" title="使用图床"></a>使用图床</h4><p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
+<hr>
+<p>以下内容为2022年2月19日补充</p>
+<h2 id="使用Jsdelivr加速图床"><a href="#使用Jsdelivr加速图床" class="headerlink" title="使用Jsdelivr加速图床"></a>使用Jsdelivr加速图床</h2><p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
+<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
+<h4 id="Jsdelivr是什么？"><a href="#Jsdelivr是什么？" class="headerlink" title="Jsdelivr是什么？"></a>Jsdelivr是什么？</h4><p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
+<h4 id="如何在Typora中设置JSDelivr？"><a href="#如何在Typora中设置JSDelivr？" class="headerlink" title="如何在Typora中设置JSDelivr？"></a>如何在Typora中设置JSDelivr？</h4><p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
+<blockquote>
+<p>“customUrl”: “https:&#x2F;&#x2F; cdn.jsdelivr.net&#x2F;gh&#x2F;用户名&#x2F;仓库名”   #注意去掉网址中间的空格</p>
+</blockquote>
+<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
+<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
+<blockquote>
+<p>https:&#x2F;&#x2F; cdn.jsdelivr.net&#x2F;gh&#x2F;用户名&#x2F;仓库名&#x2F;<mark class="hl-label default">版本号</mark> &#x2F;文件路径   #注意去掉网址中间的空格</p>
+</blockquote>
+<hr>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Blog</tag>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+        <tag>Typora</tag>
+        <tag>PicGo</tag>
+      </tags>
+  </entry>
 </search>
