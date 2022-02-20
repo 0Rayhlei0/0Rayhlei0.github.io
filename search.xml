@@ -118,7 +118,7 @@
 </blockquote>
 <p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;9)</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有满足这两个条件的行，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
 <h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
-<p>该工具的一个副本放在这里，有想看看的可以下载来看看：[下载链接](&#x2F;attachment&#x2F;Product ranking.xlsx)</p>
+<p>该工具的一个副本放在这里,有兴趣可以看看：<a href="/attachment/Product_ranking.xlsx">下载链接</a></p>
 ]]></content>
       <categories>
         <category>MS Office</category>
