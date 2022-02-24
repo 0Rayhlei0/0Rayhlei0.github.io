@@ -107,13 +107,13 @@
       
       <category domain="http://raylei.space/tags/Blog/">Blog</category>
       
-      <category domain="http://raylei.space/tags/GitHub/">GitHub</category>
-      
-      <category domain="http://raylei.space/tags/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/">日常学习</category>
-      
       <category domain="http://raylei.space/tags/Typora/">Typora</category>
       
       <category domain="http://raylei.space/tags/PicGo/">PicGo</category>
+      
+      <category domain="http://raylei.space/tags/GitHub/">GitHub</category>
+      
+      <category domain="http://raylei.space/tags/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/">日常学习</category>
       
       
       <comments>http://raylei.space/2022/02/12/2-typora_picgo_config/#disqus_thread</comments>
@@ -138,11 +138,11 @@
       
       <category domain="http://raylei.space/tags/Blog/">Blog</category>
       
-      <category domain="http://raylei.space/tags/Hexo/">Hexo</category>
-      
       <category domain="http://raylei.space/tags/GitHub/">GitHub</category>
       
       <category domain="http://raylei.space/tags/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/">日常学习</category>
+      
+      <category domain="http://raylei.space/tags/Hexo/">Hexo</category>
       
       
       <comments>http://raylei.space/2022/02/10/1-blog_setup_notes/#disqus_thread</comments>
