@@ -2,6 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://raylei.space/2022/02/23/5-What_is_object_oriented_programming/</loc>
+    
+    <lastmod>2022-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/02/21/4-Selenium_documentation_learning/</loc>
+    
+    <lastmod>2022-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/02/19/3-excel-tool-develop-1/</loc>
+    
+    <lastmod>2022-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/02/12/2-typora_picgo_config/</loc>
+    
+    <lastmod>2022-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/02/10/1-blog_setup_notes/</loc>
+    
+    <lastmod>2022-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://raylei.space/MsgBoard/index.html</loc>
     
     <lastmod>2022-02-22</lastmod>
@@ -14,33 +59,6 @@
     <loc>http://raylei.space/about/index.html</loc>
     
     <lastmod>2022-02-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/2022/02/19/3-excel-tool-develop-1/</loc>
-    
-    <lastmod>2022-02-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/2022/02/10/1-blog_setup_notes/</loc>
-    
-    <lastmod>2022-02-20</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/2022/02/12/2-typora_picgo_config/</loc>
-    
-    <lastmod>2022-02-19</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -67,7 +85,7 @@
 
   <url>
     <loc>http://raylei.space/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -75,56 +93,70 @@
   
   <url>
     <loc>http://raylei.space/tags/Blog/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/Hexo/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/GitHub/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/Typora/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/PicGo/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/Excel/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/tags/%E5%B7%A5%E4%BD%9C%E5%AD%A6%E4%B9%A0/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/Python/</loc>
+    <lastmod>2022-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/Selenium/</loc>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
@@ -133,14 +165,21 @@
   
   <url>
     <loc>http://raylei.space/categories/%E5%8D%9A%E5%AE%A2%E7%BB%B4%E6%8A%A4/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
     <loc>http://raylei.space/categories/MS-Office/</loc>
-    <lastmod>2022-02-22</lastmod>
+    <lastmod>2022-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2022-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
