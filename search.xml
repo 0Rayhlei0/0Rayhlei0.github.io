@@ -1,6 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
+    <url>/2022/02/10/1-blog_setup_notes/</url>
+    <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
+<h2 id="关于第二篇Git安装的问题"><a href="#关于第二篇Git安装的问题" class="headerlink" title="关于第二篇Git安装的问题"></a>关于第二篇Git安装的问题</h2><p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
+<ul>
+<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
+<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
+<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
+</ul>
+<h2 id="关于第三篇绑定GitHub并提交文件"><a href="#关于第三篇绑定GitHub并提交文件" class="headerlink" title="关于第三篇绑定GitHub并提交文件"></a>关于第三篇绑定GitHub并提交文件</h2><p>跟随步骤进行时有两点需要注意：</p>
+<h3 id="Git的username和email的配置"><a href="#Git的username和email的配置" class="headerlink" title="Git的username和email的配置"></a>Git的username和email的配置</h3><p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记”, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
+<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
+
+<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
+<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
+<h3 id="从Master换成Main的掩耳盗铃"><a href="#从Master换成Main的掩耳盗铃" class="headerlink" title="从Master换成Main的掩耳盗铃"></a>从Master换成Main的掩耳盗铃</h3><p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
+<h4 id="push文件时的命令"><a href="#push文件时的命令" class="headerlink" title="push文件时的命令"></a>push文件时的命令</h4><p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
+
+<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
+<h4 id="初始化本地仓库时要做的修改"><a href="#初始化本地仓库时要做的修改" class="headerlink" title="初始化本地仓库时要做的修改"></a>初始化本地仓库时要做的修改</h4><p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
+<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="为什么要提交到GitHub"><a href="#为什么要提交到GitHub" class="headerlink" title="为什么要提交到GitHub?"></a>为什么要提交到GitHub?</h3><p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
+<h2 id="关于第五篇安装node-js和Hexo"><a href="#关于第五篇安装node-js和Hexo" class="headerlink" title="关于第五篇安装node.js和Hexo"></a>关于第五篇安装node.js和Hexo</h2><p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
+<h3 id="设置文件夹权限"><a href="#设置文件夹权限" class="headerlink" title="设置文件夹权限"></a>设置文件夹权限</h3><p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
+<h3 id="Hexo是什么？"><a href="#Hexo是什么？" class="headerlink" title="Hexo是什么？"></a>Hexo是什么？</h3><p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
+<p>关于Hexo相关的命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
+
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
+<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
+<p>[第1篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Blog</tag>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
     <url>/2022/02/12/2-typora_picgo_config/</url>
     <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
@@ -53,69 +107,17 @@
 </blockquote>
 <hr>
 <h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
+<p>[第2篇]</p>
 ]]></content>
       <categories>
         <category>博客维护</category>
       </categories>
       <tags>
         <tag>Blog</tag>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
         <tag>Typora</tag>
         <tag>PicGo</tag>
-        <tag>GitHub</tag>
-        <tag>日常学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
-    <url>/2022/02/10/1-blog_setup_notes/</url>
-    <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
-<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
-<h2 id="关于第二篇Git安装的问题"><a href="#关于第二篇Git安装的问题" class="headerlink" title="关于第二篇Git安装的问题"></a>关于第二篇Git安装的问题</h2><p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
-<ul>
-<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
-<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
-<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
-</ul>
-<h2 id="关于第三篇绑定GitHub并提交文件"><a href="#关于第三篇绑定GitHub并提交文件" class="headerlink" title="关于第三篇绑定GitHub并提交文件"></a>关于第三篇绑定GitHub并提交文件</h2><p>跟随步骤进行时有两点需要注意：</p>
-<h3 id="Git的username和email的配置"><a href="#Git的username和email的配置" class="headerlink" title="Git的username和email的配置"></a>Git的username和email的配置</h3><p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记”, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
-<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
-
-<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
-<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
-<h3 id="从Master换成Main的掩耳盗铃"><a href="#从Master换成Main的掩耳盗铃" class="headerlink" title="从Master换成Main的掩耳盗铃"></a>从Master换成Main的掩耳盗铃</h3><p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
-<h4 id="push文件时的命令"><a href="#push文件时的命令" class="headerlink" title="push文件时的命令"></a>push文件时的命令</h4><p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
-
-<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
-<h4 id="初始化本地仓库时要做的修改"><a href="#初始化本地仓库时要做的修改" class="headerlink" title="初始化本地仓库时要做的修改"></a>初始化本地仓库时要做的修改</h4><p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
-<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="为什么要提交到GitHub"><a href="#为什么要提交到GitHub" class="headerlink" title="为什么要提交到GitHub?"></a>为什么要提交到GitHub?</h3><p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
-<h2 id="关于第五篇安装node-js和Hexo"><a href="#关于第五篇安装node-js和Hexo" class="headerlink" title="关于第五篇安装node.js和Hexo"></a>关于第五篇安装node.js和Hexo</h2><p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
-<h3 id="设置文件夹权限"><a href="#设置文件夹权限" class="headerlink" title="设置文件夹权限"></a>设置文件夹权限</h3><p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
-<h3 id="Hexo是什么？"><a href="#Hexo是什么？" class="headerlink" title="Hexo是什么？"></a>Hexo是什么？</h3><p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
-<p>关于Hexo相关的命令有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
-
-<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
-<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Blog</tag>
-        <tag>GitHub</tag>
-        <tag>日常学习</tag>
-        <tag>Hexo</tag>
       </tags>
   </entry>
   <entry>
@@ -184,6 +186,7 @@
 <p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;9)</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有同时满足这两个条件的行(两个1相乘才返回1)，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
 <h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
 <p>该工具的一个副本放在这里,有兴趣可以看看：<a href="/attachment/Product_ranking.xlsx">下载链接</a></p>
+<p>[第3篇]</p>
 ]]></content>
       <categories>
         <category>MS Office</category>
@@ -285,6 +288,7 @@
 <h3 id="得到元素的XPath"><a href="#得到元素的XPath" class="headerlink" title="得到元素的XPath"></a>得到元素的XPath</h3><p>同样也是一个大概所有人都知道(所以没有在任何教程里见到提及)，但我是自己玩了老半天才偶然发现的功能。原来在开发者工具中右键点击元素，找到<code>复制→复制XPath</code>就可以直接得到这个元素相对路径的XPath，不确定Chrome的算法是怎样，但似乎这个复制XPath是在尽量选择<code>不会导致ambiguity</code>的方式引用。</p>
 <p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220224195027232.png" alt="对元素点击右键，然后依次按复制→复制XPath"></p>
 <h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>因为这个项目的机会，我对网页自动测试甚至是爬取网页的经验又增加了不少（当然我知道一般爬取网页的首选项肯定是<code>BeautifulSoup</code>，毕竟不经过浏览器互动的爬取会稳定不少，但现如今大部分的网页不用浏览器互动已经啥都爬不到了）。另外之后有时间我会再把项目前半部分关于<code>Cosine Similarity</code>文本相似度匹配的部分整理好再发一篇。</p>
+<p>[第4篇]</p>
 ]]></content>
       <categories>
         <category>编程算法</category>
@@ -369,6 +373,7 @@
 
 <p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
 <h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
+<p>[第5篇]</p>
 ]]></content>
       <categories>
         <category>编程算法</category>
@@ -376,6 +381,281 @@
       <tags>
         <tag>日常学习</tag>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[MS Office] 分割MS Access数据库为前端和后端</title>
+    <url>/2022/02/25/6-MSAccess_database_split/</url>
+    <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="背景介绍"><a href="#背景介绍" class="headerlink" title="背景介绍"></a>背景介绍</h2><p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
+<p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
+<h2 id="Access基本知识"><a href="#Access基本知识" class="headerlink" title="Access基本知识"></a>Access基本知识</h2><p>开始分割数据库前先复习一下MS Access的一些<a href="https://support.microsoft.com/en-us/office/database-basics-a849ac16-07c7-4a31-9948-3c8c94a7c204" title="Microsoft Access database Intro">基本知识</a>：</p>
+<p>数据库是用来收集和管理信息的工具。本来信息也都可以储存在一般的列表或者电子表格中，但随着数据规模不断变大，用列表或表格管理的数据可能会出现各种各样的混乱且不利于提取需要的信息。如果数据达到了这种规模，普通的方式就已经不适用于这些数据的管理，这也是像Access这样的<code>数据管理系统(DBMS)</code>出现的原因。</p>
+<p>一个数据库文件中可能有多种<code>对象(obJects)</code>，除了存储数据的<code>表(Table)</code>还有实现其他功能的<code>表单(Forms)</code>，<code>报表(Reports)</code>，<code>宏(Macros)</code>和<code>模块(Modules)</code>。这些对象在一个数据库文件中可能都不只有一个。创建格式在<code>Access 2007</code>之后的文件后缀为<code>.accdb</code>，在此之前的格式后缀都为<code>.mdb</code>，Access版本在2007之后的也可以用来创建<code>.mdb</code>格式的文件。</p>
+<p>通过Access你可以实现这些功能：</p>
+<ul>
+<li>向数据库中添加新的数据</li>
+<li>在数据库中编辑已有的数据</li>
+<li>删除数据库中的数据</li>
+<li>以不同的方式管理和查看数据</li>
+<li>通过报表，邮件，内联网，互联网等方式将数据与他人共享</li>
+</ul>
+<h3 id="数据库物件"><a href="#数据库物件" class="headerlink" title="数据库物件"></a>数据库物件</h3><h4 id="表-Tables"><a href="#表-Tables" class="headerlink" title="表(Tables)"></a>表(Tables)</h4><p>数据库的表看起来和电子表格一样，被用行列的形式存储，也因为这个好处，想要将电子表格数据导入数据库中是非常方便的。数据库表和电子表格的区别主要在与他们管理和储存数据的方式上。数据库表格中为了避免冗余，会将不同层面的信息分开为不同的表，比如一个电影票的数据库中可能有观影者信息，但每个观影者可能有多张电影票，这样如果每个电影票表中都存储同一个观影者信息就会导致冗余。这个过程被称为<code>标准化(normalization)</code>。</p>
+<p>表中的每一行都是一条<code>记录(record)</code>,每一条记录都以不同<code>字段(fields)</code>的形式储存独立的信息，字段对应表中的列。比如有一条记录是关于某个观影者，那么字段可能包括他的姓，名，性别等。每一条记录代表了一个观影者在不同字段上的信息。</p>
+<p>关于<code>表</code>的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-tables-78ff21ea-2f76-4fb0-8af6-c318d1ee0ea7" title="Introduction to tables">这里</a>。</p>
+<h4 id="表单-Forms"><a href="#表单-Forms" class="headerlink" title="表单(Forms)"></a>表单(Forms)</h4><p>表单是一个允许用户<code>输入</code>和<code>编辑数据</code>的用户界面。表单里面除了数据的展示，还会有一些带有<code>控制命令</code>的按钮。用户可以不使用表单而直接在表中<code>删增改</code>数据，但使用表单会让这个过程更加清晰方便。设计者可以通过<code>自定义命令按钮</code>来决定用户可以访问修改哪些数据，这也赋予了数据一定程度的安全性，来控制数据库使用者的权限。</p>
+<p>关于表单的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-forms-e8d47343-c937-44e8-a80f-b6a83a1fa3ae" title="Introduction to forms">这里</a>。</p>
+<h4 id="报表-Reports"><a href="#报表-Reports" class="headerlink" title="报表(Reports)"></a>报表(Reports)</h4><p>报表是用户用来<code>整理总结</code>并<code>展示数据</code>的对象。一个报表的目的通常是某个具体的问题，比如“<code>我们今年在每部电影上的收入是多少</code>”等等，而报表可以让数据变得更加简单易读，用户可以通过报表得到这个设计好的问题在当前数据下的答案。</p>
+<p>关于报表的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-reports-in-access-e0869f59-7536-4d19-8e05-7158dcd3681c" title="Introduction to reports in Access">这里</a>。</p>
+<h4 id="查询-Queries"><a href="#查询-Queries" class="headerlink" title="查询(Queries)"></a>查询(Queries)</h4><p>查询是所有数据库系统最核心的功能之一，它通过不同的函数<code>连接(JOIN)</code>不同数据库，<code>筛选(FILTER)</code>条件来获取数据库中符合特定条件的数据。查询通常有两种基本类型：<code>选择查询(select query)</code>和<code>动作查询(action query)</code>。前者可以用来获取数据，后者则是用来对数据进行特定操作，例如<code>增加新表，更新数据，删除数据</code>等。</p>
+<p>关于查询的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-queries-a9739a09-d3ff-4f36-8ac3-5760249fb65c" title="Introduction to queries">这里</a>。</p>
+<h4 id="宏-Macros"><a href="#宏-Macros" class="headerlink" title="宏(Macros)"></a>宏(Macros)</h4><p>Access中的宏是一种用以给数据库<code>增加特定功能</code>的简单的<code>编程语言</code>。比如用户可以用宏编程一些可以完成提取特定数据或报表的按钮，用户点击按钮便会执行这些宏。这个主要用来将一些重复而复杂的人手工作自动化。</p>
+<h4 id="模块-Modules"><a href="#模块-Modules" class="headerlink" title="模块(Modules)"></a>模块(Modules)</h4><p>与宏一样，模块是用来向数据库添加功能的对象。它们的区别在于宏中使用的方法是从宏操作列表中选择，而编写模块则是使用VBA编程语言进行编程。模块是作为一个单元存储在一起的<code>声明(declarations)</code>，<code>陈述(statements)</code>，和<code>过程(procedures)</code>的集合。</p>
+<p>关于在Access中编程的细节都可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-access-programming-92eb616b-3204-4121-9277-70649e33be4f" title="Introduction to Access programming">这里</a></p>
+<h2 id="操作流程"><a href="#操作流程" class="headerlink" title="操作流程"></a>操作流程</h2><p>熟悉了Access的基本知识，现在我们可以意识到，其实一个Access数据库文件中真正存储数据信息的就只有<code>表(Table)</code>类型，所以我们分割数据库的理论基础就是，我们可以只把需要存储的信息(即表)放在共享网络上(作为<code>后端back-end</code>)，而需求信息的用户只需要使用链接在这些共享的表格上的其他类(作为<code>前端front-end</code>)既可以实时<code>有针对性地</code>访问需求的信息而不需要将整个数据库传输来传输去了。由于用户实际占用的只有他们各自的前端副本，且通过网络传输的只有被需求的一小股信息流(而不是整个数据库)，从而实现数据库的<code>可用性</code>和<code>实时性</code>。参考微软的<a href="https://support.microsoft.com/en-us/office/split-an-access-database-3015ad18-a3a1-4e9c-a7f3-51b1d73498cc" title="Office Support: Split an Access database">官方支持</a>，我接下来就介绍我实用的详细的分割数据库的流程。</p>
+<h3 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h3><p>开始之前有些需要注意的点：</p>
+<ul>
+<li>分割数据库前一定要<code>先备份数据</code>，很简单，直接复制一个副本放在一边，或者直接用副本分割。因为数据是非常宝贵的东西，在很多环境下可能一旦失去就是永远失去， 所以一点风险都不应该承担。</li>
+<li>分割数据前要<code>提前通知用户</code>，否则分割时用户输入的数据可能不会被记录在分割后的数据库后端中。</li>
+<li><code>确保用户电脑中的Access版本能够支持你分割后的数据库格式</code>，比如我在分割数据库的同时就帮他们把数据库格式从<code>mdb</code>升级成了<code>accdb</code>，因为公司的Access版本都是统一控制的，而文件格式本身就是向下兼容，没有必要不用功能更多性能更好的新版本格式。</li>
+</ul>
+<h3 id="分割数据库"><a href="#分割数据库" class="headerlink" title="分割数据库"></a>分割数据库</h3><p>数据库分割的功能是Access自带的，只需要按照下方步骤即可完成：</p>
+<ol>
+<li><p>首先在你的本地电脑中复制一份已有的Access数据库文件，确保左边<code>All Access Objects</code>栏位中没有任何被隐藏的表，如果表被隐藏是不会被自动分割的。(不要问我为什么特别提这点，第一次分割数据库发现一部分数据无法同步，DEBUG好久最后发现原来是因为那部分数据的表被隐藏，导致分割数据库没有把这些表上传至共享文件夹)</p>
+<p>在<code>All Access Objects(所有Access对象)</code>选项上右键，选择<code>Navigation Options(导航选项)</code>，这时会打开一个对话框，将<code>Show Hidden Objects(显示隐藏对象)</code>打勾并且确定。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124556871.png" alt="打开导航选项"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124707290.png" alt="勾选显示隐藏对象并确认"></p>
+<p>这时回到<code>All Access Objects栏</code>中，如果文件中有被隐藏的对象，会看到他们现在呈半透明色，右键点击他们按<code>Unhide in this Group(该组中取消隐藏)</code>即可解除隐藏。确保你要分割的文件中没有隐藏的表。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124841322.png" alt="image-20220301124841322"></p>
+</li>
+<li><p>分割数据库本身就非常简单了，只需要在<code>Database Tools(数据库工具)</code>选项卡上的<code>Move Data(移动数据)</code>组中，点击<code>Access Database(Access数据库)</code>，就会出现图中这个<code>Database Splitter(数据库分割向导)</code>。现在点击<code>Split Database(分割数据库)</code>按钮。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125110106.png" alt="image-20220301125110106"></p>
+</li>
+<li><p>单击<code>Split Database(分割数据库)</code>按钮后就会出现浏览文件路径的对话框，这里就是设定<code>后端</code>的所在地的地方，我们选择到我们已经准备好的共享文件夹中，确保需要使用这个数据库的用户都可以访问这个共享文件夹。数据库名称和文件类型都可以改，但没有必要(<code>除非有特别的理由</code>，否则只有坏处没有好处)。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125246928.png" alt="image-20220301125246928"></p>
+</li>
+<li><p>设置完成后点击<code>Split(分割)</code>Access就会开始自动分割数据库了，原数据库中的<code>表</code>都会被复制到刚刚设定的<code>后端文件</code>中，而这时我们进行这些操作的文件就是<code>前端文件</code>了，<code>表以外的其他对象</code>就都在前端文件中了，前后端是通过网络绑定连接在一起的。数据库分割完成后会弹出<code>分割成功</code>的提示消息。</p>
+</li>
+<li><p>这里加一点是微软的<code>官方教程没有提到</code>的，那就是前后端分割完成后还需要点击<code>Database Tools(数据库工具)</code>选项卡上的<code>Tools(工具)</code>组中的<code>Compact and Repair Database(压缩和修复数据库)</code>，否则前端数据库的大小可能跟分割前一样大。按照微软的说法，这是因为Access的运作方式中即使删除对象，它也不会立即将该对象曾经占用的硬盘空间释放。如果你对数据库中删改的需求很多量也很大的话，你也可以设置自动压缩和修复数据库，方法<a href="https://support.microsoft.com/en-us/office/compact-and-repair-a-database-6ee60f16-aed0-40ac-bf22-85fa9f4005b2" title="Compact and repair a database">参考这里</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125322541.png" alt="image-20220301125322541"></p>
+</li>
+<li><p>最后，为了限制使用者对前后端数据的更改权限，我们把刚刚的前端文件(<code>.accdb格式</code>)保存为已编译的二进制文件(<code>.accde</code>)，既将前端中可以设计更改数据库逻辑的源代码编译保存，这样二进制文件的用户可以照常使用前端需求数据，但无法对他的功能和设计做改变。具体来说只需要在前端文件中点击<code>Save as(另存为)</code>然后按下图中选择并保存在希望的位置即可。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125353890.png" alt="image-20220301125353890"></p>
+</li>
+<li><p>这时候我们已经把后端的数据库放在了共享文件夹中，并且已经有了一个可以连接后端数据库的前端文件，剩下的我们只需要把这些前端文件分发给我们的数据库用户就可以了，通过电子邮件，U盘，或者共享文件夹都可以，用户只要保存一份前端文件的副本在自己的本地硬盘中，确保他们可以通过网络访问共享文件夹，那么他们就可以像以前一样使用表以外的Access的数据提取展示等功能了。</p>
+<h3 id="更改后端数据库"><a href="#更改后端数据库" class="headerlink" title="更改后端数据库"></a>更改后端数据库</h3><p>如果想要更改后端数据库，或者是想把后端数据库的保存位置更改，<code>仅仅只复制粘贴是不行的</code>，因为前端中的连接还是在原来的后端数据库的位置。</p>
+<p>以移动后端数据库的位置为例，假设后端数据库中的表结构和名字都不需要变化，那么要做的就很简单：</p>
+<p><code>首先</code>把后端数据库复制并粘贴到你想要的新位置，<code>然后</code>如图所示点击<code>External Data(外部数据)</code>选项卡上<code>Import&amp;Link(导入和连接)</code>组中的<code>Linked Table Manager(链接表管理器)</code>。在<code>链接表管理器</code>中你可以分别连接当前前端数据库绑定的每一个表的位置，在我们的情况中我们只需要<code>Select All(选择全部)</code>然后点击上方<code>Relink(重新连接)</code>，然后选择到你新复制到的后端数据库位置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125452427.png" alt="image-20220301125452427"></p>
+<p>点击确定之后会有一个弹窗，如果你新的后端数据库没有做任何更改，那么这里<code>不要点Yes</code>。点<code>No</code>它就会开始自动帮你把所有的连接从旧的位置一张表一张表地连接到新位置的每一张同名表上，但如果你点了Yes，它会要求你每一张表给他提供新的名字，除非你真的有表名字的变化否则<code>千万别按错了</code>，不然会浪费很多时间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125530871.png" alt="image-20220301125530871"></p>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>通过这一次帮助其他团队解决效率问题，我复习并且更加了解了MS Access的一些基本功能和结构，同时知道了中小型团队在共享数据时可以使用Access来解决数据库<code>同步性(synchronization)</code>和<code>可用性(availability)</code>问题的解决方案。</p>
+<p>[第6篇]</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Access</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[英语学习]《唐顿庄园》第1季第1集学习笔记</title>
+    <url>/2022/03/01/7-Downton_Abbey_S01E01/</url>
+    <content><![CDATA[<h1 id="序言"><a href="#序言" class="headerlink" title="序言"></a>序言</h1><p>用英语用了这么多年，在英语学习上面已经不需要再在乎太多语法发音之类的问题了，因为在我看来那些都已经不会太大影响到英语水平，以实用为标准的话现在学习英语需要提升的主要是欧美的文化习惯和词汇量了。个人认为最好的办法就是认真地在欧美流行的电视剧或电影中学习他们的表达，这样既可以避免学到生僻没用的单词，也可以在一个流畅的语境下学习到新的表达甚至温故知新。</p>
+<h1 id="正文"><a href="#正文" class="headerlink" title="正文"></a>正文</h1><h2 id="学习方法"><a href="#学习方法" class="headerlink" title="学习方法"></a>学习方法</h2><p>首先一定要建立认知，看剧不是目的，学英语才是目的。只有在心里认知了这个目的，才能在之后的学习中不会急躁，因为我的方法非常慢但也非常稳。简单来说就是每集剧看3遍：</p>
+<p><code>第一遍：</code>无字幕看第一遍，第一遍的目的首先是建立对剧情发展的一个基本认识，另外对哪些部分看不懂的也会有比较清晰的认识，最后这也是建立兴趣的关键一步，因为有了第一遍的“看不懂”的对比，第三遍时“完全看懂”才能提供成就感的反馈，激励自己更长久地学习。</p>
+<p><code>第二遍：</code>对着剧的脚本一句话一句话地看剧，记录<code>不熟悉</code>或者<code>能听能看但不会用</code>的词和表达，我首先会用有道的<code>Colins词典</code>查释义(<code>Colins</code>的特点是将词放在英语的上下文中解释，非常适合<code>非母语者</code>快速了解单词的用法)，如果<code>Colins</code>没有收录才去查其他词典或例句。第二遍这个过程是最痛苦的，有时候一个1小时的剧要看4小时才能看完，实在不行就分几天看完，一定不能急躁。 </p>
+<p><code>第三遍：</code>最后再无字幕看一遍，这一遍是最爽的了。看完前两遍第三遍时基本上已经无障碍看剧了，看着剧里那些生僻的表达和含糊的口语都在脑海里清晰地形成文本，这时候就会感觉学习真是太爽了。</p>
+<h2 id="学习资源"><a href="#学习资源" class="headerlink" title="学习资源"></a>学习资源</h2><p>我的无字幕资源是在这个网站下载的，记得好像也不是免费来着，大家有更好的资源求分享:<a href="https://www.ostmovie.net/downton-abbey-season-12010/">点击链接</a></p>
+<p>《唐顿庄园》第一季的字幕脚本我是从网上找的: <a href="/attachment/DowntonAbbey_Script.pdf">点击下载</a></p>
+<h2 id="故事梗概"><a href="#故事梗概" class="headerlink" title="故事梗概"></a>故事梗概</h2><p>第1季第1集主要体现唐顿庄园的贵族与仆人们生活状态，通过各种小事介绍剧中各主要人物的背景与个性。主要内容是泰坦尼克沉没后导致Lord Robert Grantham的两个继承人去世从而引出的唐顿庄园的遗产继承问题，主要矛盾在于Lord Grantham对第三顺位继承者Matthew不熟悉，家中就是否挑战继承权以将遗产继承给大女儿Mary展开辩论，最后因为Duke of Crowborough的上门让Lord Grantham坚定了维护继承法顺位的意志，并通知Mathew他的继承权。</p>
+<h2 id="学习笔记"><a href="#学习笔记" class="headerlink" title="学习笔记"></a>学习笔记</h2><h3 id="生词"><a href="#生词" class="headerlink" title="生词"></a>生词</h3><h4 id="cease"><a href="#cease" class="headerlink" title="cease"></a>cease</h4><ul>
+<li><p>If something <code>ceases</code>, it stops happening or existing. (At one o’clock the rain had <code>ceased</code>.)</p>
+</li>
+<li><p>If you <code>cease to</code> do something, you stop doing it. (He never <code>ceases to</code> amaze me.)</p>
+</li>
+<li><p>If you <code>cease</code> something, you stop it happening or working.(The Tundra Times, a weekly newspaper in Alaska, <code>ceased</code> publication this week.)</p>
+</li>
+</ul>
+<h4 id="handiwork"><a href="#handiwork" class="headerlink" title="handiwork"></a>handiwork</h4><ul>
+<li>You can refer to something that you have done or made yourself as your <code>handiwork</code>.(The architect stepped back to admire his <code>handiwork</code>.)</li>
+</ul>
+<h4 id="Kedgeree"><a href="#Kedgeree" class="headerlink" title="Kedgeree"></a>Kedgeree</h4><ul>
+<li><p><code>Kedgeree</code> is a cooked dish consisting of rice, fish and eggs.</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301160302387.png" alt="Kedgeree"></p>
+</li>
+</ul>
+<h4 id="dreadful"><a href="#dreadful" class="headerlink" title="dreadful"></a>dreadful</h4><ul>
+<li>If you say that something is <code>dreadful</code>, you mean that it is very bad or unpleasant, or very poor in quality. (They told us the <code>dreadful</code> news.)</li>
+<li><code>Dreadful</code> is used to emphasize the degree or extent of something bad. (We’ve made a <code>dreadful</code> mistake.)</li>
+</ul>
+<h4 id="mourning"><a href="#mourning" class="headerlink" title="mourning"></a>mourning</h4><ul>
+<li><code>Mourning</code> is behaviour in which you show sadness about a person’s death. (Expect to feel angry, depressed and confused. It’s all part of the <code>mourning</code> process.)</li>
+<li>If you are <code>in mourning</code>, you are dressed or behaving in a particular way because someone you love or repect has died. (Yesterday the whole of Greece was <code>in mourning</code>.)</li>
+</ul>
+<h4 id="attic"><a href="#attic" class="headerlink" title="attic"></a>attic</h4><ul>
+<li>An <code>attic</code> is a room at the top of a house just below the roof.</li>
+</ul>
+<h4 id="snuff"><a href="#snuff" class="headerlink" title="snuff"></a>snuff</h4><ul>
+<li>Snuff is powdered tobacco which people take by breathing it in quickly though their nose.</li>
+</ul>
+<h4 id="speak-up"><a href="#speak-up" class="headerlink" title="speak up"></a>speak up</h4><ul>
+<li>If you <code>speak up</code>, you say something, especially to defend a person or pretest about something, rather than just saying nothing. (Uncle Herbert never argued, never <code>spoke up</code> for himself.)</li>
+<li>If you ask someone to <code>speak up</code>, you are asking them to speak more loudly. (I’m quite deaf. you’ll have to <code>speak up</code>.)</li>
+</ul>
+<h4 id="luncheon"><a href="#luncheon" class="headerlink" title="luncheon"></a>luncheon</h4><ul>
+<li>A <code>luncheon</code> is a formal lunch, for example, to celebrate an important event or to raise money for charity. (Earlier this month, a <code>luncheon</code> for former U.N. staff was held in Vienna.)</li>
+</ul>
+<h4 id="hail"><a href="#hail" class="headerlink" title="hail"></a>hail</h4><ul>
+<li>If a person, event, or achievement <code>is hailed as</code> important or successful, they are praised publicly. (Faulkner has <code>been hailed as</code> the greatest American novelist of his generation.)</li>
+<li><code>Hail</code> consists of small balls of ice that fall like rain from the sky. (… a sharp short-lived storm with heavy <code>hail</code>.)</li>
+<li><code>A hail of</code> things, usually small objects, is a large number of them that hit you at the same time and with great force. (The victim was hit by <code>a hail of</code> bullets.)</li>
+<li>Someone who <code>hails from</code> a particular place was born there or lives there. (He <code>hails from</code> Memphis.)</li>
+<li>If you <code>hail a taxi</code>, you wave at it in order to stop it because you want the driver to rake you somewhere. (I hurried away to <code>hail a taxi</code>.)</li>
+</ul>
+<h4 id="daunting"><a href="#daunting" class="headerlink" title="daunting"></a>daunting</h4><ul>
+<li>Something that is <code>daunting</code> makes you feel slightly afraid or worried about dealing with it. (He and his wife Jane were faced with the <code>daunting</code> task of restoring the gardens to their former splendour.)</li>
+</ul>
+<h4 id="cemetery"><a href="#cemetery" class="headerlink" title="cemetery"></a>cemetery</h4><ul>
+<li>A <code>cemetery</code> is a place where dead people’s bodies or their ashes are buried.</li>
+</ul>
+<h4 id="solicitor"><a href="#solicitor" class="headerlink" title="solicitor"></a>solicitor</h4><ul>
+<li>In the United States, a <code>solicitor</code> is the chief lawyer in a government or city department.</li>
+</ul>
+<h4 id="take-on"><a href="#take-on" class="headerlink" title="take on"></a>take on</h4><ul>
+<li>If you <code>take on</code> a job or responsibility, especially a difficult one, you accept it. (No other organization was able or willing to <code>take on</code> the job.)</li>
+<li>If something <code>takes on</code> a new appearance or quality, it develops that appearance or quality. (Believing he had only a year to live, his writing <code>took on</code> a feverish intensity.)</li>
+<li>If you <code>take someone on</code>, you employ them to do a job. (He’s spoken to a publishing company. They are going to <code>take him on</code>.)</li>
+<li>If you <code>take someone on</code>, you fight them or compete against them, especially when they are bigger or more powerful than you are. (Democrats were reluctant to <code>take on a president</code> whose popularity ratings were historically high.)</li>
+</ul>
+<h4 id="eccentric"><a href="#eccentric" class="headerlink" title="eccentric"></a>eccentric</h4><ul>
+<li>If you say that someone is <code>eccentric</code>, you mean that they behave in a strange way, and have habits or opinions that are different from those of most people. (He is an <code>eccentric</code> character who likes wearing a beret and dark glasses.)</li>
+</ul>
+<h4 id="peculiar"><a href="#peculiar" class="headerlink" title="peculiar"></a>peculiar</h4><ul>
+<li>If you describe someone or something as <code>peculiar</code>, you think that they are strange or unusual, sometimes in an unpleasant way. (Mr. Kennet has a rather <code>peculiar</code> sense of humor.)</li>
+<li>If something is <code>peculiar to</code> a particular thing, person, or situation, it belongs or relates only to that thing, person, or situation. (Punks, soldiers, hippies, and Sumo wrestlers all have distinct hair styles, <code>peculiar to</code> their group.)</li>
+</ul>
+<h4 id="nurture"><a href="#nurture" class="headerlink" title="nurture"></a>nurture</h4><ul>
+<li>If you <code>nurture</code> something such as a young child or a young plant, you care for it while it is growing and developing. (Parents want to know the best way to <code>nurture</code> and raise their child to adulthood.)</li>
+<li><code>Nurture</code> can also be a noun where it is care and encouragement that is given to someone while they are growing and developing. (The human organism learns partly by nature, partly by <code>nurture</code>.)</li>
+</ul>
+<h4 id="nuisance"><a href="#nuisance" class="headerlink" title="nuisance"></a>nuisance</h4><ul>
+<li>If you say that someone or something is a <code>nuisance</code>, you mean that they annoy you or cause you a lot of problems. (He could be a bit of a <code>nuisance</code> when he was drunk.)</li>
+</ul>
+<h4 id="chaperones"><a href="#chaperones" class="headerlink" title="chaperones"></a>chaperones</h4><ul>
+<li>A <code>chaperon</code> is someone who accompanies another person somewhere in order to make sure that they do not come to any harm.</li>
+</ul>
+<h4 id="pry"><a href="#pry" class="headerlink" title="pry"></a>pry</h4><ul>
+<li>If someone <code>pries</code>, they try to find out about someone else’s private affairs, or look at their personal possessions. (We do not want people <code>prying</code> into our affairs.)</li>
+</ul>
+<h4 id="coy"><a href="#coy" class="headerlink" title="coy"></a>coy</h4><ul>
+<li>A <code>coy</code> person is shy, or pretends to be shy, about love and sex. (I was sickened by the way Carol charmed all the men by turning <code>coy</code>.)</li>
+<li>If someone is being <code>coy</code>, they are unwilling to talk about something that they feel guilty or embarrassed about. (Mr. Alexander is not the slightest bit <code>coy</code> about his ambitions.)</li>
+</ul>
+<h4 id="come-off"><a href="#come-off" class="headerlink" title="come off"></a>come off</h4><ul>
+<li>If something <code>comes off</code>, it is successful or effective. (It was a good try but it didn’t <code>come off</code>.)</li>
+<li>If someone <code>comes off worst</code> in a contest or conflict, they are in the worst position after it. If they <code>come off best</code>, they are in the best position. (Some Democrats still have bitter memories of how they <code>came off worst</code> during the investigation.)</li>
+</ul>
+<h4 id="dalliance"><a href="#dalliance" class="headerlink" title="dalliance"></a>dalliance</h4><ul>
+<li>If two people have a brief romantic relationship, you can say that they have a <code>dalliance</code> with each other, especially if they do not take it seriously.</li>
+</ul>
+<h4 id="conscience"><a href="#conscience" class="headerlink" title="conscience"></a>conscience</h4><ul>
+<li>Your <code>conscience</code> is the part of your mind that tells you whether what you are doing is right or wrong. If you have a <code>guilty conscience</code>, you feel guilty about something because you know it was wrong. If you have a <code>clear conscience</code>, you do not feel guilty because you know you have done nothing wrong. (What if he got a guilty conscience and brought it back?)</li>
+</ul>
+<h4 id="interlude"><a href="#interlude" class="headerlink" title="interlude"></a>interlude</h4><ul>
+<li>An <code>interlude</code> is a short period of time when an activity or situation stops and something else happens.</li>
+</ul>
+<h3 id="需要熟悉的词"><a href="#需要熟悉的词" class="headerlink" title="需要熟悉的词"></a>需要熟悉的词</h3><ul>
+<li>lit是light的过去式，即点亮。</li>
+<li>crouch: 蹲；蹲下</li>
+<li>burner: 炉灶</li>
+<li>milk train: 早班火车(因为通常运送牛奶的是最早的一班火车)</li>
+<li>butler: 管家</li>
+<li>cedar-lined cupboards: 雪松木的衣柜</li>
+<li>studs: 金属饰纽</li>
+<li>hoard: 收藏；贮藏</li>
+<li>reluctant: 抗拒</li>
+<li>drawing room: 客厅</li>
+<li>flatter: 高看；奉承</li>
+<li>late husband: 已故的丈夫</li>
+<li>swag: 赃物；窗饰</li>
+<li>dowry: 嫁妆</li>
+<li>entail: 继承权</li>
+<li>tongue-tied: 因拘谨而说不出话</li>
+<li>in the presence of: 在…面前</li>
+<li>comrade: 同伴(尤其指共患难的)；战友</li>
+<li>brass: 黄铜</li>
+<li>sprinkle on…: 洒在…上</li>
+<li>dispiriting: 令人沮丧的</li>
+<li>unjust: 不公平；不公正</li>
+<li>tenner: 十英镑纸币</li>
+<li>turn up: 出现</li>
+<li>crippled: 残疾的</li>
+<li>tremendous: 巨大的；极好的</li>
+<li>glare: 怒视；刺眼的光</li>
+<li>vapours: 蒸汽</li>
+<li>Be that as it may: 无论如何；尽管如此</li>
+<li>merely: 仅仅</li>
+<li>clear away: 收拾(餐具)</li>
+<li>be content with: 满足于</li>
+<li>run off: 逃跑；私奔；复印；喋喋不休</li>
+<li>put up with: 忍受</li>
+<li>wear out: 精疲力竭</li>
+<li>undignified: 不体面的</li>
+<li>conservatory: 音乐学院；温室</li>
+<li>fern: 蕨类植物</li>
+<li>genus: 属（生物分类的）</li>
+<li>compromise: 降格；妥协</li>
+<li>Holy Grail: 圣杯</li>
+<li>speak out: 公开说出；求婚</li>
+<li>see to: 照料；办理</li>
+<li>slip away: 溜之大吉</li>
+<li>slipped the hook: 滑钩</li>
+<li>turn in: 睡觉;自首</li>
+<li>graceless: 没有教养的</li>
+<li>hollow out: 镂空</li>
+<li>lump: 块；忍耐</li>
+</ul>
+<h3 id="表达方式"><a href="#表达方式" class="headerlink" title="表达方式"></a>表达方式</h3><ul>
+<li>None of them will be <code>up</code> for hours. 他们几个小时内都不会<code>起床</code>。</li>
+<li>Is your fire still <code>in</code>? 火还<code>燃</code>着吧？</li>
+<li>wonders will never <code>cease</code>. 奇迹总会出现。</li>
+<li><code>blacking</code> the stove. <code>擦亮</code>炉子。</li>
+<li>I want the dining room given a proper <code>going-over</code> today. 今天要把餐厅<code>彻底</code>打扫干净。</li>
+<li>No rest for the wicked. 永无安宁(出自圣经，指恶人要永受折磨)</li>
+<li>There are <code>bound to</code> be others. <code>肯定</code>还有别人。</li>
+<li>When you think how excited Lucy Rothes was <code>at the prospect</code>. 你想想当时Lucy Rothes对去美国的<code>期待</code></li>
+<li>Though he left it in <code>quite a state</code>. 虽然他走的时候留下了<code>一片狼藉</code>(quite a state主要表示状态非常不一般)</li>
+<li><code>rotate</code> the summer and winter stuff. <code>轮流</code>放夏天和冬天的东西</li>
+<li>I will <code>get the hang of</code> it. 我会记住的。(get the hang of… 指掌握…的窍门)</li>
+<li>I can’t believe I’ve been <code>passed over for Long John Silver</code>. 不敢相信我居然<code>被一个跛脚海盗抢了职位</code>。</li>
+<li>I‘m not entirely sure that he’ll <code>prove equal to</code> the task. 我不太确定他是不是能<code>胜任</code>这份工作。</li>
+<li>We were all so <code>fond of</code> him. 我们都很<code>喜欢</code>他。</li>
+<li>When my sister died, God rest her soul, I <code>ate my way through</code> four platefuls of sandwiches at one sitting and slept <code>round the clock</code>. 我姐姐走的时候 愿她安息 我<code>一口气吃了</code>四盘三明治，然后睡了整整<code>12 个小时</code>。</li>
+<li>Your father <code>tied the knots pretty tight</code>. 你爸爸<code>把结打得非常死</code>。(指很难有别的方法。)</li>
+<li>Don’t <code>catch me out</code>. 别<code>鸡蛋里挑骨头</code></li>
+<li>Is it any wonder if the <code>others&#39; noses are put out</code>? 也难怪别人会<code>说三道四</code>。</li>
+<li>I wouldn’t <code>sleep a wink</code>. 我肯定<code>一宿睡不着</code>。</li>
+<li>Let’s not gild the lily. 不要多此一举。</li>
+<li>Don’t <code>stir</code> 别<code>搅混水</code>（别拱火）</li>
+<li>But the honour of Downton is <code>at stake</code>. 但这是<code>赌上</code>唐顿名誉的</li>
+<li>Don’t be such a <code>chatterbox</code>, Edith. 别这么<code>多嘴</code>，伊迪丝。</li>
+<li>It’s an ill wind. 祸兮福所倚。</li>
+<li>One swallow doesn’t make a summer. 孤燕不成夏</li>
+</ul>
+<h1 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h1><p>这篇除了学习时做的笔记，还介绍了我的学习方法和资料，之后的各篇我就直接只摆上学习笔记了。</p>
+<p>[第7篇]</p>
+]]></content>
+      <categories>
+        <category>英语学习</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
+        <tag>Downton Abbey，英语学习</tag>
       </tags>
   </entry>
 </search>
