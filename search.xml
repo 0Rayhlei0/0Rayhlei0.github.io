@@ -335,7 +335,7 @@
     <title>[金融分析] CFA一级考试学习计划</title>
     <url>/2022/03/31/12-CFA-level-1-overview/</url>
     <content><![CDATA[<h1>序言</h1>
-<p>虽然我自己认为CFA考试对我的职业发展不一定有帮助，但考虑到作为数据&quot;科学家&quot;以后可能从事的行业并不单一，加之我各种金融相关的学术背景，还是准备几个认可度较高的证考一考相比其其他证性价比会更高一些，也开拓一下今后的发展空间。今天开始准备CFA一级的考试，先在这里做个计划，首先定下目标是通过2022年11月份的CFA一级考试，同时将日语与英语的学习时间以每周4:2:1的比例分配。</p>
+<p>虽然知道CFA考试对我目前的工作没有帮助，但考虑到作为&quot;数据科学家&quot;以后可能从事的行业并不单一，加之我各种金融相关的学术背景，还是准备几个认可度较高的证考一考相比其其他证性价比会更高一些，也开拓一下今后的发展空间。今天开始准备CFA一级的考试，先在这里做个计划，首先定下目标是通过2022年11月份的CFA一级考试，同时将日语与英语的学习时间以每周4:2:1的比例分配。</p>
 <h1>正文</h1>
 <p>CFA考试对我来说算是比较陌生的，虽然听考过的同学说一级基本都是大学学过的内容，但具体这是什么东西，要考哪些内容以及考试的形式等等都需要先了解一下。而从现在3月31日至11月之间还有7个月的时间，相比起盲目复习，还是有必要在开始之前规划一下每段时间的学习计划。</p>
 <h2 id="成为持证人">成为持证人</h2>
@@ -697,110 +697,12 @@
       </tags>
   </entry>
   <entry>
-    <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
-    <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
-<h1>正文</h1>
-<h2 id="背景介绍">背景介绍</h2>
-<p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
-<h2 id="概述">概述</h2>
-<p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
-<ul>
-<li>
-<p><strong>面向过程：</strong> 顾名思义，编程方式注重过程。在解决一个问题的时候这种编程方式需要把解决方式拆分成一个个过程，按照一定的顺序执行完这些方法(methods)，方法执行完问题就解决了。</p>
-</li>
-<li>
-<p>**面向对象：**同样名字就已经非常清晰了，注重的是程序互动的对象。解决问题的时候面向对象编程是将事物抽象成对象，那问题里可能涉及的事物都定义成一个程序对象，然后给这个对象赋上一些<code>属性(Properties)</code>和<code>方法(methods)</code>。让各个对象去执行自己的方法以此来解决问题。</p>
-</li>
-</ul>
-<h3 id="举例说明">举例说明</h3>
-<p>我引用<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>提到的我觉得对于我的理解起到重要帮助的两个例子，分别是洗衣服和做饭。</p>
-<h4 id="洗衣服">洗衣服</h4>
-<p>假设有一个问题：要用洗衣机洗干净脏衣服，如何执行？</p>
-<p><strong><code>面向过程</code>的解决方法</strong>：</p>
-<ol>
-<li>执行加洗衣粉的方法；</li>
-<li>执行加水的方法；</li>
-<li>执行洗衣服的方法；</li>
-<li>执行清洗的方法；</li>
-<li>执行烘干的方法；</li>
-</ol>
-<p>将解决过程拆分成一个个方法，不用调用对象，通过执行一个个方法来解决问题。</p>
-<p><strong><code>面向对象</code>的解决方法：</strong></p>
-<ol>
-<li>先抽象出两个对象，分别是<code>洗衣机</code>和<code>人</code></li>
-<li>针对对象<code>洗衣机</code>加入一些属性和方法：“洗衣服方法”，”清洗方法“，”烘干方法“</li>
-<li>针对对象<code>人</code>加入一些属性和方法：“加洗衣粉方法”，“加水方法”</li>
-<li>然后执行：<code>人.加洗衣粉→人.加水→洗衣机.洗衣服→洗衣机.清洗→洗衣机.烘干</code></li>
-</ol>
-<p>同一个问题，面向对象编程需要先定义对象然后靠对象执行方法的方式解决问题。</p>
-<h4 id="做饭">做饭</h4>
-<p>呜呜轩轩引用了@十四期_李光的说法，分别将<code>面向过程编程</code>和<code>面向对象编程</code>比喻成<code>蛋炒饭</code>和<code>盖浇饭</code>。以此来说明两种方法的优缺点：</p>
-<ul>
-<li><code>面向过程编程就像蛋炒饭</code>，食材和饭交融在一起，难以分开，其味道可能均匀易于入口，但一旦做好就很难再改变。</li>
-<li><code>面向对象编程就像盖浇饭</code>，食材和饭是分开的，食客在同时能享受到食材和饭的同时，如果想要换一个口味也只需要将不同的菜与之前的饭放在一起就可以了。</li>
-</ul>
-<p>回到现实，这两种方法各自的优缺点就是：</p>
-<ul>
-<li>面向过程编程性能高于面向对象编程，缺点是不易维护，难以扩展，难以复用。适合需要性能优先的场景。</li>
-<li>面向对象编程就是相反了，性能略低但易维护易扩展，结构更加灵活。适合大而复杂的软件开发。</li>
-</ul>
-<p>这两个例子一个让人了解这两种方法在表达形式上的区别，一个让人了解各自的优缺点，我觉得非常方便概念比较模糊的人理解。</p>
-<h2 id="面向对象编程">面向对象编程</h2>
-<p>我个人觉得<code>面向过程编程</code>是非常<code>straightforward</code>的，所以除了两者的对比以外，我不打算细说面向过程编程。那在这一节我就还是用我从网上学到的内容(主要还是<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>和<a href="https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html" title="__init__ in Python: An Overview">Alexey</a>)现学现卖，详细讲讲面向对象编程的三大特征和五大原则，以及其实际的实现方法等。</p>
-<h3 id="三大基本特征">三大基本特征</h3>
-<p>**封装(Encapsulation)：**把客观事物封装成抽象的<code>类(Class)</code>，而类可以把自己的<code>属性(Property)</code>和<code>方法(methods)</code>只让可信的类或者对象操作，对不可信的进行信息隐藏(public和private)。一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。</p>
-<p>**继承(Inheritance)：**让某个类型的对象获得另一个类型对象的属性的方法。继承使新类可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展，通过继承创建的新类称为<code>“子类(Subclass)”</code>或<code>“派生类(Derived class)”</code>，被继承的类称为<code>“基类(Base class)”</code>，<code>“父类(Parent class)”</code>或<code>“超类(Super class)”</code>。继承的过程就是从<code>一般(generalized)</code>到<code>特殊(specialized)</code>的过程。要实现继承，可以通过<code>“继承(Inheritance)”</code>和<code>“组合(Composition)”</code>来实现。继承概念的实现方式有两类：<code>实现继承(Implementation inheritance)</code>与<code>接口继承(Interface inheritance)</code>。前者指直接使用父类的属性和方法而无需额外编码的能力；后者则是指仅使用属性和方法的名称，但子类必须提供实现的能力。</p>
-<p>**多态(Polymorphism)：**指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着虽然针对不同对象的具体操作不同，但通过一个公共的类，它们可以通过相同的方式予以调用。</p>
-<h3 id="五大基本原则">五大基本原则</h3>
-<p>**单一职责原则SRP(Single Responsibility Principle)：**指一个类的功能要单一，不能混杂什么都有。</p>
-<p>**开放封闭原则OCP(Open－Close Principle)：**一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。比如：一个网络模块，原来只有服务端功能，在现在要加入客户端功能，那么就应该在不用修改已有功能代码的前提下就能增加客户端的实现代码，这要求在设计之初就将两个部分分开，将公共部分抽象出来。</p>
-<p>**里式替换原则LSP(the Liskov Substitution Principle LSP)：**子类应当可以替换父类并出现在父类能出现的任何地方。</p>
-<p>**依赖倒置原则DIP(the Dependency Inversion Principle DIP)：**程序要依赖于抽象接口而不能依赖于具体实现。假设B是较A低的模块，但B需要使用到A的功能，这个时候，B不应当直接使用A中的具体类，因为如果这样做的话任何一个下层模块的变动都会导致上层必须要被相应更改。正确做法应当由B定义一个抽象接口，并由A来实现这个抽象接口，B只使用这个抽象接口：这样就达到了依赖倒置的目的，B也解除了对A的依赖，反过来是A依赖于B定义的抽象接口。</p>
-<p>**接口分离原则ISP(the Interface Segregation Principle ISP)：**模块间要通过抽象接口隔离开，而不是通过具体的类强耦合起来。</p>
-<h3 id="Python中的面向对象编程">Python中的面向对象编程</h3>
-<h4 id="Python中的类-Class">Python中的类(Class)</h4>
-<p>一个<code>类(Class)</code>会定义所有以它创建的对象，你甚至可以把类想象成一个对象工厂。举例来说，假设你有一只<code>牛头梗</code>，从<code>面向对象编程</code>的角度来看，一个<code>狗</code>的类中可能包含狗的一些特征，比如他的品种，眼色等。由于牛头梗是一只狗，那么我们就可以创建一个继承<code>狗</code>这个<code>类</code>特征的对象来定义牛头梗。<code>类</code>使用<code>方法函数(methods)</code>和<code>构造函数(constructors)</code>来创建并定义<code>对象(Objects)</code>。</p>
-<h4 id="用户定义的方法-user-defined-methods-和特殊方法-special-methods">用户定义的方法(user-defined methods)和特殊方法(special methods)</h4>
-<p><code>方法(methods)</code>是类中用以执行特殊任务的函数，Python将方法分成程序员编写的<code>用户定义方法(user-defined method)</code>和语言中自带的<code>特殊方法(special method)</code>。比如一个叫<code>狗</code>的<code>类</code>中可能有一个方法叫做<code>walk()</code>来供<code>狗</code>的对象调用，程序员编写这个方法来执行特殊的动作。</p>
-<p>而<code>特殊方法</code>则被<code>双下划线(__)</code>包围的名字定义，比如说<code>__init__</code>。Python用这些特殊方法来加强类的功能性，其大多在后台工作并会在程序需要的时候被自动调用。程序员不能直接调用这些方法。举例来说，当你创建一个新的对象的时候，Python会自动调用<code>__new__</code>方法，而这又会调用<code>__init__</code>方法。</p>
-<h4 id="构造函数-constructor">构造函数(constructor)</h4>
-<p>构造函数是程序在创建对象时会调用的特殊方法，其在类中是被用来初始化对象数据的。以<code>狗</code>这个类举例，我们可以用这个类的构造函数去给每一个<code>牛头梗</code>对象特征赋值，<code>__init__</code>就是Python的构造函数。</p>
-<h4 id="用代码来解释">用代码来解释</h4>
-<p>我们首先创建一个类，并且在这个类中定义一个<code>__init__</code>方法，而这个方法则初始化两个<code>属性(attribute)</code>:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,dogBreed,dogEyeColor</span>):</span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed       </span><br><span class="line">    self.eyeColor = dogEyeColor...</span><br></pre></td></tr></table></figure>
-<p>这时我们已经有了一个<code>类</code>了，接下来我们以这个类创建<code>对象</code>，并且将<code>类</code>中的<code>属性</code>传递给这个<code>对象</code>。这时候我们就需要<mark class="hl-label red">self</mark> 这个magic word来将对象的属性绑定在其接收到的参数上。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...Tomita = Dog(<span class="string">&quot;Fox Terrier&quot;</span>,<span class="string">&quot;brown&quot;</span>)...</span><br></pre></td></tr></table></figure>
-<p>在上面这行代码中，我们创建了一个叫做<code>Tomita</code>的对象(这是这只狗的名字)，然后我们首先声明定义这个对象的类的名字(<code>Dog</code>)，然后将在<code>Dog类</code>的<code>__init__</code>中设定的两个属性分别设定为<code>Fox Terrier</code>和<code>brown</code>。然后<code>__init__</code>用<code>self</code>来将这两个以参数传回的值赋给对象的属性<code>self.breed</code>和<code>self.eteColor</code>。</p>
-<p>然后要访问我们创建的对象的属性，我们只需要在对象名后用<code>.</code>接上相应的属性名，就可以访问这个对象的这个属性的值，例如：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...<span class="built_in">print</span>(<span class="string">&quot;This dog is a&quot;</span>,tomita.breed,<span class="string">&quot;and its eyes are&quot;</span>,tomita.eyeColor)</span><br></pre></td></tr></table></figure>
-<p>我们运行上面这段代码会得到这样的结果：</p>
-<blockquote>
-<p>This dog is a Fox Terrier and its eyes are brown</p>
-</blockquote>
-<p>Python中的构造函数也可以不输入参数，可以使用默认参数设定。如果一个构造函数不是必须输入参数的话，这个构造函数就叫<code>默认构造函数(default constructor)</code>。比如上面的<code>Dog类</code>如果写成默认构造函数形式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dogBreed=<span class="string">&quot;German Shepherd&quot;</span>,dogEyeColor=<span class="string">&quot;Brown&quot;</span></span>): </span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed   </span><br><span class="line">    self.eyeColor = dogEyeColor</span><br></pre></td></tr></table></figure>
-<p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
-<h1>最后</h1>
-<p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
-<p>[第5篇]</p>
-]]></content>
-      <categories>
-        <category>编程算法</category>
-      </categories>
-      <tags>
-        <tag>日常学习</tag>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[编程算法] 公司项目需要的自动化测试Selenium文档解读</title>
     <url>/2022/02/21/4-Selenium_documentation_learning/</url>
     <content><![CDATA[<h1>序言</h1>
 <p>基于刚进公司时接手的一个<code>自然语言处理</code>+<code>自动化测试</code>的项目，这篇文章我会主要覆盖Python的Selenium包的文档解读，由于在HKU时的毕业项目便涉及各种在线论坛的评论爬取，我对Selenium并不算陌生，但由于Selenium的内容功能是比较多的，本篇除了一些基础知识以外，我会重点关注与公司项目有关的部分。</p>
 <h1>正文</h1>
-<h2 id="背景介绍-2">背景介绍</h2>
+<h2 id="背景介绍">背景介绍</h2>
 <p>刚进公司的时候接手了一个前人的<code>自然语言处理</code>+<code>自动测试</code>项目。因为现在公司有一个由集团设定报价逻辑的报价系统，通常来说由代理或核保人员输入客户的相关资料便可以完成报价，但这个系统报价汽车险时要输入的资料非常繁琐，导致代理不愿意使用这个系统报价，影响报价率。考虑到这个系统中很多资料是没有意义的，因此前人建议代理直接填写车型排量司机年龄等必要资料，并用Python做了一个自动报价工具。</p>
 <p>这个工具由两个大部分组成，第一个部分是自然语言处理，即使用<code>Cosine Similarity</code>算法将代理输入的车型信息与公司系统中的车型信息匹配，有机会我会再写一篇文章讲讲这部分。第二部分则是自动化测试，使用匹配到的车型信息利用Selenium自动填写资料并返回报价。前人对第一个部分的完成度是比较高的，因此我只是对代码<code>规范性</code>和<code>循环逻辑</code>稍作调整便可以获得较好的<code>文本匹配和稳定性</code>。但第二个部分他的测试显然是不够的（毕竟是未完成的项目），网站中有非常多的特殊情况例如某些资料未填写时其他资料将不会显示，司机年龄和驾龄都很小时会直接弹出错误信息不予报价，有时网站弹窗提示时需要先将该弹窗关闭才能继续操作等等。</p>
 <p><strong>但由于代码本身涉及公司内部报价网站的架构，我<code>不会</code>在这里分享具体的代码或逻辑，因此本篇我会分享一些我在解决这些问题时通过<a href="https://selenium-python.readthedocs.io/index.html" title="Selenium with Python">Selenium with Python</a>学习到的知识。</strong></p>
@@ -813,7 +715,7 @@
 <p>举例来说，当使用<code>webdriver.Chrome()</code>将<code>Chrome driver</code>设定为<code>实例(instance)</code>并将该实例赋值给<code>driver</code>时，使用<code>driver.get(“xx网址URL”)</code>，浏览器便会被打开并导航至该指定网址，需要注意的是<code>Webdriver</code>会等到网页完全加载完毕之后才将控制权返回你的脚本，也就是说在这个阶段你通常不用担心你的程序会急着在没有加载出来的网页中操作或找寻你要的东西，但如果网页使用了大量的<code>AJAX(Asynchronous JavaScript And XML</code>, 用于直接在已加载的网页中读取网络服务器数据)，那么driver可能无法判断网页是否完全加载，如果要确保网页完全加载可能需要使用selenium的<a href="#%E7%AD%89%E5%BE%85%E5%8A%A0%E8%BD%BD(Waits)">waits</a>函数。</p>
 <h3 id="定位元素">定位元素</h3>
 <p>当我们进入了想要测试的网页之后，首先要解决的问题就是如何让driver找到你想要互动的元素，Selenium提供的方式非常丰富，包括<code>id, name, Xpath, link text, partial link text, tag name, class name甚至css selector</code>。</p>
-<h4 id="举例说明-2">举例说明</h4>
+<h4 id="举例说明">举例说明</h4>
 <p>举例来说，如果我们有一个如下的网页：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">&quot;loginForm&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;continue&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Login&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;continue&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Clear&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span> Are you sure you want to do this?<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;continue.html&quot;</span>&gt;</span>Continue<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;cancel.html&quot;</span>&gt;</span>Cancel<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>那么你可以分别通过下面这些方式定位你想要的各个元素：</p>
@@ -916,7 +818,7 @@
     <content><![CDATA[<h1>序言</h1>
 <p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
 <h1>正文</h1>
-<h2 id="背景介绍-3">背景介绍</h2>
+<h2 id="背景介绍-2">背景介绍</h2>
 <p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
 <p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
 <h2 id="Access基本知识">Access基本知识</h2>
@@ -1010,6 +912,104 @@
       <tags>
         <tag>工作学习</tag>
         <tag>Access</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
+    <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
+<h1>正文</h1>
+<h2 id="背景介绍-3">背景介绍</h2>
+<p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
+<h2 id="概述">概述</h2>
+<p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
+<ul>
+<li>
+<p><strong>面向过程：</strong> 顾名思义，编程方式注重过程。在解决一个问题的时候这种编程方式需要把解决方式拆分成一个个过程，按照一定的顺序执行完这些方法(methods)，方法执行完问题就解决了。</p>
+</li>
+<li>
+<p>**面向对象：**同样名字就已经非常清晰了，注重的是程序互动的对象。解决问题的时候面向对象编程是将事物抽象成对象，那问题里可能涉及的事物都定义成一个程序对象，然后给这个对象赋上一些<code>属性(Properties)</code>和<code>方法(methods)</code>。让各个对象去执行自己的方法以此来解决问题。</p>
+</li>
+</ul>
+<h3 id="举例说明-2">举例说明</h3>
+<p>我引用<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>提到的我觉得对于我的理解起到重要帮助的两个例子，分别是洗衣服和做饭。</p>
+<h4 id="洗衣服">洗衣服</h4>
+<p>假设有一个问题：要用洗衣机洗干净脏衣服，如何执行？</p>
+<p><strong><code>面向过程</code>的解决方法</strong>：</p>
+<ol>
+<li>执行加洗衣粉的方法；</li>
+<li>执行加水的方法；</li>
+<li>执行洗衣服的方法；</li>
+<li>执行清洗的方法；</li>
+<li>执行烘干的方法；</li>
+</ol>
+<p>将解决过程拆分成一个个方法，不用调用对象，通过执行一个个方法来解决问题。</p>
+<p><strong><code>面向对象</code>的解决方法：</strong></p>
+<ol>
+<li>先抽象出两个对象，分别是<code>洗衣机</code>和<code>人</code></li>
+<li>针对对象<code>洗衣机</code>加入一些属性和方法：“洗衣服方法”，”清洗方法“，”烘干方法“</li>
+<li>针对对象<code>人</code>加入一些属性和方法：“加洗衣粉方法”，“加水方法”</li>
+<li>然后执行：<code>人.加洗衣粉→人.加水→洗衣机.洗衣服→洗衣机.清洗→洗衣机.烘干</code></li>
+</ol>
+<p>同一个问题，面向对象编程需要先定义对象然后靠对象执行方法的方式解决问题。</p>
+<h4 id="做饭">做饭</h4>
+<p>呜呜轩轩引用了@十四期_李光的说法，分别将<code>面向过程编程</code>和<code>面向对象编程</code>比喻成<code>蛋炒饭</code>和<code>盖浇饭</code>。以此来说明两种方法的优缺点：</p>
+<ul>
+<li><code>面向过程编程就像蛋炒饭</code>，食材和饭交融在一起，难以分开，其味道可能均匀易于入口，但一旦做好就很难再改变。</li>
+<li><code>面向对象编程就像盖浇饭</code>，食材和饭是分开的，食客在同时能享受到食材和饭的同时，如果想要换一个口味也只需要将不同的菜与之前的饭放在一起就可以了。</li>
+</ul>
+<p>回到现实，这两种方法各自的优缺点就是：</p>
+<ul>
+<li>面向过程编程性能高于面向对象编程，缺点是不易维护，难以扩展，难以复用。适合需要性能优先的场景。</li>
+<li>面向对象编程就是相反了，性能略低但易维护易扩展，结构更加灵活。适合大而复杂的软件开发。</li>
+</ul>
+<p>这两个例子一个让人了解这两种方法在表达形式上的区别，一个让人了解各自的优缺点，我觉得非常方便概念比较模糊的人理解。</p>
+<h2 id="面向对象编程">面向对象编程</h2>
+<p>我个人觉得<code>面向过程编程</code>是非常<code>straightforward</code>的，所以除了两者的对比以外，我不打算细说面向过程编程。那在这一节我就还是用我从网上学到的内容(主要还是<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>和<a href="https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html" title="__init__ in Python: An Overview">Alexey</a>)现学现卖，详细讲讲面向对象编程的三大特征和五大原则，以及其实际的实现方法等。</p>
+<h3 id="三大基本特征">三大基本特征</h3>
+<p>**封装(Encapsulation)：**把客观事物封装成抽象的<code>类(Class)</code>，而类可以把自己的<code>属性(Property)</code>和<code>方法(methods)</code>只让可信的类或者对象操作，对不可信的进行信息隐藏(public和private)。一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。</p>
+<p>**继承(Inheritance)：**让某个类型的对象获得另一个类型对象的属性的方法。继承使新类可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展，通过继承创建的新类称为<code>“子类(Subclass)”</code>或<code>“派生类(Derived class)”</code>，被继承的类称为<code>“基类(Base class)”</code>，<code>“父类(Parent class)”</code>或<code>“超类(Super class)”</code>。继承的过程就是从<code>一般(generalized)</code>到<code>特殊(specialized)</code>的过程。要实现继承，可以通过<code>“继承(Inheritance)”</code>和<code>“组合(Composition)”</code>来实现。继承概念的实现方式有两类：<code>实现继承(Implementation inheritance)</code>与<code>接口继承(Interface inheritance)</code>。前者指直接使用父类的属性和方法而无需额外编码的能力；后者则是指仅使用属性和方法的名称，但子类必须提供实现的能力。</p>
+<p>**多态(Polymorphism)：**指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着虽然针对不同对象的具体操作不同，但通过一个公共的类，它们可以通过相同的方式予以调用。</p>
+<h3 id="五大基本原则">五大基本原则</h3>
+<p>**单一职责原则SRP(Single Responsibility Principle)：**指一个类的功能要单一，不能混杂什么都有。</p>
+<p>**开放封闭原则OCP(Open－Close Principle)：**一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。比如：一个网络模块，原来只有服务端功能，在现在要加入客户端功能，那么就应该在不用修改已有功能代码的前提下就能增加客户端的实现代码，这要求在设计之初就将两个部分分开，将公共部分抽象出来。</p>
+<p>**里式替换原则LSP(the Liskov Substitution Principle LSP)：**子类应当可以替换父类并出现在父类能出现的任何地方。</p>
+<p>**依赖倒置原则DIP(the Dependency Inversion Principle DIP)：**程序要依赖于抽象接口而不能依赖于具体实现。假设B是较A低的模块，但B需要使用到A的功能，这个时候，B不应当直接使用A中的具体类，因为如果这样做的话任何一个下层模块的变动都会导致上层必须要被相应更改。正确做法应当由B定义一个抽象接口，并由A来实现这个抽象接口，B只使用这个抽象接口：这样就达到了依赖倒置的目的，B也解除了对A的依赖，反过来是A依赖于B定义的抽象接口。</p>
+<p>**接口分离原则ISP(the Interface Segregation Principle ISP)：**模块间要通过抽象接口隔离开，而不是通过具体的类强耦合起来。</p>
+<h3 id="Python中的面向对象编程">Python中的面向对象编程</h3>
+<h4 id="Python中的类-Class">Python中的类(Class)</h4>
+<p>一个<code>类(Class)</code>会定义所有以它创建的对象，你甚至可以把类想象成一个对象工厂。举例来说，假设你有一只<code>牛头梗</code>，从<code>面向对象编程</code>的角度来看，一个<code>狗</code>的类中可能包含狗的一些特征，比如他的品种，眼色等。由于牛头梗是一只狗，那么我们就可以创建一个继承<code>狗</code>这个<code>类</code>特征的对象来定义牛头梗。<code>类</code>使用<code>方法函数(methods)</code>和<code>构造函数(constructors)</code>来创建并定义<code>对象(Objects)</code>。</p>
+<h4 id="用户定义的方法-user-defined-methods-和特殊方法-special-methods">用户定义的方法(user-defined methods)和特殊方法(special methods)</h4>
+<p><code>方法(methods)</code>是类中用以执行特殊任务的函数，Python将方法分成程序员编写的<code>用户定义方法(user-defined method)</code>和语言中自带的<code>特殊方法(special method)</code>。比如一个叫<code>狗</code>的<code>类</code>中可能有一个方法叫做<code>walk()</code>来供<code>狗</code>的对象调用，程序员编写这个方法来执行特殊的动作。</p>
+<p>而<code>特殊方法</code>则被<code>双下划线(__)</code>包围的名字定义，比如说<code>__init__</code>。Python用这些特殊方法来加强类的功能性，其大多在后台工作并会在程序需要的时候被自动调用。程序员不能直接调用这些方法。举例来说，当你创建一个新的对象的时候，Python会自动调用<code>__new__</code>方法，而这又会调用<code>__init__</code>方法。</p>
+<h4 id="构造函数-constructor">构造函数(constructor)</h4>
+<p>构造函数是程序在创建对象时会调用的特殊方法，其在类中是被用来初始化对象数据的。以<code>狗</code>这个类举例，我们可以用这个类的构造函数去给每一个<code>牛头梗</code>对象特征赋值，<code>__init__</code>就是Python的构造函数。</p>
+<h4 id="用代码来解释">用代码来解释</h4>
+<p>我们首先创建一个类，并且在这个类中定义一个<code>__init__</code>方法，而这个方法则初始化两个<code>属性(attribute)</code>:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,dogBreed,dogEyeColor</span>):</span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed       </span><br><span class="line">    self.eyeColor = dogEyeColor...</span><br></pre></td></tr></table></figure>
+<p>这时我们已经有了一个<code>类</code>了，接下来我们以这个类创建<code>对象</code>，并且将<code>类</code>中的<code>属性</code>传递给这个<code>对象</code>。这时候我们就需要<mark class="hl-label red">self</mark> 这个magic word来将对象的属性绑定在其接收到的参数上。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...Tomita = Dog(<span class="string">&quot;Fox Terrier&quot;</span>,<span class="string">&quot;brown&quot;</span>)...</span><br></pre></td></tr></table></figure>
+<p>在上面这行代码中，我们创建了一个叫做<code>Tomita</code>的对象(这是这只狗的名字)，然后我们首先声明定义这个对象的类的名字(<code>Dog</code>)，然后将在<code>Dog类</code>的<code>__init__</code>中设定的两个属性分别设定为<code>Fox Terrier</code>和<code>brown</code>。然后<code>__init__</code>用<code>self</code>来将这两个以参数传回的值赋给对象的属性<code>self.breed</code>和<code>self.eteColor</code>。</p>
+<p>然后要访问我们创建的对象的属性，我们只需要在对象名后用<code>.</code>接上相应的属性名，就可以访问这个对象的这个属性的值，例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...<span class="built_in">print</span>(<span class="string">&quot;This dog is a&quot;</span>,tomita.breed,<span class="string">&quot;and its eyes are&quot;</span>,tomita.eyeColor)</span><br></pre></td></tr></table></figure>
+<p>我们运行上面这段代码会得到这样的结果：</p>
+<blockquote>
+<p>This dog is a Fox Terrier and its eyes are brown</p>
+</blockquote>
+<p>Python中的构造函数也可以不输入参数，可以使用默认参数设定。如果一个构造函数不是必须输入参数的话，这个构造函数就叫<code>默认构造函数(default constructor)</code>。比如上面的<code>Dog类</code>如果写成默认构造函数形式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dogBreed=<span class="string">&quot;German Shepherd&quot;</span>,dogEyeColor=<span class="string">&quot;Brown&quot;</span></span>): </span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed   </span><br><span class="line">    self.eyeColor = dogEyeColor</span><br></pre></td></tr></table></figure>
+<p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
+<h1>最后</h1>
+<p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
+<p>[第5篇]</p>
+]]></content>
+      <categories>
+        <category>编程算法</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
