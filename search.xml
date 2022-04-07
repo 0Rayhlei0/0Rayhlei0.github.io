@@ -1,6 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
+    <url>/2022/02/10/1-blog_setup_notes/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
+<h1>正文</h1>
+<p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
+<h2 id="关于第二篇Git安装的问题">关于第二篇Git安装的问题</h2>
+<p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
+<ul>
+<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
+<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
+<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
+</ul>
+<h2 id="关于第三篇绑定GitHub并提交文件">关于第三篇绑定GitHub并提交文件</h2>
+<p>跟随步骤进行时有两点需要注意：</p>
+<h3 id="Git的username和email的配置">Git的username和email的配置</h3>
+<p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记&quot;, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
+<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
+<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
+<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
+<h3 id="从Master换成Main的掩耳盗铃">从Master换成Main的掩耳盗铃</h3>
+<p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
+<h4 id="push文件时的命令">push文件时的命令</h4>
+<p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
+<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
+<h4 id="初始化本地仓库时要做的修改">初始化本地仓库时要做的修改</h4>
+<p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
+<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
+<h3 id="为什么要提交到GitHub">为什么要提交到GitHub?</h3>
+<p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
+<h2 id="关于第五篇安装node-js和Hexo">关于第五篇安装node.js和Hexo</h2>
+<p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
+<h3 id="设置文件夹权限">设置文件夹权限</h3>
+<p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
+<h3 id="Hexo是什么？">Hexo是什么？</h3>
+<p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
+<p>关于Hexo相关的命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
+<h1>最后</h1>
+<p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
+<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
+<p>[第1篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[数据分析]常用数据库类型对比介绍</title>
     <url>/2022/03/09/10-introduction-to-different-db/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -172,68 +234,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
-    <url>/2022/02/10/1-blog_setup_notes/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
-<h1>正文</h1>
-<p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
-<h2 id="关于第二篇Git安装的问题">关于第二篇Git安装的问题</h2>
-<p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
-<ul>
-<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
-<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
-<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
-</ul>
-<h2 id="关于第三篇绑定GitHub并提交文件">关于第三篇绑定GitHub并提交文件</h2>
-<p>跟随步骤进行时有两点需要注意：</p>
-<h3 id="Git的username和email的配置">Git的username和email的配置</h3>
-<p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
-<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记&quot;, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
-<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
-<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
-<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
-<h3 id="从Master换成Main的掩耳盗铃">从Master换成Main的掩耳盗铃</h3>
-<p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
-<h4 id="push文件时的命令">push文件时的命令</h4>
-<p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
-<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
-<h4 id="初始化本地仓库时要做的修改">初始化本地仓库时要做的修改</h4>
-<p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
-<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
-<h3 id="为什么要提交到GitHub">为什么要提交到GitHub?</h3>
-<p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
-<h2 id="关于第五篇安装node-js和Hexo">关于第五篇安装node.js和Hexo</h2>
-<p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
-<h3 id="设置文件夹权限">设置文件夹权限</h3>
-<p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
-<h3 id="Hexo是什么？">Hexo是什么？</h3>
-<p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
-<p>关于Hexo相关的命令有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
-<h1>最后</h1>
-<p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
-<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
-<p>[第1篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>GitHub</tag>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[MS Office]使用 MS Access 开发文档管理查询工具</title>
     <url>/2022/03/27/11-MSAccess-documentation-tool/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -329,6 +329,171 @@
       <tags>
         <tag>工作学习</tag>
         <tag>Access</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[金融分析] CFA一级《财务报表分析》学习笔记</title>
+    <url>/2022/04/06/13-CFA-level1-financial-statement-analysis/</url>
+    <content><![CDATA[<h1>概览</h1>
+<p>财务报表分析一共包括4个Session的12个Reading，各个Reading的内容如下表：</p>
+<table>
+    <tr>
+        <th>Sessions</th>
+        <th>Readings</th>
+        <th>Contents</th>
+    </tr>
+    <tr>
+        <td rowspan="2">SS6</td>
+        <td>R19</td>
+        <td>Introduction to Financial  Statement Analysis</td>
+    </tr>
+    <tr>
+        <td>R20</td>
+        <td>Financial Reporting Standards</td>
+    </tr>
+    <tr>
+        <td rowspan="4">SS7</td>
+        <td>R21</td>
+        <td>Understanding the I/S</td>
+    </tr>
+    <tr>
+        <td>R22</td>
+        <td>Understanding the B/S</td>
+    </tr>
+    <tr>
+        <td>R23</td>
+        <td>Understanding the C/F</td>
+    </tr>
+    <tr>
+        <td>R24</td>
+        <td>Financial Analysis Techniques</td>
+    </tr>
+    <tr>
+        <td rowspan="4">SS8</td>
+        <td>R25</td>
+        <td>Inventories</td>
+    </tr>
+    <tr>
+        <td>R26</td>
+        <td>Long-Lived Assets</td>
+    </tr>
+    <tr>
+        <td>R27</td>
+        <td>Income Taxes</td>
+    </tr>
+    <tr>
+        <td>R28</td>
+        <td>Long-Term Liabilities and Leases</td>
+    </tr>
+    <tr>
+        <td rowspan="2">SS9</td>
+        <td>R29</td>
+        <td>Financial Reporting Quality</td>
+    </tr>
+    <tr>
+        <td>R30</td>
+        <td>Financial Statement Analysis: Applications</td>
+    </tr>
+</table>
+<p>其中该科目的重要考点主要集中在Session7和Session8,占考点重数的80-90%。从下面开始我会把每个Reading的知识点和重要考点一一记录下来。</p>
+<h1>Session 6</h1>
+<p>本Session中主要涉及的是财务报表分析的一些概况型知识，其中R19主要介绍公司财务各财务各报表的大致作用以及特性，财务报表分析可能关注的信息类型等。R20主要介绍财务报告标准。</p>
+<h2 id="Reading-19">Reading 19</h2>
+<h3 id="财务报表分析的作用">财务报表分析的作用</h3>
+<p>公司编制财务报表用来向其投资者，债权人以及其他相关方展示其财务状况。而财务报表分析则是利用公司财务报表中的信息，以及其他相关信息做决策。</p>
+<h3 id="财务报表内容">财务报表内容</h3>
+<p>一般公司的财务报表有五张，其中最重要的三张分别是：</p>
+<p><code>Balance sheet(B/S):</code> 该报表主要报告某个<code>时间点</code>公司的<code>财务状况(financial position)</code>。该报表有3个主要<code>elements</code>，分别为<code>Assets(资产)</code>,<code>Liabilities(负债)</code>和<code>Owner's equity(所有者权益)</code>。资产为公司所有的所有资源，负债为债权人所有的资金，所有者权益为股东所有的资金。该报表为<code>Accrual basis(权责发生制)</code>。会计恒等式：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>e</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>w</mi><mi>n</mi><mi>e</mi><msup><mi>r</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Asset = Liabilities + Owner&#x27; Equity
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">es</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9963em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">Ow</span><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span></p>
+<p><code>Income statement(I/S):</code>该报表主要报告公司在<code>一段时间内</code>的的财务表现。其中<code>主要elements</code>包括<code>Revenue(收入)</code>，<code>Expenses(支出)</code>和<code>Other income(其他收入)</code>。该报表为<code>Accrual basis(权责发生制)</code>。</p>
+<p><code>Cash flow statement(C/F):</code>该报表主要报告公司在<code>一段时间内</code>的现金收入与支付。各个<code>Cashflow(现金流)</code>被划分为<code>Operating cash flows</code>(主要指与公司正常经营相关的现金流), <code>Investing cash flows</code>(主要指买卖固定资产或参与其他公司投资相关的现金流)或者<code>Financing cash flows</code>(主要指与金融行为相关如发行或回收公司债务或权益证券也包括付给股东的分红等现金流)。该报表为<code>Cash basis(收付实现制)</code>。</p>
+<p>而另外两张财务报表分别是：</p>
+<p><code>The statement of comprehensive income:</code>该报表主要报告<code>Other comprehensive income(OCI)</code>的变动，<code>OCI</code>指根据会计准则的4项不计入<code>I/S</code>中而直接计入<code>B/S</code>的<code>equity</code>中。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>=</mo><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>+</mo><mi>O</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>r</mi><mtext> </mtext><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Comprehensive\ income = Net\ Income + Other\ comprehensive\ income
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">re</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Ot</span><span class="mord mathnormal">h</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace"> </span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">re</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span></span></span></span></span></p>
+<p><code>The statement of changes in equity:</code>该报表主要报告<code>一段时间内</code>equity的变动来源和数额。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">Equity = Capital + Retained\ Earnings + OCI
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span></span></p>
+<h3 id="主要报表间关系">主要报表间关系</h3>
+<p>公司的三张主要报表之间各有关联，每张表中有数字变动都会导致另外两张表中的数字相应变动，他们之间的关系两两来看。</p>
+<h4 id="B-S与I-S关系">B/S与I/S关系</h4>
+<p><code>Income statement</code>的主要信息为<code>Revenue - Expense = Net Income</code>，而公司每年的<code>Net Income</code>除了付出的<code>Dividend</code>，剩下的部分要被计入<code>Balance sheet</code>中的<code>Equity</code>的<code>Retained Earnings(留存收益)</code>科目中。即 <code>Net income - Dividend = Retained Earnings</code>。</p>
+<h4 id="B-S与C-F关系">B/S与C/F关系</h4>
+<p><code>Cash flow statement</code>中的主要信息为<code>Total CF = Operating CF + Investing CF + Financing CF</code>,而其中的Total CF则是当年现金流的净值，反映在<code>Balance sheet</code>中的<code>Asset</code>中的<code>Cash</code>科目中。即<code>年末Cash - 年初Cash = Total CF</code>。</p>
+<h4 id="I-S与C-F关系">I/S与C/F关系</h4>
+<p>Income statement 与 Cash flow statement的主要差别在于非现金交易，在<code>Income statement</code>的<code>Net income</code>中减去当年<code>非现金收入</code>并加上当年<code>非现金支出</code>便可以得到当年的<code>Total CF</code>。即 <code>Net income - Non-cash revenue + Non-cash Expense = Total Cash flow</code>。(疑问，receivable和payable属于noncash?)</p>
+<h3 id="Elements-元素-与Accounts-科目">Elements(元素)与Accounts(科目)</h3>
+<p>财务报表中<code>Elements(元素)</code>为主要分类，分为资产，负债，所有者权益，收入，支出。而每一个Elements中都有不同的Accounts(科目)。例如<code>资产元素</code>中有现金，固定资产，无形资产等科目。<code>负债元素</code>中有应付账款，银行借款等科目。</p>
+<h4 id="Contra-Accounts">Contra Accounts</h4>
+<p><code>Contra accounts(备抵科目)</code>为资产科目，其特征为<code>负数</code>，该科目用来抵减资产金额。例如：应收账款的坏账，固定资产的减值等。</p>
+<h4 id="Measurement-of-financial-elements">Measurement of financial elements</h4>
+<ul>
+<li><code>Historical cost(历史成本):</code> 用来计量<code>短期资产</code>(变现时间少于一年)，资产价值等于付出的成本。</li>
+<li><code>Amortized cost(摊余成本):</code> 用来计量长期资产(变现时间大于一年)，资产价值以<code>摊销(amortization)</code>，<code>折旧(depreciation)</code>，<code>减值(impairment)</code>，<code>耗减(depletion)</code>后的历史成本记账。</li>
+<li><code>Fair value(公允价值):</code>一般用来计算金融资产，需要有活跃报价。以两个<code>无信息差(knowledgeable)</code>，<code>自愿(willing)</code>，<code>非关联(arm's length)</code>的交易双方同意交易的价格计量。</li>
+</ul>
+<h3 id="Other-Relevant-information-其他相关信息">Other Relevant information(其他相关信息)</h3>
+<p>除了公司财务报表以外，金融分析师还需要从其他渠道获取补充信息，主要有六种，分别为<code>Financial statement notes(footnotes)</code>，<code>Management's commentary(MD&amp;A)</code>，<code>Proxy statement</code>, <code>Interim reports</code>, <code>Interim reports</code>,  <code>Earnings announcement</code>和<code>External sources</code>。其中考得比较多的是<code>footnote, MD&amp;A和Proxy</code>。</p>
+<p><code>Financial statement notes：</code>用来解释说明财务报表中的细节， 如会计方法，假设，估计，固定资产的折旧年限等等，如果需要了解财务报表中数字细节就要看这个财报附注。</p>
+<p><code>Management's commentary：</code>财务报表只能反映过去无法反映将来，<code>MD&amp;A</code>是公司管理层对公司经营状况的解读，其中会包含公司经营目标，过去表现，重要事件，未来可能有的不确定性以及表外事项等。</p>
+<p><code>Proxy statements：</code>临时股东大会通告出现说明公司出现需要临时召集股东投票的重大事件，事项可能包括调整管理层薪资，董事会成员选举，重大股权激励等等。</p>
+<p><code>Interim report：</code>中期报告是未经审计的半年或季度财务报告，可以提供更高时效性的公司财务信息。</p>
+<p><code>Earning announcements：</code>业绩预告是比中期报告有更高时效性的公司表现报告，但也是未经审计可能调整。</p>
+<p><code>External sources：</code>分析师还需要从公司外部获取相关信息，可能来源包括研究报告，整体经济状况，行业状况，相关新闻等。</p>
+<h3 id="Audit-审计">Audit(审计)</h3>
+<h4 id="审计原因">审计原因</h4>
+<p>公司财务报告需要审计的原因是<code>Principal-agent relationship</code>，也即<code>委托代理冲突</code>。其根本原因在于现代公司治理体系下公司所有者与公司管理者分治导致公司管理者可能为自己利益欺瞒公司所有者(即股东)。因此除董事会监督外，还需要由外部审计对公司管理者出具的公司财务报告进行审计。</p>
+<h4 id="审计概念">审计概念</h4>
+<ol>
+<li>审计本身提供对公司财务报表的<code>独立</code>审核，审计师不能与公司内部关联。</li>
+<li>审计师对公司财务报告的正确性提供<code>合理</code>保证(非100%)，保证公司财报没有<code>重大</code>误差。</li>
+<li>审计师除了对财报进行审计外还对公司内控程序进行审计，以此判定财报数字的可信度。</li>
+</ol>
+<h4 id="审计Opinion">审计Opinion</h4>
+<p>审计师完成财报审计后提供审计意见，共有4种Opinions:</p>
+<p><code>Unqualified opinion：</code>无保留意见，表示公司财务报表没有重大误差。</p>
+<p><code>Qualified opinion：</code>保留意见，表示公司财务报表中有个别性质不严重的偏差。</p>
+<p><code>Adverse opinion：</code>否定意见，表示公司财务报表中存在重大或大量误差。</p>
+<p><code>Disclaimer of opinion：</code>无法表示意见，表示因审计师活动受限以致无法出具审计意见。</p>
+<h3 id="Accounting-Equation-会计恒等式">Accounting Equation(会计恒等式)</h3>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>+</mo><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><msub><mi>s</mi><mrow><mi>E</mi><mi>n</mi><mi>d</mi></mrow></msub><mo>=</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><msub><mi>g</mi><mrow><mi>B</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>−</mo><mi>D</mi><mi>i</mi><mi>v</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>d</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>=</mo><mi>R</mi><mi>e</mi><mi>v</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>e</mi><mo>−</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>e</mi></mrow></mstyle></mtd></mtr></mtable></mrow><mspace width="14.2264em"/></mrow><annotation encoding="application/x-tex">\begin{cases}
+Asset = Liability + Equity\\
+Equity = Capital + Retained Earnings + OCI\\
+Retained Earnings_{End} = Retained\ Earning_{Begin}+Net\ Income - Dividend\\
+Net\ Income = Revenue - Expense
+\end{cases}\hspace{5cm}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.76em;vertical-align:-2.63em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-1.6em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎩</span></span></span><span style="top:-1.592em;"><span class="pstrut" style="height:3.15em;"></span><span style="height:0.916em;width:0.8889em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.8889em' height='0.916em' style='width:0.8889em' viewBox='0 0 888.89 916' preserveAspectRatio='xMinYMin'><path d='M384 0 H504 V916 H384z M384 0 H504 V916 H384z'/></svg></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎨</span></span></span><span style="top:-4.292em;"><span class="pstrut" style="height:3.15em;"></span><span style="height:0.916em;width:0.8889em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.8889em' height='0.916em' style='width:0.8889em' viewBox='0 0 888.89 916' preserveAspectRatio='xMinYMin'><path d='M384 0 H504 V916 H384z M384 0 H504 V916 H384z'/></svg></span></span><span style="top:-5.2em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎧</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.13em;"><span style="top:-5.13em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">in</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span></span></span><span style="top:-0.81em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">se</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.63em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:14.2264em;"></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo>⇓</mo><mspace width="34.1433em"/></mrow><annotation encoding="application/x-tex">\Darr\hspace{12cm}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mrel">⇓</span><span class="mspace" style="margin-right:34.1433em;"></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>b</mi><mi>u</mi><mi>t</mi><mi>e</mi><mi>d</mi><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><msub><mi>s</mi><mrow><mi>B</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>R</mi><mi>e</mi><mi>v</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>e</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>−</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi>s</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>−</mo><mi>D</mi><mi>i</mi><mi>v</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>d</mi><mi>e</mi><mi>c</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow></mstyle></mtd></mtr></mtable><mspace width="28.4528em"/></mrow><annotation encoding="application/x-tex">\begin{align*}
+Asset&amp;=Liability\\
+&amp;+Contributed Capital\\
+&amp;+Retained\ Earnings_{Begin}\\
+&amp;+Revenue\\
+&amp;-Expenses\\
+&amp;-Dividend declared\\
+&amp;+OCI
+\end{align*}\hspace{10cm}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:10.5em;vertical-align:-5em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:5.5em;"><span style="top:-7.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span></span></span><span style="top:-6.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-0.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:1.34em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:5.5em;"><span style="top:-7.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-6.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">ib</span><span class="mord mathnormal">u</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">in</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">ses</span></span></span><span style="top:-0.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">dd</span><span class="mord mathnormal">ec</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">re</span><span class="mord mathnormal">d</span></span></span><span style="top:1.34em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5em;"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:28.4528em;"></span></span></span></span></span></p>
+<h3 id="Accrual-Accounting-权责发生制">Accrual Accounting(权责发生制)</h3>
+<p>当每笔交易都是现款现货交易时，权责发生制与收付实现制记账结果一致，因此当收发货时间与收付款时间不一致时就会产生差异，不同情况下权责发生制的记账方式如下：</p>
+<h4 id="Cash-received-in-advance">Cash received in advance</h4>
+<p>交易未完成，现金已收到：已收到现金，因此在<code>资产</code>中记入一笔<code>现金</code>，同时在<code>负债</code>中计入<code>Unearned revenue(预收账款)</code>。</p>
+<h4 id="Cash-paid-in-advance">Cash paid in advance</h4>
+<p>交易未完成，现金已支付：已支付现金，因此在<code>资产</code>中扣除一笔<code>现金</code>，同时在<code>资产</code>中扣去<code>Prepaid expense(预付账款)</code>。</p>
+<h4 id="Cash-received-in-arrears">Cash received in arrears</h4>
+<p>交易已完成，现金未收到：已完成交易因此<code>收入</code>增加一笔<code>Accrued revenue(应计收入)</code>，计入<code>Equity</code>。同时在资产中计入<code>Account Receivable(应收账款)</code>。</p>
+<h4 id="Cash-paid-in-arrears">Cash paid in arrears</h4>
+<p>交易已完成，现金未支付：已完成交易，因此在<code>支出</code>扣除一笔<code>Accrued expense(应计费用)</code>，计入Equity。同时在负债中计入<code>Account Payable(应付账款)</code>。</p>
+<p>[第13篇]</p>
+]]></content>
+      <categories>
+        <category>金融分析</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
+        <tag>CFA一级</tag>
       </tags>
   </entry>
   <entry>
@@ -534,253 +699,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[金融分析] CFA一级《财务报表分析》学习笔记</title>
-    <url>/2022/04/06/13-CFA-level1-financial-statement-analysis/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>在本篇中，我会持续更新我学习CFA一级的《财务报表分析》时的学习笔记，将知识点整理好以便后期第二轮复习时快速复习。每天的学习内容会在第二天更新，以此达到24小时内复习的目的，增强记忆。</p>
-<h1>正文</h1>
-<h2 id="概览">概览</h2>
-<p>财务报表分析一共包括4个Session的12个Reading，各个Reading的内容如下表：</p>
-<table>
-    <tr>
-        <th>Sessions</th>
-        <th>Readings</th>
-        <th>Contents</th>
-    </tr>
-    <tr>
-        <td rowspan="2">SS6</td>
-        <td>R19</td>
-        <td>Introduction to Financial  Statement Analysis</td>
-    </tr>
-    <tr>
-        <td>R20</td>
-        <td>Financial Reporting Standards</td>
-    </tr>
-    <tr>
-        <td rowspan="4">SS7</td>
-        <td>R21</td>
-        <td>Understanding the I/S</td>
-    </tr>
-    <tr>
-        <td>R22</td>
-        <td>Understanding the B/S</td>
-    </tr>
-    <tr>
-        <td>R23</td>
-        <td>Understanding the C/F</td>
-    </tr>
-    <tr>
-        <td>R24</td>
-        <td>Financial Analysis Techniques</td>
-    </tr>
-    <tr>
-        <td rowspan="4">SS8</td>
-        <td>R25</td>
-        <td>Inventories</td>
-    </tr>
-    <tr>
-        <td>R26</td>
-        <td>Long-Lived Assets</td>
-    </tr>
-    <tr>
-        <td>R27</td>
-        <td>Income Taxes</td>
-    </tr>
-    <tr>
-        <td>R28</td>
-        <td>Long-Term Liabilities and Leases</td>
-    </tr>
-    <tr>
-        <td rowspan="2">SS9</td>
-        <td>R29</td>
-        <td>Financial Reporting Quality</td>
-    </tr>
-    <tr>
-        <td>R30</td>
-        <td>Financial Statement Analysis: Applications</td>
-    </tr>
-</table>
-<p>其中该科目的重要考点主要集中在Session7和Session8,占考点重数的80-90%。从下面开始我会把每个Reading的知识点和重要考点一一记录下来。</p>
-<h2 id="Session-6">Session 6</h2>
-<p>本Session中主要涉及的是财务报表分析的一些概况型知识，其中R19主要介绍公司财务各财务各报表的大致作用以及特性，财务报表分析可能关注的信息类型等。R20主要介绍财务报告标准。</p>
-<h3 id="Reading-19">Reading 19</h3>
-<h4 id="财务报表分析的作用">财务报表分析的作用</h4>
-<p>公司编制财务报表用来向其投资者，债权人以及其他相关方展示其财务状况。而财务报表分析则是利用公司财务报表中的信息，以及其他相关信息做决策。</p>
-<h4 id="财务报表内容">财务报表内容</h4>
-<p>一般公司的财务报表有五张，其中最重要的三张分别是：</p>
-<p><code>Balance sheet(B/S):</code> 该报表主要报告某个<code>时间点</code>公司的<code>财务状况(financial position)</code>。该报表有3个主要<code>elements</code>，分别为<code>Assets(资产)</code>,<code>Liabilities(负债)</code>和<code>Owner's equity(所有者权益)</code>。资产为公司所有的所有资源，负债为债权人所有的资金，所有者权益为股东所有的资金。该报表为<code>Accrual basis(权责发生制)</code>。会计恒等式：</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>e</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>w</mi><mi>n</mi><mi>e</mi><msup><mi>r</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Asset = Liabilities + Owner&#x27; Equity
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">es</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9963em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">Ow</span><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span></p>
-<p><code>Income statement(I/S):</code>该报表主要报告公司在<code>一段时间内</code>的的财务表现。其中<code>主要elements</code>包括<code>Revenue(收入)</code>，<code>Expenses(支出)</code>和<code>Other income(其他收入)</code>。该报表为<code>Accrual basis(权责发生制)</code>。</p>
-<p><code>Cash flow statement(C/F):</code>该报表主要报告公司在<code>一段时间内</code>的现金收入与支付。各个<code>Cashflow(现金流)</code>被划分为<code>Operating cash flows</code>(主要指与公司正常经营相关的现金流), <code>Investing cash flows</code>(主要指买卖固定资产或参与其他公司投资相关的现金流)或者<code>Financing cash flows</code>(主要指与金融行为相关如发行或回收公司债务或权益证券也包括付给股东的分红等现金流)。该报表为<code>Cash basis(收付实现制)</code>。</p>
-<p>而另外两张财务报表分别是：</p>
-<p><code>The statement of comprehensive income:</code>该报表主要报告<code>Other comprehensive income(OCI)</code>的变动，<code>OCI</code>指根据会计准则的4项不计入<code>I/S</code>中而直接计入<code>B/S</code>的<code>equity</code>中。</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>=</mo><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>+</mo><mi>O</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>r</mi><mtext> </mtext><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Comprehensive\ income = Net\ Income + Other\ comprehensive\ income
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">re</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Ot</span><span class="mord mathnormal">h</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace"> </span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">re</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span></span></span></span></span></p>
-<p><code>The statement of changes in equity:</code>该报表主要报告<code>一段时间内</code>equity的变动来源和数额。</p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">Equity = Capital + Retained\ Earnings + OCI
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span></span></p>
-<h4 id="主要报表间关系">主要报表间关系</h4>
-<p>公司的三张主要报表之间各有关联，每张表中有数字变动都会导致另外两张表中的数字相应变动，他们之间的关系两两来看。</p>
-<h5 id="B-S与I-S关系">B/S与I/S关系</h5>
-<p><code>Income statement</code>的主要信息为<code>Revenue - Expense = Net Income</code>，而公司每年的<code>Net Income</code>除了付出的<code>Dividend</code>，剩下的部分要被计入<code>Balance sheet</code>中的<code>Equity</code>的<code>Retained Earnings(留存收益)</code>科目中。即 <code>Net income - Dividend = Retained Earnings</code>。</p>
-<h5 id="B-S与C-F关系">B/S与C/F关系</h5>
-<p><code>Cash flow statement</code>中的主要信息为<code>Total CF = Operating CF + Investing CF + Financing CF</code>,而其中的Total CF则是当年现金流的净值，反映在<code>Balance sheet</code>中的<code>Asset</code>中的<code>Cash</code>科目中。即<code>年末Cash - 年初Cash = Total CF</code>。</p>
-<h5 id="I-S与C-F关系">I/S与C/F关系</h5>
-<p>Income statement 与 Cash flow statement的主要差别在于非现金交易，在<code>Income statement</code>的<code>Net income</code>中减去当年<code>非现金收入</code>并加上当年<code>非现金支出</code>便可以得到当年的<code>Total CF</code>。即 <code>Net income - Non-cash revenue + Non-cash Expense = Total Cash flow</code>。(疑问，receivable和payable属于noncash?)</p>
-<h4 id="Elements-元素-与Accounts-科目">Elements(元素)与Accounts(科目)</h4>
-<p>财务报表中<code>Elements(元素)</code>为主要分类，分为资产，负债，所有者权益，收入，支出。而每一个Elements中都有不同的Accounts(科目)。例如<code>资产元素</code>中有现金，固定资产，无形资产等科目。<code>负债元素</code>中有应付账款，银行借款等科目。</p>
-<h5 id="Contra-Accounts">Contra Accounts</h5>
-<p><code>Contra accounts(备抵科目)</code>为资产科目，其特征为<code>负数</code>，该科目用来抵减资产金额。例如：应收账款的坏账，固定资产的减值等。</p>
-<h5 id="Measurement-of-financial-elements">Measurement of financial elements</h5>
-<ul>
-<li><code>Historical cost(历史成本):</code> 用来计量<code>短期资产</code>(变现时间少于一年)，资产价值等于付出的成本。</li>
-<li><code>Amortized cost(摊余成本):</code> 用来计量长期资产(变现时间大于一年)，资产价值以<code>摊销(amortization)</code>，<code>折旧(depreciation)</code>，<code>减值(impairment)</code>，<code>耗减(depletion)</code>后的历史成本记账。</li>
-<li><code>Fair value(公允价值):</code>一般用来计算金融资产，需要有活跃报价。以两个<code>无信息差(knowledgeable)</code>，<code>自愿(willing)</code>，<code>非关联(arm's length)</code>的交易双方同意交易的价格计量。</li>
-</ul>
-<h4 id="Other-Relevant-information-其他相关信息">Other Relevant information(其他相关信息)</h4>
-<p>除了公司财务报表以外，金融分析师还需要从其他渠道获取补充信息，主要有六种，分别为<code>Financial statement notes(footnotes)</code>，<code>Management's commentary(MD&amp;A)</code>，<code>Proxy statement</code>, <code>Interim reports</code>, <code>Interim reports</code>,  <code>Earnings announcement</code>和<code>External sources</code>。其中考得比较多的是<code>footnote, MD&amp;A和Proxy</code>。</p>
-<p><code>Financial statement notes：</code>用来解释说明财务报表中的细节， 如会计方法，假设，估计，固定资产的折旧年限等等，如果需要了解财务报表中数字细节就要看这个财报附注。</p>
-<p><code>Management's commentary：</code>财务报表只能反映过去无法反映将来，<code>MD&amp;A</code>是公司管理层对公司经营状况的解读，其中会包含公司经营目标，过去表现，重要事件，未来可能有的不确定性以及表外事项等。</p>
-<p><code>Proxy statements：</code>临时股东大会通告出现说明公司出现需要临时召集股东投票的重大事件，事项可能包括调整管理层薪资，董事会成员选举，重大股权激励等等。</p>
-<p><code>Interim report：</code>中期报告是未经审计的半年或季度财务报告，可以提供更高时效性的公司财务信息。</p>
-<p><code>Earning announcements：</code>业绩预告是比中期报告有更高时效性的公司表现报告，但也是未经审计可能调整。</p>
-<p><code>External sources：</code>分析师还需要从公司外部获取相关信息，可能来源包括研究报告，整体经济状况，行业状况，相关新闻等。</p>
-<h4 id="Audit-审计">Audit(审计)</h4>
-<h5 id="审计原因">审计原因</h5>
-<p>公司财务报告需要审计的原因是<code>Principal-agent relationship</code>，也即<code>委托代理冲突</code>。其根本原因在于现代公司治理体系下公司所有者与公司管理者分治导致公司管理者可能为自己利益欺瞒公司所有者(即股东)。因此除董事会监督外，还需要由外部审计对公司管理者出具的公司财务报告进行审计。</p>
-<h5 id="审计概念">审计概念</h5>
-<ol>
-<li>审计本身提供对公司财务报表的<code>独立</code>审核，审计师不能与公司内部关联。</li>
-<li>审计师对公司财务报告的正确性提供<code>合理</code>保证(非100%)，保证公司财报没有<code>重大</code>误差。</li>
-<li>审计师除了对财报进行审计外还对公司内控程序进行审计，以此判定财报数字的可信度。</li>
-</ol>
-<h5 id="审计Opinion">审计Opinion</h5>
-<p>审计师完成财报审计后提供审计意见，共有4种Opinions:</p>
-<p><code>Unqualified opinion：</code>无保留意见，表示公司财务报表没有重大误差。</p>
-<p><code>Qualified opinion：</code>保留意见，表示公司财务报表中有个别性质不严重的偏差。</p>
-<p><code>Adverse opinion：</code>否定意见，表示公司财务报表中存在重大或大量误差。</p>
-<p><code>Disclaimer of opinion：</code>无法表示意见，表示因审计师活动受限以致无法出具审计意见。</p>
-<h4 id="Accounting-Equation-会计恒等式">Accounting Equation(会计恒等式)</h4>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>+</mo><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><msub><mi>s</mi><mrow><mi>E</mi><mi>n</mi><mi>d</mi></mrow></msub><mo>=</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><msub><mi>g</mi><mrow><mi>B</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>−</mo><mi>D</mi><mi>i</mi><mi>v</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>d</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>=</mo><mi>R</mi><mi>e</mi><mi>v</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>e</mi><mo>−</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>e</mi></mrow></mstyle></mtd></mtr></mtable></mrow><mspace width="14.2264em"/></mrow><annotation encoding="application/x-tex">\begin{cases}
-Asset = Liability + Equity\\
-Equity = Capital + Retained Earnings + OCI\\
-Retained Earnings_{End} = Retained\ Earning_{Begin}+Net\ Income - Dividend\\
-Net\ Income = Revenue - Expense
-\end{cases}\hspace{5cm}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.76em;vertical-align:-2.63em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-1.6em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎩</span></span></span><span style="top:-1.592em;"><span class="pstrut" style="height:3.15em;"></span><span style="height:0.916em;width:0.8889em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.8889em' height='0.916em' style='width:0.8889em' viewBox='0 0 888.89 916' preserveAspectRatio='xMinYMin'><path d='M384 0 H504 V916 H384z M384 0 H504 V916 H384z'/></svg></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎨</span></span></span><span style="top:-4.292em;"><span class="pstrut" style="height:3.15em;"></span><span style="height:0.916em;width:0.8889em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.8889em' height='0.916em' style='width:0.8889em' viewBox='0 0 888.89 916' preserveAspectRatio='xMinYMin'><path d='M384 0 H504 V916 H384z M384 0 H504 V916 H384z'/></svg></span></span><span style="top:-5.2em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎧</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.13em;"><span style="top:-5.13em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">in</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span></span></span><span style="top:-0.81em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">se</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.63em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:14.2264em;"></span></span></span></span></span></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo>⇓</mo><mspace width="34.1433em"/></mrow><annotation encoding="application/x-tex">\Darr\hspace{12cm}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mrel">⇓</span><span class="mspace" style="margin-right:34.1433em;"></span></span></span></span></span></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>b</mi><mi>u</mi><mi>t</mi><mi>e</mi><mi>d</mi><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><msub><mi>s</mi><mrow><mi>B</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>R</mi><mi>e</mi><mi>v</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>e</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>−</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi>s</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>−</mo><mi>D</mi><mi>i</mi><mi>v</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>d</mi><mi>e</mi><mi>c</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow></mstyle></mtd></mtr></mtable><mspace width="28.4528em"/></mrow><annotation encoding="application/x-tex">\begin{align*}
-Asset&amp;=Liability\\
-&amp;+Contributed Capital\\
-&amp;+Retained\ Earnings_{Begin}\\
-&amp;+Revenue\\
-&amp;-Expenses\\
-&amp;-Dividend declared\\
-&amp;+OCI
-\end{align*}\hspace{10cm}
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:10.5em;vertical-align:-5em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:5.5em;"><span style="top:-7.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span></span></span><span style="top:-6.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-0.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:1.34em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:5.5em;"><span style="top:-7.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-6.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">ib</span><span class="mord mathnormal">u</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">in</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">ses</span></span></span><span style="top:-0.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">dd</span><span class="mord mathnormal">ec</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">re</span><span class="mord mathnormal">d</span></span></span><span style="top:1.34em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5em;"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:28.4528em;"></span></span></span></span></span></p>
-<h4 id="Accrual-Accounting-权责发生制">Accrual Accounting(权责发生制)</h4>
-<p>当每笔交易都是现款现货交易时，权责发生制与收付实现制记账结果一致，因此当收发货时间与收付款时间不一致时就会产生差异，不同情况下权责发生制的记账方式如下：</p>
-<h5 id="Cash-received-in-advance">Cash received in advance</h5>
-<p>交易未完成，现金已收到：已收到现金，因此在<code>资产</code>中记入一笔<code>现金</code>，同时在<code>负债</code>中计入<code>Unearned revenue(预收账款)</code>。</p>
-<h5 id="Cash-paid-in-advance">Cash paid in advance</h5>
-<p>交易未完成，现金已支付：已支付现金，因此在<code>资产</code>中扣除一笔<code>现金</code>，同时在<code>资产</code>中扣去<code>Prepaid expense(预付账款)</code>。</p>
-<h5 id="Cash-received-in-arrears">Cash received in arrears</h5>
-<p>交易已完成，现金未收到：已完成交易因此<code>收入</code>增加一笔<code>Accrued revenue(应计收入)</code>，计入<code>Equity</code>。同时在资产中计入<code>Account Receivable(应收账款)</code>。</p>
-<h5 id="Cash-paid-in-arrears">Cash paid in arrears</h5>
-<p>交易已完成，现金未支付：已完成交易，因此在<code>支出</code>扣除一笔<code>Accrued expense(应计费用)</code>，计入Equity。同时在负债中计入<code>Account Payable(应付账款)</code>。</p>
-<p>[第13篇]</p>
-]]></content>
-      <categories>
-        <category>金融分析</category>
-      </categories>
-      <tags>
-        <tag>日常学习</tag>
-        <tag>CFA一级</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
-    <url>/2022/02/12/2-typora_picgo_config/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
-<h1>正文</h1>
-<h2 id="创建博文">创建博文</h2>
-<p>先介绍一些在Hexo中发文的基础知识。</p>
-<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
-<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
-<ul>
-<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
-<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
-<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
-<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
-</ul>
-<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
-<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
-<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
-<p>hexo命令创建三类文件的方式分别如下：</p>
-<ul>
-<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
-<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
-<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
-</ul>
-<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
-<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
-<h3 id="Typora是什么">Typora是什么</h3>
-<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
-<h3 id="PicGo是什么">PicGo是什么</h3>
-<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
-<h3 id="具体如何配置">具体如何配置</h3>
-<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
-<h4 id="配置Typora">配置Typora</h4>
-<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
-<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
-<h4 id="配置图床">配置图床</h4>
-<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
-<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
-<h4 id="使用图床">使用图床</h4>
-<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
-<hr>
-<p>以下内容为2022年2月19日补充</p>
-<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
-<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
-<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
-<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
-<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
-<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
-<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
-<blockquote>
-<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
-</blockquote>
-<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
-<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
-<blockquote>
-<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
-</blockquote>
-<hr>
-<h1>最后</h1>
-<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
-<p>[第2篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>日常学习</tag>
-        <tag>Typora</tag>
-        <tag>PicGo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
     <url>/2022/02/19/3-excel-tool-develop-1/</url>
     <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
@@ -863,6 +781,85 @@ Asset&amp;=Liability\\
       <tags>
         <tag>工作学习</tag>
         <tag>Excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
+    <url>/2022/02/12/2-typora_picgo_config/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
+<h1>正文</h1>
+<h2 id="创建博文">创建博文</h2>
+<p>先介绍一些在Hexo中发文的基础知识。</p>
+<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
+<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
+<ul>
+<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
+<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
+<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
+<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
+</ul>
+<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
+<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
+<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
+<p>hexo命令创建三类文件的方式分别如下：</p>
+<ul>
+<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
+<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
+<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
+</ul>
+<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
+<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
+<h3 id="Typora是什么">Typora是什么</h3>
+<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
+<h3 id="PicGo是什么">PicGo是什么</h3>
+<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
+<h3 id="具体如何配置">具体如何配置</h3>
+<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
+<h4 id="配置Typora">配置Typora</h4>
+<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
+<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
+<h4 id="配置图床">配置图床</h4>
+<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
+<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
+<h4 id="使用图床">使用图床</h4>
+<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
+<hr>
+<p>以下内容为2022年2月19日补充</p>
+<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
+<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
+<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
+<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
+<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
+<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
+<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
+<blockquote>
+<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
+</blockquote>
+<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
+<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
+<blockquote>
+<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
+</blockquote>
+<hr>
+<h1>最后</h1>
+<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
+<p>[第2篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+        <tag>Typora</tag>
+        <tag>PicGo</tag>
       </tags>
   </entry>
   <entry>
@@ -1418,6 +1415,54 @@ Asset&amp;=Liability\\
       </tags>
   </entry>
   <entry>
+    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
+    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
+<h1>正文</h1>
+<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
+<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
+<blockquote>
+<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
+</blockquote>
+<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
+<h2 id="清除缓存">清除缓存</h2>
+<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
+<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
+<h2 id="引用版本号">引用版本号</h2>
+<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
+<blockquote>
+<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
+</blockquote>
+<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
+<blockquote>
+<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
+</blockquote>
+<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
+<h2 id="解决办法">解决办法</h2>
+<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
+<h2 id="一个疑惑">一个疑惑</h2>
+<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
+<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
+<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
+<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
+<h1>最后</h1>
+<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
+<p>[第9篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[信息安全]解码微信PC版中以dat格式存储的聊天图片</title>
     <url>/2022/03/04/8-decrypt-wechat-pics/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -1469,54 +1514,6 @@ Asset&amp;=Liability\\
         <tag>日常学习</tag>
         <tag>微信</tag>
         <tag>解码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
-    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
-<h1>正文</h1>
-<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
-<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
-<blockquote>
-<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
-</blockquote>
-<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
-<h2 id="清除缓存">清除缓存</h2>
-<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
-<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
-<h2 id="引用版本号">引用版本号</h2>
-<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
-<blockquote>
-<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
-</blockquote>
-<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
-<blockquote>
-<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
-</blockquote>
-<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
-<h2 id="解决办法">解决办法</h2>
-<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
-<h2 id="一个疑惑">一个疑惑</h2>
-<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
-<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
-<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
-<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
-<h1>最后</h1>
-<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
-<p>[第9篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-        <tag>Github</tag>
       </tags>
   </entry>
 </search>
