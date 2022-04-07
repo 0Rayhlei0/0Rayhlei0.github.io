@@ -1,68 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
-    <url>/2022/02/10/1-blog_setup_notes/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
-<h1>正文</h1>
-<p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
-<h2 id="关于第二篇Git安装的问题">关于第二篇Git安装的问题</h2>
-<p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
-<ul>
-<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
-<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
-<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
-</ul>
-<h2 id="关于第三篇绑定GitHub并提交文件">关于第三篇绑定GitHub并提交文件</h2>
-<p>跟随步骤进行时有两点需要注意：</p>
-<h3 id="Git的username和email的配置">Git的username和email的配置</h3>
-<p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
-<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记&quot;, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
-<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
-<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
-<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
-<h3 id="从Master换成Main的掩耳盗铃">从Master换成Main的掩耳盗铃</h3>
-<p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
-<h4 id="push文件时的命令">push文件时的命令</h4>
-<p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
-<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
-<h4 id="初始化本地仓库时要做的修改">初始化本地仓库时要做的修改</h4>
-<p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
-<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
-<h3 id="为什么要提交到GitHub">为什么要提交到GitHub?</h3>
-<p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
-<h2 id="关于第五篇安装node-js和Hexo">关于第五篇安装node.js和Hexo</h2>
-<p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
-<h3 id="设置文件夹权限">设置文件夹权限</h3>
-<p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
-<h3 id="Hexo是什么？">Hexo是什么？</h3>
-<p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
-<p>关于Hexo相关的命令有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
-<h1>最后</h1>
-<p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
-<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
-<p>[第1篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>GitHub</tag>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[数据分析]常用数据库类型对比介绍</title>
     <url>/2022/03/09/10-introduction-to-different-db/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -234,6 +172,68 @@
       </tags>
   </entry>
   <entry>
+    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
+    <url>/2022/02/10/1-blog_setup_notes/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
+<h1>正文</h1>
+<p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
+<h2 id="关于第二篇Git安装的问题">关于第二篇Git安装的问题</h2>
+<p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
+<ul>
+<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
+<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
+<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
+</ul>
+<h2 id="关于第三篇绑定GitHub并提交文件">关于第三篇绑定GitHub并提交文件</h2>
+<p>跟随步骤进行时有两点需要注意：</p>
+<h3 id="Git的username和email的配置">Git的username和email的配置</h3>
+<p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记&quot;, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
+<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
+<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
+<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
+<h3 id="从Master换成Main的掩耳盗铃">从Master换成Main的掩耳盗铃</h3>
+<p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
+<h4 id="push文件时的命令">push文件时的命令</h4>
+<p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
+<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
+<h4 id="初始化本地仓库时要做的修改">初始化本地仓库时要做的修改</h4>
+<p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
+<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
+<h3 id="为什么要提交到GitHub">为什么要提交到GitHub?</h3>
+<p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
+<h2 id="关于第五篇安装node-js和Hexo">关于第五篇安装node.js和Hexo</h2>
+<p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
+<h3 id="设置文件夹权限">设置文件夹权限</h3>
+<p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
+<h3 id="Hexo是什么？">Hexo是什么？</h3>
+<p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
+<p>关于Hexo相关的命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
+<h1>最后</h1>
+<p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
+<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
+<p>[第1篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[MS Office]使用 MS Access 开发文档管理查询工具</title>
     <url>/2022/03/27/11-MSAccess-documentation-tool/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -368,9 +368,9 @@
 </tr>
 <tr>
 <td>问题形式</td>
-<td>多项选择题</td>
-<td>情景支持的多项选择题</td>
-<td>情景支持的论文题和多项选择题</td>
+<td>单项选择题</td>
+<td>基于案例的单项选择题</td>
+<td>基于案例的简答题和单项选择题</td>
 </tr>
 <tr>
 <td>结果通知时间</td>
@@ -529,6 +529,175 @@
         <category>金融分析</category>
       </categories>
       <tags>
+        <tag>日常学习</tag>
+        <tag>CFA一级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[金融分析] CFA一级《财务报表分析》学习笔记</title>
+    <url>/2022/04/06/13-CFA-level1-financial-statement-analysis/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>在本篇中，我会持续更新我学习CFA一级的《财务报表分析》时的学习笔记，将知识点整理好以便后期第二轮复习时快速复习。每天的学习内容会在第二天更新，以此达到24小时内复习的目的，增强记忆。</p>
+<h1>正文</h1>
+<h2 id="概览">概览</h2>
+<p>财务报表分析一共包括4个Session的12个Reading，各个Reading的内容如下表：</p>
+<table>
+    <tr>
+        <th>Sessions</th>
+        <th>Readings</th>
+        <th>Contents</th>
+    </tr>
+    <tr>
+        <td rowspan="2">SS6</td>
+        <td>R19</td>
+        <td>Introduction to Financial  Statement Analysis</td>
+    </tr>
+    <tr>
+        <td>R20</td>
+        <td>Financial Reporting Standards</td>
+    </tr>
+    <tr>
+        <td rowspan="4">SS7</td>
+        <td>R21</td>
+        <td>Understanding the I/S</td>
+    </tr>
+    <tr>
+        <td>R22</td>
+        <td>Understanding the B/S</td>
+    </tr>
+    <tr>
+        <td>R23</td>
+        <td>Understanding the C/F</td>
+    </tr>
+    <tr>
+        <td>R24</td>
+        <td>Financial Analysis Techniques</td>
+    </tr>
+    <tr>
+        <td rowspan="4">SS8</td>
+        <td>R25</td>
+        <td>Inventories</td>
+    </tr>
+    <tr>
+        <td>R26</td>
+        <td>Long-Lived Assets</td>
+    </tr>
+    <tr>
+        <td>R27</td>
+        <td>Income Taxes</td>
+    </tr>
+    <tr>
+        <td>R28</td>
+        <td>Long-Term Liabilities and Leases</td>
+    </tr>
+    <tr>
+        <td rowspan="2">SS9</td>
+        <td>R29</td>
+        <td>Financial Reporting Quality</td>
+    </tr>
+    <tr>
+        <td>R30</td>
+        <td>Financial Statement Analysis: Applications</td>
+    </tr>
+</table>
+<p>其中该科目的重要考点主要集中在Session7和Session8,占考点重数的80-90%。从下面开始我会把每个Reading的知识点和重要考点一一记录下来。</p>
+<h2 id="Session-6">Session 6</h2>
+<p>本Session中主要涉及的是财务报表分析的一些概况型知识，其中R19主要介绍公司财务各财务各报表的大致作用以及特性，财务报表分析可能关注的信息类型等。R20主要介绍财务报告标准。</p>
+<h3 id="Reading-19">Reading 19</h3>
+<h4 id="财务报表分析的作用">财务报表分析的作用</h4>
+<p>公司编制财务报表用来向其投资者，债权人以及其他相关方展示其财务状况。而财务报表分析则是利用公司财务报表中的信息，以及其他相关信息做决策。</p>
+<h4 id="财务报表内容">财务报表内容</h4>
+<p>一般公司的财务报表有五张，其中最重要的三张分别是：</p>
+<p><code>Balance sheet(B/S):</code> 该报表主要报告某个<code>时间点</code>公司的<code>财务状况(financial position)</code>。该报表有3个主要<code>elements</code>，分别为<code>Assets(资产)</code>,<code>Liabilities(负债)</code>和<code>Owner's equity(所有者权益)</code>。资产为公司所有的所有资源，负债为债权人所有的资金，所有者权益为股东所有的资金。该报表为<code>Accrual basis(权责发生制)</code>。会计恒等式：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>i</mi><mi>e</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>w</mi><mi>n</mi><mi>e</mi><msup><mi>r</mi><mo mathvariant="normal" lspace="0em" rspace="0em">′</mo></msup><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">Asset = Liabilities + Owner&#x27; Equity
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">es</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.9963em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">Ow</span><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8019em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">′</span></span></span></span></span></span></span></span></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span></span></span></p>
+<p><code>Income statement(I/S):</code>该报表主要报告公司在<code>一段时间内</code>的的财务表现。其中<code>主要elements</code>包括<code>Revenue(收入)</code>，<code>Expenses(支出)</code>和<code>Other income(其他收入)</code>。该报表为<code>Accrual basis(权责发生制)</code>。</p>
+<p><code>Cash flow statement(C/F):</code>该报表主要报告公司在<code>一段时间内</code>的现金收入与支付。各个<code>Cashflow(现金流)</code>被划分为<code>Operating cash flows</code>(主要指与公司正常经营相关的现金流), <code>Investing cash flows</code>(主要指买卖固定资产或参与其他公司投资相关的现金流)或者<code>Financing cash flows</code>(主要指与金融行为相关如发行或回收公司债务或权益证券也包括付给股东的分红等现金流)。该报表为<code>Cash basis(收付实现制)</code>。</p>
+<p>而另外两张财务报表分别是：</p>
+<p><code>The statement of comprehensive income:</code>该报表主要报告<code>Other comprehensive income(OCI)</code>的变动，<code>OCI</code>指根据会计准则的4项不计入<code>I/S</code>中而直接计入<code>B/S</code>的<code>equity</code>中。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>=</mo><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>+</mo><mi>O</mi><mi>t</mi><mi>h</mi><mi>e</mi><mi>r</mi><mtext> </mtext><mi>c</mi><mi>o</mi><mi>m</mi><mi>p</mi><mi>r</mi><mi>e</mi><mi>h</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">Comprehensive\ income = Net\ Income + Other\ comprehensive\ income
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">re</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">Ot</span><span class="mord mathnormal">h</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace"> </span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">p</span><span class="mord mathnormal">re</span><span class="mord mathnormal">h</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span></span></span></span></span></p>
+<p><code>The statement of changes in equity:</code>该报表主要报告<code>一段时间内</code>equity的变动来源和数额。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow><annotation encoding="application/x-tex">Equity = Capital + Retained\ Earnings + OCI
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8778em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span></span></p>
+<h4 id="主要报表间关系">主要报表间关系</h4>
+<p>公司的三张主要报表之间各有关联，每张表中有数字变动都会导致另外两张表中的数字相应变动，他们之间的关系两两来看。</p>
+<h5 id="B-S与I-S关系">B/S与I/S关系</h5>
+<p><code>Income statement</code>的主要信息为<code>Revenue - Expense = Net Income</code>，而公司每年的<code>Net Income</code>除了付出的<code>Dividend</code>，剩下的部分要被计入<code>Balance sheet</code>中的<code>Equity</code>的<code>Retained Earnings(留存收益)</code>科目中。即 <code>Net income - Dividend = Retained Earnings</code>。</p>
+<h5 id="B-S与C-F关系">B/S与C/F关系</h5>
+<p><code>Cash flow statement</code>中的主要信息为<code>Total CF = Operating CF + Investing CF + Financing CF</code>,而其中的Total CF则是当年现金流的净值，反映在<code>Balance sheet</code>中的<code>Asset</code>中的<code>Cash</code>科目中。即<code>年末Cash - 年初Cash = Total CF</code>。</p>
+<h5 id="I-S与C-F关系">I/S与C/F关系</h5>
+<p>Income statement 与 Cash flow statement的主要差别在于非现金交易，在<code>Income statement</code>的<code>Net income</code>中减去当年<code>非现金收入</code>并加上当年<code>非现金支出</code>便可以得到当年的<code>Total CF</code>。即 <code>Net income - Non-cash revenue + Non-cash Expense = Total Cash flow</code>。(疑问，receivable和payable属于noncash?)</p>
+<h4 id="Elements-元素-与Accounts-科目">Elements(元素)与Accounts(科目)</h4>
+<p>财务报表中<code>Elements(元素)</code>为主要分类，分为资产，负债，所有者权益，收入，支出。而每一个Elements中都有不同的Accounts(科目)。例如<code>资产元素</code>中有现金，固定资产，无形资产等科目。<code>负债元素</code>中有应付账款，银行借款等科目。</p>
+<h5 id="Contra-Accounts">Contra Accounts</h5>
+<p><code>Contra accounts(备抵科目)</code>为资产科目，其特征为<code>负数</code>，该科目用来抵减资产金额。例如：应收账款的坏账，固定资产的减值等。</p>
+<h5 id="Measurement-of-financial-elements">Measurement of financial elements</h5>
+<ul>
+<li><code>Historical cost(历史成本):</code> 用来计量<code>短期资产</code>(变现时间少于一年)，资产价值等于付出的成本。</li>
+<li><code>Amortized cost(摊余成本):</code> 用来计量长期资产(变现时间大于一年)，资产价值以<code>摊销(amortization)</code>，<code>折旧(depreciation)</code>，<code>减值(impairment)</code>，<code>耗减(depletion)</code>后的历史成本记账。</li>
+<li><code>Fair value(公允价值):</code>一般用来计算金融资产，需要有活跃报价。以两个<code>无信息差(knowledgeable)</code>，<code>自愿(willing)</code>，<code>非关联(arm's length)</code>的交易双方同意交易的价格计量。</li>
+</ul>
+<h4 id="Other-Relevant-information-其他相关信息">Other Relevant information(其他相关信息)</h4>
+<p>除了公司财务报表以外，金融分析师还需要从其他渠道获取补充信息，主要有六种，分别为<code>Financial statement notes(footnotes)</code>，<code>Management's commentary(MD&amp;A)</code>，<code>Proxy statement</code>, <code>Interim reports</code>, <code>Interim reports</code>,  <code>Earnings announcement</code>和<code>External sources</code>。其中考得比较多的是<code>footnote, MD&amp;A和Proxy</code>。</p>
+<p><code>Financial statement notes：</code>用来解释说明财务报表中的细节， 如会计方法，假设，估计，固定资产的折旧年限等等，如果需要了解财务报表中数字细节就要看这个财报附注。</p>
+<p><code>Management's commentary：</code>财务报表只能反映过去无法反映将来，<code>MD&amp;A</code>是公司管理层对公司经营状况的解读，其中会包含公司经营目标，过去表现，重要事件，未来可能有的不确定性以及表外事项等。</p>
+<p><code>Proxy statements：</code>临时股东大会通告出现说明公司出现需要临时召集股东投票的重大事件，事项可能包括调整管理层薪资，董事会成员选举，重大股权激励等等。</p>
+<p><code>Interim report：</code>中期报告是未经审计的半年或季度财务报告，可以提供更高时效性的公司财务信息。</p>
+<p><code>Earning announcements：</code>业绩预告是比中期报告有更高时效性的公司表现报告，但也是未经审计可能调整。</p>
+<p><code>External sources：</code>分析师还需要从公司外部获取相关信息，可能来源包括研究报告，整体经济状况，行业状况，相关新闻等。</p>
+<h4 id="Audit-审计">Audit(审计)</h4>
+<h5 id="审计原因">审计原因</h5>
+<p>公司财务报告需要审计的原因是<code>Principal-agent relationship</code>，也即<code>委托代理冲突</code>。其根本原因在于现代公司治理体系下公司所有者与公司管理者分治导致公司管理者可能为自己利益欺瞒公司所有者(即股东)。因此除董事会监督外，还需要由外部审计对公司管理者出具的公司财务报告进行审计。</p>
+<h5 id="审计概念">审计概念</h5>
+<ol>
+<li>审计本身提供对公司财务报表的<code>独立</code>审核，审计师不能与公司内部关联。</li>
+<li>审计师对公司财务报告的正确性提供<code>合理</code>保证(非100%)，保证公司财报没有<code>重大</code>误差。</li>
+<li>审计师除了对财报进行审计外还对公司内控程序进行审计，以此判定财报数字的可信度。</li>
+</ol>
+<h5 id="审计Opinion">审计Opinion</h5>
+<p>审计师完成财报审计后提供审计意见，共有4种Opinions:</p>
+<p><code>Unqualified opinion：</code>无保留意见，表示公司财务报表没有重大误差。</p>
+<p><code>Qualified opinion：</code>保留意见，表示公司财务报表中有个别性质不严重的偏差。</p>
+<p><code>Adverse opinion：</code>否定意见，表示公司财务报表中存在重大或大量误差。</p>
+<p><code>Disclaimer of opinion：</code>无法表示意见，表示因审计师活动受限以致无法出具审计意见。</p>
+<h4 id="Accounting-Equation-会计恒等式">Accounting Equation(会计恒等式)</h4>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mrow><mo fence="true">{</mo><mtable rowspacing="0.36em" columnalign="left left" columnspacing="1em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>+</mo><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>E</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><mi>s</mi><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><msub><mi>s</mi><mrow><mi>E</mi><mi>n</mi><mi>d</mi></mrow></msub><mo>=</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><msub><mi>g</mi><mrow><mi>B</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub><mo>+</mo><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>−</mo><mi>D</mi><mi>i</mi><mi>v</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>d</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="false"><mrow><mi>N</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>I</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mo>=</mo><mi>R</mi><mi>e</mi><mi>v</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>e</mi><mo>−</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>e</mi></mrow></mstyle></mtd></mtr></mtable></mrow><mspace width="14.2264em"/></mrow><annotation encoding="application/x-tex">\begin{cases}
+Asset = Liability + Equity\\
+Equity = Capital + Retained Earnings + OCI\\
+Retained Earnings_{End} = Retained\ Earning_{Begin}+Net\ Income - Dividend\\
+Net\ Income = Revenue - Expense
+\end{cases}\hspace{5cm}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:5.76em;vertical-align:-2.63em;"></span><span class="minner"><span class="mopen"><span class="delimsizing mult"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:2.95em;"><span style="top:-1.6em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎩</span></span></span><span style="top:-1.592em;"><span class="pstrut" style="height:3.15em;"></span><span style="height:0.916em;width:0.8889em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.8889em' height='0.916em' style='width:0.8889em' viewBox='0 0 888.89 916' preserveAspectRatio='xMinYMin'><path d='M384 0 H504 V916 H384z M384 0 H504 V916 H384z'/></svg></span></span><span style="top:-3.15em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎨</span></span></span><span style="top:-4.292em;"><span class="pstrut" style="height:3.15em;"></span><span style="height:0.916em;width:0.8889em;"><svg xmlns="http://www.w3.org/2000/svg" width='0.8889em' height='0.916em' style='width:0.8889em' viewBox='0 0 888.89 916' preserveAspectRatio='xMinYMin'><path d='M384 0 H504 V916 H384z M384 0 H504 V916 H384z'/></svg></span></span><span style="top:-5.2em;"><span class="pstrut" style="height:3.15em;"></span><span class="delimsizinginner delim-size4"><span>⎧</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.45em;"><span></span></span></span></span></span></span><span class="mord"><span class="mtable"><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:3.13em;"><span style="top:-5.13em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-3.69em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">Eq</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">s</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span><span style="top:-2.25em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05764em;">E</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">d</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0359em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">in</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">d</span></span></span><span style="top:-0.81em;"><span class="pstrut" style="height:3.008em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal">n</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">se</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:2.63em;"><span></span></span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mspace" style="margin-right:14.2264em;"></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mo>⇓</mo><mspace width="34.1433em"/></mrow><annotation encoding="application/x-tex">\Darr\hspace{12cm}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mrel">⇓</span><span class="mspace" style="margin-right:34.1433em;"></span></span></span></span></span></p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtable rowspacing="0.25em" columnalign="right left" columnspacing="0em"><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mi>A</mi><mi>s</mi><mi>s</mi><mi>e</mi><mi>t</mi></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>=</mo><mi>L</mi><mi>i</mi><mi>a</mi><mi>b</mi><mi>i</mi><mi>l</mi><mi>i</mi><mi>t</mi><mi>y</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>C</mi><mi>o</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>i</mi><mi>b</mi><mi>u</mi><mi>t</mi><mi>e</mi><mi>d</mi><mi>C</mi><mi>a</mi><mi>p</mi><mi>i</mi><mi>t</mi><mi>a</mi><mi>l</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>R</mi><mi>e</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>e</mi><mi>d</mi><mtext> </mtext><mi>E</mi><mi>a</mi><mi>r</mi><mi>n</mi><mi>i</mi><mi>n</mi><mi>g</mi><msub><mi>s</mi><mrow><mi>B</mi><mi>e</mi><mi>g</mi><mi>i</mi><mi>n</mi></mrow></msub></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>R</mi><mi>e</mi><mi>v</mi><mi>e</mi><mi>n</mi><mi>u</mi><mi>e</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>−</mo><mi>E</mi><mi>x</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>e</mi><mi>s</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>−</mo><mi>D</mi><mi>i</mi><mi>v</mi><mi>i</mi><mi>d</mi><mi>e</mi><mi>n</mi><mi>d</mi><mi>d</mi><mi>e</mi><mi>c</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow></mstyle></mtd></mtr><mtr><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow></mrow></mstyle></mtd><mtd><mstyle scriptlevel="0" displaystyle="true"><mrow><mrow></mrow><mo>+</mo><mi>O</mi><mi>C</mi><mi>I</mi></mrow></mstyle></mtd></mtr></mtable><mspace width="28.4528em"/></mrow><annotation encoding="application/x-tex">\begin{align*}
+Asset&amp;=Liability\\
+&amp;+Contributed Capital\\
+&amp;+Retained\ Earnings_{Begin}\\
+&amp;+Revenue\\
+&amp;-Expenses\\
+&amp;-Dividend declared\\
+&amp;+OCI
+\end{align*}\hspace{10cm}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:10.5em;vertical-align:-5em;"></span><span class="mord"><span class="mtable"><span class="col-align-r"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:5.5em;"><span style="top:-7.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">A</span><span class="mord mathnormal">sse</span><span class="mord mathnormal">t</span></span></span><span style="top:-6.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:-0.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span><span style="top:1.34em;"><span class="pstrut" style="height:3em;"></span><span class="mord"></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5em;"><span></span></span></span></span></span><span class="col-align-l"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:5.5em;"><span style="top:-7.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal">iabi</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span></span></span><span style="top:-6.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">ib</span><span class="mord mathnormal">u</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mord mathnormal" style="margin-right:0.07153em;">C</span><span class="mord mathnormal">a</span><span class="mord mathnormal">p</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span></span></span><span style="top:-4.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ain</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">nin</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathnormal">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.05017em;">B</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">g</span><span class="mord mathnormal mtight">in</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.2861em;"><span></span></span></span></span></span></span></span></span><span style="top:-3.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">u</span><span class="mord mathnormal">e</span></span></span><span style="top:-1.66em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mord mathnormal">x</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">ses</span></span></span><span style="top:-0.16em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">i</span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">dd</span><span class="mord mathnormal">ec</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">re</span><span class="mord mathnormal">d</span></span></span><span style="top:1.34em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord"></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal" style="margin-right:0.07153em;">OC</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:5em;"><span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:28.4528em;"></span></span></span></span></span></p>
+<h4 id="Accrual-Accounting-权责发生制">Accrual Accounting(权责发生制)</h4>
+<p>当每笔交易都是现款现货交易时，权责发生制与收付实现制记账结果一致，因此当收发货时间与收付款时间不一致时就会产生差异，不同情况下权责发生制的记账方式如下：</p>
+<h5 id="Cash-received-in-advance">Cash received in advance</h5>
+<p>交易未完成，现金已收到：已收到现金，因此在<code>资产</code>中记入一笔<code>现金</code>，同时在<code>负债</code>中计入<code>Unearned revenue(预收账款)</code>。</p>
+<h5 id="Cash-paid-in-advance">Cash paid in advance</h5>
+<p>交易未完成，现金已支付：已支付现金，因此在<code>资产</code>中扣除一笔<code>现金</code>，同时在<code>资产</code>中扣去<code>Prepaid expense(预付账款)</code>。</p>
+<h5 id="Cash-received-in-arrears">Cash received in arrears</h5>
+<p>交易已完成，现金未收到：已完成交易因此<code>收入</code>增加一笔<code>Accrued revenue(应计收入)</code>，计入<code>Equity</code>。同时在资产中计入<code>Account Receivable(应收账款)</code>。</p>
+<h5 id="Cash-paid-in-arrears">Cash paid in arrears</h5>
+<p>交易已完成，现金未支付：已完成交易，因此在<code>支出</code>扣除一笔<code>Accrued expense(应计费用)</code>，计入Equity。同时在负债中计入<code>Account Payable(应付账款)</code>。</p>
+<p>[第13篇]</p>
+]]></content>
+      <categories>
+        <category>金融分析</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
         <tag>CFA一级</tag>
       </tags>
   </entry>
@@ -813,12 +982,110 @@
       </tags>
   </entry>
   <entry>
+    <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
+    <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
+<h1>正文</h1>
+<h2 id="背景介绍-2">背景介绍</h2>
+<p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
+<h2 id="概述">概述</h2>
+<p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
+<ul>
+<li>
+<p><strong>面向过程：</strong> 顾名思义，编程方式注重过程。在解决一个问题的时候这种编程方式需要把解决方式拆分成一个个过程，按照一定的顺序执行完这些方法(methods)，方法执行完问题就解决了。</p>
+</li>
+<li>
+<p>**面向对象：**同样名字就已经非常清晰了，注重的是程序互动的对象。解决问题的时候面向对象编程是将事物抽象成对象，那问题里可能涉及的事物都定义成一个程序对象，然后给这个对象赋上一些<code>属性(Properties)</code>和<code>方法(methods)</code>。让各个对象去执行自己的方法以此来解决问题。</p>
+</li>
+</ul>
+<h3 id="举例说明-2">举例说明</h3>
+<p>我引用<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>提到的我觉得对于我的理解起到重要帮助的两个例子，分别是洗衣服和做饭。</p>
+<h4 id="洗衣服">洗衣服</h4>
+<p>假设有一个问题：要用洗衣机洗干净脏衣服，如何执行？</p>
+<p><strong><code>面向过程</code>的解决方法</strong>：</p>
+<ol>
+<li>执行加洗衣粉的方法；</li>
+<li>执行加水的方法；</li>
+<li>执行洗衣服的方法；</li>
+<li>执行清洗的方法；</li>
+<li>执行烘干的方法；</li>
+</ol>
+<p>将解决过程拆分成一个个方法，不用调用对象，通过执行一个个方法来解决问题。</p>
+<p><strong><code>面向对象</code>的解决方法：</strong></p>
+<ol>
+<li>先抽象出两个对象，分别是<code>洗衣机</code>和<code>人</code></li>
+<li>针对对象<code>洗衣机</code>加入一些属性和方法：“洗衣服方法”，”清洗方法“，”烘干方法“</li>
+<li>针对对象<code>人</code>加入一些属性和方法：“加洗衣粉方法”，“加水方法”</li>
+<li>然后执行：<code>人.加洗衣粉→人.加水→洗衣机.洗衣服→洗衣机.清洗→洗衣机.烘干</code></li>
+</ol>
+<p>同一个问题，面向对象编程需要先定义对象然后靠对象执行方法的方式解决问题。</p>
+<h4 id="做饭">做饭</h4>
+<p>呜呜轩轩引用了@十四期_李光的说法，分别将<code>面向过程编程</code>和<code>面向对象编程</code>比喻成<code>蛋炒饭</code>和<code>盖浇饭</code>。以此来说明两种方法的优缺点：</p>
+<ul>
+<li><code>面向过程编程就像蛋炒饭</code>，食材和饭交融在一起，难以分开，其味道可能均匀易于入口，但一旦做好就很难再改变。</li>
+<li><code>面向对象编程就像盖浇饭</code>，食材和饭是分开的，食客在同时能享受到食材和饭的同时，如果想要换一个口味也只需要将不同的菜与之前的饭放在一起就可以了。</li>
+</ul>
+<p>回到现实，这两种方法各自的优缺点就是：</p>
+<ul>
+<li>面向过程编程性能高于面向对象编程，缺点是不易维护，难以扩展，难以复用。适合需要性能优先的场景。</li>
+<li>面向对象编程就是相反了，性能略低但易维护易扩展，结构更加灵活。适合大而复杂的软件开发。</li>
+</ul>
+<p>这两个例子一个让人了解这两种方法在表达形式上的区别，一个让人了解各自的优缺点，我觉得非常方便概念比较模糊的人理解。</p>
+<h2 id="面向对象编程">面向对象编程</h2>
+<p>我个人觉得<code>面向过程编程</code>是非常<code>straightforward</code>的，所以除了两者的对比以外，我不打算细说面向过程编程。那在这一节我就还是用我从网上学到的内容(主要还是<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>和<a href="https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html" title="__init__ in Python: An Overview">Alexey</a>)现学现卖，详细讲讲面向对象编程的三大特征和五大原则，以及其实际的实现方法等。</p>
+<h3 id="三大基本特征">三大基本特征</h3>
+<p>**封装(Encapsulation)：**把客观事物封装成抽象的<code>类(Class)</code>，而类可以把自己的<code>属性(Property)</code>和<code>方法(methods)</code>只让可信的类或者对象操作，对不可信的进行信息隐藏(public和private)。一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。</p>
+<p>**继承(Inheritance)：**让某个类型的对象获得另一个类型对象的属性的方法。继承使新类可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展，通过继承创建的新类称为<code>“子类(Subclass)”</code>或<code>“派生类(Derived class)”</code>，被继承的类称为<code>“基类(Base class)”</code>，<code>“父类(Parent class)”</code>或<code>“超类(Super class)”</code>。继承的过程就是从<code>一般(generalized)</code>到<code>特殊(specialized)</code>的过程。要实现继承，可以通过<code>“继承(Inheritance)”</code>和<code>“组合(Composition)”</code>来实现。继承概念的实现方式有两类：<code>实现继承(Implementation inheritance)</code>与<code>接口继承(Interface inheritance)</code>。前者指直接使用父类的属性和方法而无需额外编码的能力；后者则是指仅使用属性和方法的名称，但子类必须提供实现的能力。</p>
+<p>**多态(Polymorphism)：**指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着虽然针对不同对象的具体操作不同，但通过一个公共的类，它们可以通过相同的方式予以调用。</p>
+<h3 id="五大基本原则">五大基本原则</h3>
+<p>**单一职责原则SRP(Single Responsibility Principle)：**指一个类的功能要单一，不能混杂什么都有。</p>
+<p>**开放封闭原则OCP(Open－Close Principle)：**一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。比如：一个网络模块，原来只有服务端功能，在现在要加入客户端功能，那么就应该在不用修改已有功能代码的前提下就能增加客户端的实现代码，这要求在设计之初就将两个部分分开，将公共部分抽象出来。</p>
+<p>**里式替换原则LSP(the Liskov Substitution Principle LSP)：**子类应当可以替换父类并出现在父类能出现的任何地方。</p>
+<p>**依赖倒置原则DIP(the Dependency Inversion Principle DIP)：**程序要依赖于抽象接口而不能依赖于具体实现。假设B是较A低的模块，但B需要使用到A的功能，这个时候，B不应当直接使用A中的具体类，因为如果这样做的话任何一个下层模块的变动都会导致上层必须要被相应更改。正确做法应当由B定义一个抽象接口，并由A来实现这个抽象接口，B只使用这个抽象接口：这样就达到了依赖倒置的目的，B也解除了对A的依赖，反过来是A依赖于B定义的抽象接口。</p>
+<p>**接口分离原则ISP(the Interface Segregation Principle ISP)：**模块间要通过抽象接口隔离开，而不是通过具体的类强耦合起来。</p>
+<h3 id="Python中的面向对象编程">Python中的面向对象编程</h3>
+<h4 id="Python中的类-Class">Python中的类(Class)</h4>
+<p>一个<code>类(Class)</code>会定义所有以它创建的对象，你甚至可以把类想象成一个对象工厂。举例来说，假设你有一只<code>牛头梗</code>，从<code>面向对象编程</code>的角度来看，一个<code>狗</code>的类中可能包含狗的一些特征，比如他的品种，眼色等。由于牛头梗是一只狗，那么我们就可以创建一个继承<code>狗</code>这个<code>类</code>特征的对象来定义牛头梗。<code>类</code>使用<code>方法函数(methods)</code>和<code>构造函数(constructors)</code>来创建并定义<code>对象(Objects)</code>。</p>
+<h4 id="用户定义的方法-user-defined-methods-和特殊方法-special-methods">用户定义的方法(user-defined methods)和特殊方法(special methods)</h4>
+<p><code>方法(methods)</code>是类中用以执行特殊任务的函数，Python将方法分成程序员编写的<code>用户定义方法(user-defined method)</code>和语言中自带的<code>特殊方法(special method)</code>。比如一个叫<code>狗</code>的<code>类</code>中可能有一个方法叫做<code>walk()</code>来供<code>狗</code>的对象调用，程序员编写这个方法来执行特殊的动作。</p>
+<p>而<code>特殊方法</code>则被<code>双下划线(__)</code>包围的名字定义，比如说<code>__init__</code>。Python用这些特殊方法来加强类的功能性，其大多在后台工作并会在程序需要的时候被自动调用。程序员不能直接调用这些方法。举例来说，当你创建一个新的对象的时候，Python会自动调用<code>__new__</code>方法，而这又会调用<code>__init__</code>方法。</p>
+<h4 id="构造函数-constructor">构造函数(constructor)</h4>
+<p>构造函数是程序在创建对象时会调用的特殊方法，其在类中是被用来初始化对象数据的。以<code>狗</code>这个类举例，我们可以用这个类的构造函数去给每一个<code>牛头梗</code>对象特征赋值，<code>__init__</code>就是Python的构造函数。</p>
+<h4 id="用代码来解释">用代码来解释</h4>
+<p>我们首先创建一个类，并且在这个类中定义一个<code>__init__</code>方法，而这个方法则初始化两个<code>属性(attribute)</code>:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,dogBreed,dogEyeColor</span>):</span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed       </span><br><span class="line">    self.eyeColor = dogEyeColor...</span><br></pre></td></tr></table></figure>
+<p>这时我们已经有了一个<code>类</code>了，接下来我们以这个类创建<code>对象</code>，并且将<code>类</code>中的<code>属性</code>传递给这个<code>对象</code>。这时候我们就需要<mark class="hl-label red">self</mark> 这个magic word来将对象的属性绑定在其接收到的参数上。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...Tomita = Dog(<span class="string">&quot;Fox Terrier&quot;</span>,<span class="string">&quot;brown&quot;</span>)...</span><br></pre></td></tr></table></figure>
+<p>在上面这行代码中，我们创建了一个叫做<code>Tomita</code>的对象(这是这只狗的名字)，然后我们首先声明定义这个对象的类的名字(<code>Dog</code>)，然后将在<code>Dog类</code>的<code>__init__</code>中设定的两个属性分别设定为<code>Fox Terrier</code>和<code>brown</code>。然后<code>__init__</code>用<code>self</code>来将这两个以参数传回的值赋给对象的属性<code>self.breed</code>和<code>self.eteColor</code>。</p>
+<p>然后要访问我们创建的对象的属性，我们只需要在对象名后用<code>.</code>接上相应的属性名，就可以访问这个对象的这个属性的值，例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...<span class="built_in">print</span>(<span class="string">&quot;This dog is a&quot;</span>,tomita.breed,<span class="string">&quot;and its eyes are&quot;</span>,tomita.eyeColor)</span><br></pre></td></tr></table></figure>
+<p>我们运行上面这段代码会得到这样的结果：</p>
+<blockquote>
+<p>This dog is a Fox Terrier and its eyes are brown</p>
+</blockquote>
+<p>Python中的构造函数也可以不输入参数，可以使用默认参数设定。如果一个构造函数不是必须输入参数的话，这个构造函数就叫<code>默认构造函数(default constructor)</code>。比如上面的<code>Dog类</code>如果写成默认构造函数形式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dogBreed=<span class="string">&quot;German Shepherd&quot;</span>,dogEyeColor=<span class="string">&quot;Brown&quot;</span></span>): </span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed   </span><br><span class="line">    self.eyeColor = dogEyeColor</span><br></pre></td></tr></table></figure>
+<p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
+<h1>最后</h1>
+<p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
+<p>[第5篇]</p>
+]]></content>
+      <categories>
+        <category>编程算法</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[MS Office] 分割MS Access数据库为前端和后端</title>
     <url>/2022/02/25/6-MSAccess_database_split/</url>
     <content><![CDATA[<h1>序言</h1>
 <p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
 <h1>正文</h1>
-<h2 id="背景介绍-2">背景介绍</h2>
+<h2 id="背景介绍-3">背景介绍</h2>
 <p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
 <p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
 <h2 id="Access基本知识">Access基本知识</h2>
@@ -912,104 +1179,6 @@
       <tags>
         <tag>工作学习</tag>
         <tag>Access</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
-    <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
-<h1>正文</h1>
-<h2 id="背景介绍-3">背景介绍</h2>
-<p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
-<h2 id="概述">概述</h2>
-<p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
-<ul>
-<li>
-<p><strong>面向过程：</strong> 顾名思义，编程方式注重过程。在解决一个问题的时候这种编程方式需要把解决方式拆分成一个个过程，按照一定的顺序执行完这些方法(methods)，方法执行完问题就解决了。</p>
-</li>
-<li>
-<p>**面向对象：**同样名字就已经非常清晰了，注重的是程序互动的对象。解决问题的时候面向对象编程是将事物抽象成对象，那问题里可能涉及的事物都定义成一个程序对象，然后给这个对象赋上一些<code>属性(Properties)</code>和<code>方法(methods)</code>。让各个对象去执行自己的方法以此来解决问题。</p>
-</li>
-</ul>
-<h3 id="举例说明-2">举例说明</h3>
-<p>我引用<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>提到的我觉得对于我的理解起到重要帮助的两个例子，分别是洗衣服和做饭。</p>
-<h4 id="洗衣服">洗衣服</h4>
-<p>假设有一个问题：要用洗衣机洗干净脏衣服，如何执行？</p>
-<p><strong><code>面向过程</code>的解决方法</strong>：</p>
-<ol>
-<li>执行加洗衣粉的方法；</li>
-<li>执行加水的方法；</li>
-<li>执行洗衣服的方法；</li>
-<li>执行清洗的方法；</li>
-<li>执行烘干的方法；</li>
-</ol>
-<p>将解决过程拆分成一个个方法，不用调用对象，通过执行一个个方法来解决问题。</p>
-<p><strong><code>面向对象</code>的解决方法：</strong></p>
-<ol>
-<li>先抽象出两个对象，分别是<code>洗衣机</code>和<code>人</code></li>
-<li>针对对象<code>洗衣机</code>加入一些属性和方法：“洗衣服方法”，”清洗方法“，”烘干方法“</li>
-<li>针对对象<code>人</code>加入一些属性和方法：“加洗衣粉方法”，“加水方法”</li>
-<li>然后执行：<code>人.加洗衣粉→人.加水→洗衣机.洗衣服→洗衣机.清洗→洗衣机.烘干</code></li>
-</ol>
-<p>同一个问题，面向对象编程需要先定义对象然后靠对象执行方法的方式解决问题。</p>
-<h4 id="做饭">做饭</h4>
-<p>呜呜轩轩引用了@十四期_李光的说法，分别将<code>面向过程编程</code>和<code>面向对象编程</code>比喻成<code>蛋炒饭</code>和<code>盖浇饭</code>。以此来说明两种方法的优缺点：</p>
-<ul>
-<li><code>面向过程编程就像蛋炒饭</code>，食材和饭交融在一起，难以分开，其味道可能均匀易于入口，但一旦做好就很难再改变。</li>
-<li><code>面向对象编程就像盖浇饭</code>，食材和饭是分开的，食客在同时能享受到食材和饭的同时，如果想要换一个口味也只需要将不同的菜与之前的饭放在一起就可以了。</li>
-</ul>
-<p>回到现实，这两种方法各自的优缺点就是：</p>
-<ul>
-<li>面向过程编程性能高于面向对象编程，缺点是不易维护，难以扩展，难以复用。适合需要性能优先的场景。</li>
-<li>面向对象编程就是相反了，性能略低但易维护易扩展，结构更加灵活。适合大而复杂的软件开发。</li>
-</ul>
-<p>这两个例子一个让人了解这两种方法在表达形式上的区别，一个让人了解各自的优缺点，我觉得非常方便概念比较模糊的人理解。</p>
-<h2 id="面向对象编程">面向对象编程</h2>
-<p>我个人觉得<code>面向过程编程</code>是非常<code>straightforward</code>的，所以除了两者的对比以外，我不打算细说面向过程编程。那在这一节我就还是用我从网上学到的内容(主要还是<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>和<a href="https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html" title="__init__ in Python: An Overview">Alexey</a>)现学现卖，详细讲讲面向对象编程的三大特征和五大原则，以及其实际的实现方法等。</p>
-<h3 id="三大基本特征">三大基本特征</h3>
-<p>**封装(Encapsulation)：**把客观事物封装成抽象的<code>类(Class)</code>，而类可以把自己的<code>属性(Property)</code>和<code>方法(methods)</code>只让可信的类或者对象操作，对不可信的进行信息隐藏(public和private)。一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。</p>
-<p>**继承(Inheritance)：**让某个类型的对象获得另一个类型对象的属性的方法。继承使新类可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展，通过继承创建的新类称为<code>“子类(Subclass)”</code>或<code>“派生类(Derived class)”</code>，被继承的类称为<code>“基类(Base class)”</code>，<code>“父类(Parent class)”</code>或<code>“超类(Super class)”</code>。继承的过程就是从<code>一般(generalized)</code>到<code>特殊(specialized)</code>的过程。要实现继承，可以通过<code>“继承(Inheritance)”</code>和<code>“组合(Composition)”</code>来实现。继承概念的实现方式有两类：<code>实现继承(Implementation inheritance)</code>与<code>接口继承(Interface inheritance)</code>。前者指直接使用父类的属性和方法而无需额外编码的能力；后者则是指仅使用属性和方法的名称，但子类必须提供实现的能力。</p>
-<p>**多态(Polymorphism)：**指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着虽然针对不同对象的具体操作不同，但通过一个公共的类，它们可以通过相同的方式予以调用。</p>
-<h3 id="五大基本原则">五大基本原则</h3>
-<p>**单一职责原则SRP(Single Responsibility Principle)：**指一个类的功能要单一，不能混杂什么都有。</p>
-<p>**开放封闭原则OCP(Open－Close Principle)：**一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。比如：一个网络模块，原来只有服务端功能，在现在要加入客户端功能，那么就应该在不用修改已有功能代码的前提下就能增加客户端的实现代码，这要求在设计之初就将两个部分分开，将公共部分抽象出来。</p>
-<p>**里式替换原则LSP(the Liskov Substitution Principle LSP)：**子类应当可以替换父类并出现在父类能出现的任何地方。</p>
-<p>**依赖倒置原则DIP(the Dependency Inversion Principle DIP)：**程序要依赖于抽象接口而不能依赖于具体实现。假设B是较A低的模块，但B需要使用到A的功能，这个时候，B不应当直接使用A中的具体类，因为如果这样做的话任何一个下层模块的变动都会导致上层必须要被相应更改。正确做法应当由B定义一个抽象接口，并由A来实现这个抽象接口，B只使用这个抽象接口：这样就达到了依赖倒置的目的，B也解除了对A的依赖，反过来是A依赖于B定义的抽象接口。</p>
-<p>**接口分离原则ISP(the Interface Segregation Principle ISP)：**模块间要通过抽象接口隔离开，而不是通过具体的类强耦合起来。</p>
-<h3 id="Python中的面向对象编程">Python中的面向对象编程</h3>
-<h4 id="Python中的类-Class">Python中的类(Class)</h4>
-<p>一个<code>类(Class)</code>会定义所有以它创建的对象，你甚至可以把类想象成一个对象工厂。举例来说，假设你有一只<code>牛头梗</code>，从<code>面向对象编程</code>的角度来看，一个<code>狗</code>的类中可能包含狗的一些特征，比如他的品种，眼色等。由于牛头梗是一只狗，那么我们就可以创建一个继承<code>狗</code>这个<code>类</code>特征的对象来定义牛头梗。<code>类</code>使用<code>方法函数(methods)</code>和<code>构造函数(constructors)</code>来创建并定义<code>对象(Objects)</code>。</p>
-<h4 id="用户定义的方法-user-defined-methods-和特殊方法-special-methods">用户定义的方法(user-defined methods)和特殊方法(special methods)</h4>
-<p><code>方法(methods)</code>是类中用以执行特殊任务的函数，Python将方法分成程序员编写的<code>用户定义方法(user-defined method)</code>和语言中自带的<code>特殊方法(special method)</code>。比如一个叫<code>狗</code>的<code>类</code>中可能有一个方法叫做<code>walk()</code>来供<code>狗</code>的对象调用，程序员编写这个方法来执行特殊的动作。</p>
-<p>而<code>特殊方法</code>则被<code>双下划线(__)</code>包围的名字定义，比如说<code>__init__</code>。Python用这些特殊方法来加强类的功能性，其大多在后台工作并会在程序需要的时候被自动调用。程序员不能直接调用这些方法。举例来说，当你创建一个新的对象的时候，Python会自动调用<code>__new__</code>方法，而这又会调用<code>__init__</code>方法。</p>
-<h4 id="构造函数-constructor">构造函数(constructor)</h4>
-<p>构造函数是程序在创建对象时会调用的特殊方法，其在类中是被用来初始化对象数据的。以<code>狗</code>这个类举例，我们可以用这个类的构造函数去给每一个<code>牛头梗</code>对象特征赋值，<code>__init__</code>就是Python的构造函数。</p>
-<h4 id="用代码来解释">用代码来解释</h4>
-<p>我们首先创建一个类，并且在这个类中定义一个<code>__init__</code>方法，而这个方法则初始化两个<code>属性(attribute)</code>:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,dogBreed,dogEyeColor</span>):</span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed       </span><br><span class="line">    self.eyeColor = dogEyeColor...</span><br></pre></td></tr></table></figure>
-<p>这时我们已经有了一个<code>类</code>了，接下来我们以这个类创建<code>对象</code>，并且将<code>类</code>中的<code>属性</code>传递给这个<code>对象</code>。这时候我们就需要<mark class="hl-label red">self</mark> 这个magic word来将对象的属性绑定在其接收到的参数上。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...Tomita = Dog(<span class="string">&quot;Fox Terrier&quot;</span>,<span class="string">&quot;brown&quot;</span>)...</span><br></pre></td></tr></table></figure>
-<p>在上面这行代码中，我们创建了一个叫做<code>Tomita</code>的对象(这是这只狗的名字)，然后我们首先声明定义这个对象的类的名字(<code>Dog</code>)，然后将在<code>Dog类</code>的<code>__init__</code>中设定的两个属性分别设定为<code>Fox Terrier</code>和<code>brown</code>。然后<code>__init__</code>用<code>self</code>来将这两个以参数传回的值赋给对象的属性<code>self.breed</code>和<code>self.eteColor</code>。</p>
-<p>然后要访问我们创建的对象的属性，我们只需要在对象名后用<code>.</code>接上相应的属性名，就可以访问这个对象的这个属性的值，例如：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...<span class="built_in">print</span>(<span class="string">&quot;This dog is a&quot;</span>,tomita.breed,<span class="string">&quot;and its eyes are&quot;</span>,tomita.eyeColor)</span><br></pre></td></tr></table></figure>
-<p>我们运行上面这段代码会得到这样的结果：</p>
-<blockquote>
-<p>This dog is a Fox Terrier and its eyes are brown</p>
-</blockquote>
-<p>Python中的构造函数也可以不输入参数，可以使用默认参数设定。如果一个构造函数不是必须输入参数的话，这个构造函数就叫<code>默认构造函数(default constructor)</code>。比如上面的<code>Dog类</code>如果写成默认构造函数形式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dogBreed=<span class="string">&quot;German Shepherd&quot;</span>,dogEyeColor=<span class="string">&quot;Brown&quot;</span></span>): </span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed   </span><br><span class="line">    self.eyeColor = dogEyeColor</span><br></pre></td></tr></table></figure>
-<p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
-<h1>最后</h1>
-<p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
-<p>[第5篇]</p>
-]]></content>
-      <categories>
-        <category>编程算法</category>
-      </categories>
-      <tags>
-        <tag>日常学习</tag>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
