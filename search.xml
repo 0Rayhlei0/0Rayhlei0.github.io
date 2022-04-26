@@ -1,68 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
-    <url>/2022/02/10/1-blog_setup_notes/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
-<h1>正文</h1>
-<p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
-<h2 id="关于第二篇Git安装的问题">关于第二篇Git安装的问题</h2>
-<p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
-<ul>
-<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
-<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
-<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
-</ul>
-<h2 id="关于第三篇绑定GitHub并提交文件">关于第三篇绑定GitHub并提交文件</h2>
-<p>跟随步骤进行时有两点需要注意：</p>
-<h3 id="Git的username和email的配置">Git的username和email的配置</h3>
-<p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
-<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记&quot;, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
-<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
-<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
-<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
-<h3 id="从Master换成Main的掩耳盗铃">从Master换成Main的掩耳盗铃</h3>
-<p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
-<h4 id="push文件时的命令">push文件时的命令</h4>
-<p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
-<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
-<h4 id="初始化本地仓库时要做的修改">初始化本地仓库时要做的修改</h4>
-<p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
-<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
-<h3 id="为什么要提交到GitHub">为什么要提交到GitHub?</h3>
-<p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
-<h2 id="关于第五篇安装node-js和Hexo">关于第五篇安装node.js和Hexo</h2>
-<p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
-<h3 id="设置文件夹权限">设置文件夹权限</h3>
-<p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
-<h3 id="Hexo是什么？">Hexo是什么？</h3>
-<p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
-<p>关于Hexo相关的命令有：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
-<h1>最后</h1>
-<p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
-<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
-<p>[第1篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Hexo</tag>
-        <tag>GitHub</tag>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[数据分析]常用数据库类型对比介绍</title>
     <url>/2022/03/09/10-introduction-to-different-db/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -231,6 +169,68 @@
       <tags>
         <tag>Database</tag>
         <tag>工作学习</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
+    <url>/2022/02/10/1-blog_setup_notes/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>从很久以前就想搭一个自己的网站，分享并且记录自己的一些日常工作和学习的过程和成果，此篇作为我的第一篇文章，就先分享一下我跟随<a href="https://zhuanlan.zhihu.com/p/102592286?tdsourcetag=s_pctim_aiomsg" title="从零开始搭建个人博客（超详细)">枫叶</a>的详细教功搭建本博客网站的一些心得体会。</p>
+<h1>正文</h1>
+<p>本网站的搭建过程与枫叶教程中的基本一致，下面我就分篇讲一讲我作为一个“网络”小白在读教程的过程中遇到的一些问题，以及查询资料后我的理解。</p>
+<h2 id="关于第二篇Git安装的问题">关于第二篇Git安装的问题</h2>
+<p>Git本身是一个免费开源的分布式版本控制系统(Distributed version control system), Git的主要作用是我们通过此版本控制系统提交文件至仓库，由该系统为提交的文件打上版本号，然后每次提交仓库时根据版本号知道哪些文件需要更新哪些可以不用改动。需要记录的几个定义，需要强调的是以下基于我查到的资料和我自己的理解，有理解不对的地方还请大神指正：</p>
+<ul>
+<li>本地仓库与远程仓库：分别指建立在本地和互联网服务器内的文件夹</li>
+<li>分布式与集中式版本控制系统：分布式系统（如Git）同时具有本地及远程仓库，提交文件时先提交至本地仓库，有网络时再提交至服务器上的远程仓库。集中式系统（如SVN）只配有远程仓库，提交文件时直接提交到远程仓库。</li>
+<li>在此步骤中，GitHub既是远程仓库，是一个网络文件夹。我们主要使用Git作为同步本地仓库和远程仓库的工具。</li>
+</ul>
+<h2 id="关于第三篇绑定GitHub并提交文件">关于第三篇绑定GitHub并提交文件</h2>
+<p>跟随步骤进行时有两点需要注意：</p>
+<h3 id="Git的username和email的配置">Git的username和email的配置</h3>
+<p>首次提交文件时需要向远程仓库声明本机器的名字和Email地址，即使用：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config --global user.name <span class="string">&quot;yourusername&quot;</span></span><br><span class="line">$ git config --global user.email <span class="string">&quot;youremailaddress@xxx.com&quot;</span></span><br></pre></td></tr></table></figure>
+<p>根据<a href="https://careerkarma.com/blog/git-config/" title="How to Set Up Git Using git config">这篇文章</a>的描述，这个username可以是任何你想要附在你的提交文件上的一个“标记”，它不需要和你的版本控制用户名（例如你的GitHub用户名）一致。之所以要在首次提交之前输入这个信息就是为了给你的提交打上“标记&quot;, 一旦你的提交被创建，它的“著作权”就已经和你填写的这两条信息绑定，不能再被更改。</p>
+<p>此处以我自己的理解是该名字和Email地址其实对于我们真正要做的事情并没有实质作用或影响，只不过是向远程仓库提交了一个象征这个本地仓库的一个符号，提交后即可以使用下方命令查看配置是否成功上传。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git config -l</span><br></pre></td></tr></table></figure>
+<p>之所以强调要查看这个配置的原因是因为在枫叶的教程中给出的代码有<strong>少许错误</strong>：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220210235741955.png" alt="教程中的代码没有带空格"></p>
+<p>没有这个空格不会有任何报错，同时也不会有任何效果，我当时因为不知道这个小错误，还以为username与email都成功设置了，导致Git一直无法成功commit而找不到原因，需要注意。</p>
+<h3 id="从Master换成Main的掩耳盗铃">从Master换成Main的掩耳盗铃</h3>
+<p>枫叶教程中多次提及的GitHub的默认分支Master，<a href="https://blog.csdn.net/j3T9Z7H/article/details/108898310" title="今天开始，GitHub将启用main作为默认分支名，master将成为历史！">查询</a>后发现原来这个默认的Master分支已经在2020年10月1日起被GitHub改成了Main，其原因竟是因为要避讳可能引起人们联想到奴隶制的词汇，为了这种自欺欺人的原因导致多少人的麻烦。</p>
+<h4 id="push文件时的命令">push文件时的命令</h4>
+<p>回到正题，因为分支名的改动，文件commit至本地仓库后应使用</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git push origin main</span><br></pre></td></tr></table></figure>
+<p>将本地仓库提交至远程仓库，这其中origin是远程主机(即GitHub)的名字,而main则是我们仓库的默认分支名。</p>
+<h4 id="初始化本地仓库时要做的修改">初始化本地仓库时要做的修改</h4>
+<p>在实际操作中我还发现了这个改动导致git隐藏的一个地雷，那就是当我们用枫叶第三篇博客中提到的第二种git方法提交文件时，使用<code>git init</code>将不会初始化到我们想要的main分支，而是默认创建了master分支。这将直接导致我们之后使用<code>git push origin main</code>推至远程仓库时会报错，因为我们的本地仓库根本就不是main。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220213115508276.png" alt="image-20220213115508276"></p>
+<p>这时我们要将这个本地仓库分支名改成我们想要推至的远程仓库，并且最好顺道把<code>git init</code>的默认分支也改成main，毕竟GitHub的默认分支都已经改成main了。然后你就可以继续按照教程快乐上传各种文件了。</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ git branch -M main <span class="comment">#这个命令可以将你当前所在的本地仓库分支名改成-M后面这个参数&quot;main&quot;</span></span><br><span class="line">$ git config --global init.defaultBranch main <span class="comment">#将默认分支名改成main，可以用git config -l查看是否更改成功</span></span><br></pre></td></tr></table></figure>
+<h3 id="为什么要提交到GitHub">为什么要提交到GitHub?</h3>
+<p>我们之所以要将文件提交至GitHub的远程仓库其实是因为其提供的一项服务<a href="https://docs.github.com/en/pages" title="GitHub Pages Documentation">GitHub Pages</a>， 这项服务使用户可以创建和托管其自己的个人网站，每个GitHub账号只允许创建一个网站，这也是我们要用创建名称为<code>“用户名.github.io”</code>的仓库这样的方式来启用这项服务的原因。</p>
+<h2 id="关于第五篇安装node-js和Hexo">关于第五篇安装node.js和Hexo</h2>
+<p>node.js简单来说就是JavaScript的一种运行环境，而npm则是node.js的包管理器 (package manager)，使用npm可以自动根据各个需要模块的依赖关系快速下载安装需要的所有依赖的包并管理，本篇中安装node.js的直观原因就是为了能在命令行中使用npm。</p>
+<h3 id="设置文件夹权限">设置文件夹权限</h3>
+<p>本篇中需要注意的一点是，设置npm的路径和环境变量时在nodejs文件夹中创建的两个node_cache和node_global文件夹需要在各自的属性中给与用户所有权限，否则会导致npm报错。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220211002517309.png" alt="给予用户完全控制权限"></p>
+<h3 id="Hexo是什么？">Hexo是什么？</h3>
+<p>根据Hexo的<a href="https://hexo.io/docs/" title="Hexo Documentation">官方文档</a>，Node.js与Git都是使用Hexo的必要条件，而Hexo本身则是一个免费的博客框架，换句话说既是已经写好的“网站积木”，有了Hexo我们就不需要完全重新设计搭建网站，被古老的html语言折磨，而可以用已有的积木搭出我们想要的网站的样子，主流的博客框架除了Hexo还有与GitHub Pages绑定的Jekyll，尽管看到不少网友鼓吹Jekyll的便捷，但我看着网上大部分由Hexo搭建的博客网站想想大概人类的本质就是口嫌体直罢。</p>
+<p>关于Hexo相关的命令有：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo init [folder] <span class="comment"># 该命令在提供的文件夹下初始化一个网站，如果没有提供文件夹路径则在当前路径初始化。完成导入hexo-starter到目标文件夹并安装依赖包。</span></span><br><span class="line">$ hexo g <span class="comment"># 等同于 hexo generate，该命令将文件夹中的资源文件生成部署网站用的静态文件，这也是我们刚刚提到的Hexo最重要的作用，将积木搭成城堡的一步。</span></span><br><span class="line">$ hexo s <span class="comment"># 等同于hexo server，启动本地服务器。该命令用于预览已经做出的更改，但不会推送至远程仓库部署，使用该命令不需要hexo g即可默认从http://localhost:4000/本地预览网站的样子。</span></span><br><span class="line">$ hexo clean <span class="comment"># 该命令用于清除缓存文件db.json和已经生成的静态文件Public, hexo g之前最好先运行此命令以免造成generate的文件出现难以预估的问题。</span></span><br><span class="line">$ hexo d <span class="comment">#等同于hexo deploy，使用此命令将目前文件夹中的静态文件部署到设定的仓库（网站）。</span></span><br></pre></td></tr></table></figure>
+<h1>最后</h1>
+<p>感谢枫叶大佬的详细介绍才使得我一个完全没有接触过类似东西的人得以在几天内忙里偷闲搭起了这样一个网站，像是有了一个小小的自己的空间，非常感激。即使第六篇之后，也就是网站的主题选择我没有像枫叶大佬一样选择Next主题，而是用了目前看起来更新更符合我审美的<a href="https://butterfly.js.org/" title="Butterfly Documentation">Butterfly</a>，我也依然在配置Hexo的主题文件等等问题上很大程度上参考了大部分第八篇的内容。</p>
+<p>另外必须给大家推荐我现在使用的这个主题, 这是最符合我审美并且自由度相当高的一款主题，网站上有相当详细的文档，大家配置主题的时候跟着文档走就可以完成大部分的网站配置了。</p>
+<p>[第1篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Hexo</tag>
+        <tag>GitHub</tag>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
       </tags>
   </entry>
   <entry>
@@ -531,6 +531,121 @@
       <tags>
         <tag>日常学习</tag>
         <tag>CFA一级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[数据分析] 使用R做EDA分析的基础知识</title>
+    <url>/2022/04/09/14-R-EDA-basics/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>因为最近想要给公司做一些预测性模型来标注保单的取消风险而提取了一些相关的数据，在使用机器学习模型之前按照惯例需要对数据进行一些<code>探索性分析(EDA, Exploratory Data Analysis)</code>，并可能以此结果来指导机器学习模型的建造。那么在这篇里就先介绍一些EDA分析的例行步骤，以及如何使用<code>R</code>来实现这些步骤。</p>
+<h1>正文</h1>
+<p>我在查找资料的时候发现了一个针对EDA教学且解释非常细致的教学网站，是<a href="https://datacarpentry.org/R-ecology-lesson/index.html" title="Data Analysis and Visualization in R for Ecologists">Data Carpentry</a>为生态学家使用R分析数据做的基础指南，虽然在标题中表现出相当的特殊性，但实际内容却是针对EDA分析的一般性知识。我会根据他的内容和结构大致介绍如何使用R来进行EDA分析。</p>
+<h2 id="读取数据">读取数据</h2>
+<p>使用R做数据分析必须要介绍的一个包就是<a href="https://www.tidyverse.org/" title="Tidyverse">Tidyverse</a>，这是一个集合了数据收集，转换，清洗，可视化等一系列满足数据科学需求的包的集合。<code>Tidyverse</code>中包括的<code>reader</code>包就是用来读取数据的工具，通常我们会使用<code>read_csv()</code>包来将<code>csv文件</code>读取为R中的数据框对象。</p>
+<p>关于<code>read_csv()</code>的参数设置，如果直接以文件名读取文件而不设置任何参数的话，经常会导致如下图所示，第一列数据表头的读取错误，这时我们需要在函数中加入<code>fileEncoding = &quot;UTF-8-BOM&quot;</code>,因为<code>read_csv()</code>默认解码方式是使用<code>无BOM的UTF-8</code>，这样读取一些带有BOM这种文件头的文件就会被错误解码。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220426214059545.png" alt="第一列列名读取错误"></p>
+<p>另外两个我用得比较多的参数是<code>stringsAsFactors</code>和<code>na.strings</code>。<code>stringsAsFactors</code>设置为<code>TRUE</code>时R会将文件中读取的字段按<code>因子(factor)</code>处理，这样当数据中需要作为训练使用的字符串格式字段较多时不需要将他们逐一转换为因子格式。<code>na.strings</code>则被用于认定丢失值，也就是说数据中出现这个参数设置的值时这条数据会被认为<code>NA</code>。<code>read_csv()</code>的使用示例如下 ：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">&lt;-</span> read.csv<span class="punctuation">(</span><span class="string">&quot;data_clean.csv&quot;</span><span class="punctuation">,</span> fileEncoding <span class="operator">=</span> <span class="string">&quot;UTF-8-BOM&quot;</span><span class="punctuation">,</span> stringsAsFactors <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">,</span>na.strings <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;&quot;</span><span class="punctuation">,</span><span class="string">&quot; &quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h2 id="数据检视">数据检视</h2>
+<p>数据拿到手的第一件事是查看数据的大致情况，R有一些简单的公式可以让分析师对数据有一些快速简单的了解。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="built_in">class</span><span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 返回对象的类型，例如data.frame</span></span><br><span class="line">str<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 返回对象及内部元素的结构概览</span></span><br><span class="line">view<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 使用Rstudio的Data viewer来检视数据，可以看到所有数据并有简单的查找，筛选，排序等功能。</span></span><br><span class="line">head<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 默认检视对象中的前n条数据，n默认为6。类似的还有tail()，用于检视最后n条数据</span></span><br><span class="line">summary<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 用于获取数据框中每列数据的简单统计情况</span></span><br></pre></td></tr></table></figure>
+<h3 id="数据框数据">数据框数据</h3>
+<p><code>数据框格式(data frame)</code>数据是数据分析中最常见的数据格式之一，它的特点是将数据以表格的形式储存，每一列都是一个长度相等的<code>向量(vector)</code>，而每一行则代表一条数据，由于列的本质是向量，因此每列中的数据类型都应该相同。数据框数据的引用方法：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">,</span><span class="number">6</span><span class="punctuation">]</span> <span class="comment">#选出第2行第6列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">,</span> <span class="punctuation">]</span> <span class="comment">#选出第2行所有列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="punctuation">,</span> <span class="number">6</span><span class="punctuation">]</span> <span class="comment">#选出所有行第6列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="number">6</span><span class="punctuation">]</span> <span class="comment">#省略逗号时效果同上，选出所有行第6列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">,</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">4</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">)</span><span class="punctuation">]</span> <span class="comment">#选出第1，2，3行第5，6列的所有数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="punctuation">,</span> <span class="number">5</span><span class="operator">:</span><span class="number">6</span><span class="punctuation">]</span> <span class="comment">#效果同上，1:3表示1至3的整数序列</span></span><br><span class="line">df.raw<span class="punctuation">[[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">]</span> <span class="comment"># 选出所有行第1列数据，以向量格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[[</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">]</span><span class="punctuation">]</span> <span class="comment"># 选出第1行第1列数据，以值的格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="punctuation">,</span> <span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="comment"># 数字前加-号表示去除该坐标，选出其余所有数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="string">&quot;id&quot;</span><span class="punctuation">]</span> <span class="comment">#还可以以列名的格式选择到列，返回格式为数据框</span></span><br><span class="line">df.raw<span class="operator">$</span>id <span class="comment">#$符号加列名表示以向量格式返回该列数据</span></span><br></pre></td></tr></table></figure>
+<h3 id="因子">因子</h3>
+<p><code>因子(factors)</code>是R中存储<code>分类数据(categorical data)</code>时所用的一种特色的数据格式，这些数据的特点是它们会从有限数量的可能值中取值。一个因子类的变量一旦被创建，它就只能从预设集中取值，这些预设集被称为<code>水平值(levels)</code>，而因子变量本身则被以与这些水平集中的<code>标签(labels)</code>一一对应的<code>整数</code>储存。因此虽然因子变量看起来像字符变量，但实际上在数据处理时他们是被当成<code>整型向量</code>处理。</p>
+<h4 id="将其他类型变量转换为因子类型">将其他类型变量转换为因子类型</h4>
+<p>虽然我们在读取数据时已经设置过了将字符串形式数据以因子形式储存，但即使不这样做我们也可以用<code>factor()</code>方程来手动将需要转换的字符型列转换为因子型。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw<span class="operator">$</span>id <span class="operator">&lt;-</span> factor<span class="punctuation">(</span>df.raw<span class="operator">$</span>id<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h4 id="将因子变量水平值排序">将因子变量水平值排序</h4>
+<p>通常R会按字母顺序排列水平值并编号，但有些时候由于水平值本身有顺序含义(例如大中小)，因此R也提供了手动将水平值排序的功能。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw<span class="operator">$</span>id <span class="operator">&lt;-</span> factor<span class="punctuation">(</span>df.raw<span class="operator">$</span>id<span class="punctuation">,</span> levels <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;第一&quot;</span>，<span class="string">&quot;第二&quot;</span><span class="punctuation">,</span> <span class="string">&quot;第三&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h4 id="因子型变量转换为其他类型">因子型变量转换为其他类型</h4>
+<p>如果需要将因子类型转换为数字或字符类型需要注意一点，因为因子类型本身以数字形式储存，所以直接对因子类型数据使用<code>as.numeric()</code>会导致变量被直接转换为因子储存的整数索引值，正确方法应该如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="built_in">as.character</span><span class="punctuation">(</span>sex<span class="punctuation">)</span> <span class="comment">#因子型转换为字符型时可以直接使用as.character</span></span><br><span class="line"><span class="built_in">as.numeric</span><span class="punctuation">(</span><span class="built_in">as.character</span><span class="punctuation">(</span>year_fct<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 若要将因子标签转换为数字型，需要先转换为字符型</span></span><br><span class="line"><span class="built_in">as.numeric</span><span class="punctuation">(</span>levels<span class="punctuation">(</span>year_fct<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">[</span>year_fct<span class="punctuation">]</span> <span class="comment"># 效率更高的方法是先将所有标签一一转换为数字，然后将这些数字对应至变量中</span></span><br></pre></td></tr></table></figure>
+<h4 id="因子水平值重命名">因子水平值重命名</h4>
+<p>在R中，如果一个因子变量中存在缺失值，这些缺失值会被默认忽视，他们不会有自己的水平值。但事实情况中存在一些留有信息的缺失值，比如因为特定情况导致特定记录的值无法采集，这种情况下如果忽略这些缺失值实际上是丢失了有效信息，因此不同情况下我们也需要把缺失值放入水平值集中并可能需要重命名。</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">sex <span class="operator">&lt;-</span> surveys<span class="operator">$</span>sex</span><br><span class="line">levels<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#&gt; [1] &quot;F&quot; &quot;M&quot; NA</span></span><br><span class="line">sex <span class="operator">&lt;-</span> addNA<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line">head<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#&gt; [1] M    M    &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span></span><br><span class="line"><span class="comment">#&gt; Levels: F M &lt;NA&gt;</span></span><br><span class="line">levels<span class="punctuation">(</span>sex<span class="punctuation">)</span><span class="punctuation">[</span><span class="number">3</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> <span class="string">&quot;undetermined&quot;</span></span><br><span class="line">head<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#&gt; [1] M            M            undetermined undetermined undetermined</span></span><br><span class="line"><span class="comment">#&gt; [6] undetermined</span></span><br><span class="line"><span class="comment">#&gt; Levels: F M undetermined</span></span><br></pre></td></tr></table></figure>
+<p>总结下来就是使用<code>addNA()</code>可以将缺失值加入因子型变量中，然后使用<code>levels(sex)[3] &lt;- &quot;undetermined&quot;</code>则可以将<code>undetermined</code>赋值给<code>sex</code>的第<code>3</code>个水平值。</p>
+<h2 id="数据清洗">数据清洗</h2>
+<p>在这一步中我们需要挑选，调整，创建一系列的变量，来达到获得理想的适合进行数据分析的数据集的结果。我们首先介绍一些<code>tidyverse</code>中<code>dplyr</code>包的功能，这个包中的函数可以实现上面提到的大部分数据操作。</p>
+<h3 id="挑选和筛选">挑选和筛选</h3>
+<p>要做数据清洗首先需要的第一个功能就是以特定需求挑选所需的数据，<code>dplyr</code>包中的<code>select()</code>和<code>filter()</code>就是分别用来挑选数据列和行的。具体用法如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">select<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> id<span class="punctuation">,</span> sex<span class="punctuation">,</span> age<span class="punctuation">)</span> <span class="comment"># 第一个参数为数据框，其他为需要挑选的列</span></span><br><span class="line">select<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> <span class="operator">-</span>id<span class="punctuation">,</span> <span class="operator">-</span>sex<span class="punctuation">)</span> <span class="comment"># 在列前加-号表示不需要该列</span></span><br><span class="line">filter<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> sex <span class="operator">==</span> <span class="string">&quot;M&quot;</span><span class="punctuation">)</span> <span class="comment"># 筛选符合条件的记录</span></span><br></pre></td></tr></table></figure>
+<p>通常在我们处理数据集时要将数据集先后进行各种操作，如果将他们逐一赋值或嵌套会非常混乱且麻烦，因此<code>dplyr</code>也提供了方便的<code>pipe</code>功能，可以将前一步操作的结果直接输入下一步操作的第一个参数。例如我们想要从<code>df.raw</code>中先筛选出性别为<code>M</code>的记录，然后选出他们的<code>age</code>与<code>id</code>作为数据集：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span> <span class="comment">#将df.raw输入到下一步</span></span><br><span class="line">  filter<span class="punctuation">(</span>sex <span class="operator">==</span> <span class="string">&quot;M&quot;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span> <span class="comment"># 筛选，第一个参数为df.raw</span></span><br><span class="line">  select<span class="punctuation">(</span>age<span class="punctuation">,</span> id<span class="punctuation">)</span> <span class="comment"># 挑选，第一个参数为filter(df.raw, sex == &quot;M&quot;)</span></span><br></pre></td></tr></table></figure>
+<p>上方步骤中，<code>%&gt;%</code>这个符号是代表<code>pipe</code>的操作符，在<code>Rstudio</code>中可以使用<code>Ctrl + Shift + M</code>来快速输入。</p>
+<h4 id="is-na"><a href="http://is.na">is.na</a>()</h4>
+<p><code>is.na()</code>公式是在用来判断对象是否为缺失值的公式，可以配合<code>filter()</code>公式使用来排除某列中为空的记录：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  filter<span class="punctuation">(</span><span class="operator">!</span><span class="built_in">is.na</span><span class="punctuation">(</span>sex<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 将sex列值缺失的记录筛选出去，!符号代表不需要</span></span><br></pre></td></tr></table></figure>
+<h3 id="创建新列">创建新列</h3>
+<p>通常如果我们需要在数据集中根据已有列创建新列，就需要使用<code>mutate()</code>函数。他的使用方法非常简单：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">mutate<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> salary_in_k <span class="operator">=</span> salary<span class="operator">/</span><span class="number">1000</span><span class="punctuation">)</span> <span class="comment"># 创建一个名叫salary_in_k的列，内容为salary/1000</span></span><br><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">mutate<span class="punctuation">(</span>salary_in_k <span class="operator">=</span> salary<span class="operator">/</span><span class="number">1000</span><span class="punctuation">)</span> <span class="comment"># 以pipe的方式实现上句</span></span><br></pre></td></tr></table></figure>
+<p>而我们通常在创建新列的时候除了进行计算，也会做一些例如判断或将连续变量离散化分组的操作，下面介绍的两个函数就可以帮助完成这两个操作。</p>
+<h4 id="cut">cut()</h4>
+<p><code>cut()</code>函数可以被用来对连续变量进行离散化分组，实际用法如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  mutate<span class="punctuation">(</span>Age <span class="operator">=</span> cut<span class="punctuation">(</span>Age<span class="punctuation">,</span> breaks <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span><span class="number">14</span><span class="punctuation">,</span><span class="number">24</span><span class="punctuation">,</span><span class="number">64</span><span class="punctuation">,</span><span class="literal">Inf</span><span class="punctuation">)</span><span class="punctuation">,</span> labels <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;Children&quot;</span><span class="punctuation">,</span><span class="string">&quot;Youth&quot;</span><span class="punctuation">,</span><span class="string">&quot;Adult&quot;</span><span class="punctuation">,</span><span class="string">&quot;Senior&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span>include.lowest <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>该函数中，<code>breaks</code>参数既可以取不同取值点，也可以使用整数表示将区间平分为整数个。<code>include.lowest</code>设定为<code>TRUE</code>时分组区间的最左边区间会取双闭区间。其他参数或具体示例可以参考<a href="https://r-coder.com/cut-r/" title="Cut function in R">该网站</a>。</p>
+<h4 id="ifelse">ifelse()</h4>
+<p><code>ifelse()</code>函数可以用来做各种判断取值，实际用法如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  mutate<span class="punctuation">(</span>NOC <span class="operator">=</span> ifelse<span class="punctuation">(</span><span class="built_in">is.na</span><span class="punctuation">(</span>NOC<span class="punctuation">)</span><span class="punctuation">,</span><span class="number">0</span><span class="punctuation">,</span>NOC<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 若NOC为NA，则使用0，否则使用本身的数值</span></span><br></pre></td></tr></table></figure>
+<h3 id="数据分组计算">数据分组计算</h3>
+<p>有些情况下我们需要对一些数据进行分组的计算和整理，比如统计某个特定分类的数量或者平均值，或者这个分类中各个更小的分类占这个分类数量的半分比等，就可以用<code>group_by()</code>这个函数实现，以我给公司分析的数据中使用的代码举例：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment"># check the percentage of renewal for each product at each renewal point ---------------</span></span><br><span class="line"><span class="comment"># count the number of records for each group first</span></span><br><span class="line">Renewal_CNT_table <span class="operator">&lt;-</span> df.LAPSED <span class="operator">%&gt;%</span></span><br><span class="line">  group_by<span class="punctuation">(</span>CNTTYPE<span class="punctuation">,</span> MAX_ZRENNO<span class="punctuation">,</span> Lapased_reason_desc<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">  summarise<span class="punctuation">(</span>count <span class="operator">=</span> n<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># the percentage of each number of renewed times for each product</span></span><br><span class="line">Renewal_percent <span class="operator">&lt;-</span> Renewal_CNT_table <span class="operator">%&gt;%</span> </span><br><span class="line">  group_by<span class="punctuation">(</span>CNTTYPE<span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>Total <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>count<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">  mutate<span class="punctuation">(</span>renewed_prcent <span class="operator">=</span> count<span class="operator">/</span>Total<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">  na.omit<span class="punctuation">(</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的一点是在上面代码的第二部分，我们<code>Total = sum(count)</code>的操作虽然是针对所有行，但<code>sum</code>本身却由于前面的<code>group_by(CNTTYPE)</code>只针对<code>CNTTYPE</code>中的每一个<code>factors</code>，以此算出了每个单独的<code>CNTTYPE</code>的和。</p>
+<h4 id="arrange">arrange()</h4>
+<p><code>arrange()</code>函数可以用来将数据框以特定列的数值排列，用法如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  arrange<span class="punctuation">(</span>sex<span class="punctuation">,</span> salary<span class="punctuation">)</span> <span class="operator">%&gt;%</span> <span class="comment"># arrange默认将列按从小到大，从A到Z的顺序排序</span></span><br><span class="line">  arrange<span class="punctuation">(</span>desc<span class="punctuation">(</span>salary<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 若要从大到小，从Z到A排序则需要加desc()函数</span></span><br></pre></td></tr></table></figure>
+<h4 id="count">count()</h4>
+<p>对数据框对象使用<code>count()</code>函数并指定特定列名，效果等同于以该列分组后计数。实际使用如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">    count<span class="punctuation">(</span>sex<span class="punctuation">,</span> sort <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h2 id="数据可视化">数据可视化</h2>
+<p>探索性分析的最后一步就是将处理好的数据进行对比展示从而得出所需信息了，<code>tidyverse</code>中使用<code>ggplot2</code>来进行数据可视化。本节我会首先介绍下<code>ggplot2</code>的函数使用的基本格式，然后介绍一些常见的函数和参数，这里最后附上一个<code>ggplot2</code>的详细的<a href="http://www.sthda.com/english/wiki/ggplot2-essentials" title="ggplot2 - Essentials">文档网站</a>。</p>
+<h3 id="函数格式">函数格式</h3>
+<p>之所以专门要说一说函数的格式是因为<code>ggplot</code>的函数使用格式与其他常见包有较大的区别，当需要在一张图上增加不同功能或元素时不同部分之间使用<code>+</code>号连接。</p>
+<blockquote>
+<p>ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  &lt;GEOM_FUNCTION&gt;()</p>
+</blockquote>
+<h3 id="ggplot">ggplot()</h3>
+<p><code>ggplot()</code>是<code>ggplot2</code>作图的最基础的模块，在这个函数内指定作图的数据源，同时在这个函数中我们也可以使用<code>aes()</code>函数设置图片可视化的不同维度。使用方法如下：</p>
+<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot<span class="punctuation">(</span>data <span class="operator">=</span> df.raw<span class="punctuation">,</span> <span class="comment"># data参数中指定使用的数据集</span></span><br><span class="line">       mapping <span class="operator">=</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> sex<span class="punctuation">,</span> <span class="comment"># x轴维度</span></span><br><span class="line">                     y <span class="operator">=</span> salary<span class="punctuation">,</span> <span class="comment"># y轴维度</span></span><br><span class="line">                    fill <span class="operator">=</span> CNTTYPE<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment">#填充颜色</span></span><br></pre></td></tr></table></figure>
+<p>需要强调一下<code>aes()</code>的<a href="https://ggplot2.tidyverse.org/reference/aes.html" title="Construct aesthetic mappings">使用方法</a>，该函数本身用来指定需要制作的图的各个参数，可以在<code>ggplot()</code>中设定，也可以在各层<code>GEOM_FUNCTION</code>中单独设置。其中<code>fill</code>这个参数如果使用特定颜色则表示使用改颜色填充图，若使用某个因子型变量则代表在图中使用不同颜色标明这个变量的不同值。</p>
+<h3 id="常用图类型及参数设置">常用图类型及参数设置</h3>
+<ul>
+<li><code>geom_point()：</code>根据数据绘制点图，<code>size</code>, <code>color</code>, <code>shape</code>三个参数分别可以控制点的<code>大小</code>，<code>颜色</code>和<code>形状</code>。可以增加<code>geom_rug()</code>,<code>geom_density_2d()</code>或<code>stat_ellipse()</code>等功能增强显示，具体参见<a href="http://www.sthda.com/english/wiki/ggplot2-scatter-plots-quick-start-guide-r-software-and-data-visualization" title="ggplot2 scatter plots : Quick start guide - R software and data visualization">此页面</a>。</li>
+<li><code>geom_smooth()：</code>对点图绘制回归线，<code>method</code>参数可以选择默认的<code>loess</code>或<code>lm</code>，后者可以通过<code>formula = y ~ poly(x, 3)</code>参数指定回归的次数，<code>se</code>参数设定为<code>TRUE</code>时显示回归线的置信区间，<code>fullrange</code>设定为<code>TRUE</code>时回归线会跨过整个图，<code>level</code>参数是置信水平，默认为<code>0.95</code>。</li>
+<li><code>geom_line()：</code>根据数据点绘制线图，可以使用<code>linetype</code>调整线的形状，在<code>group</code>参数中可以对不同的分组绘图。</li>
+<li><code>geom_abline()：</code>在图中添加线，<code>intercept</code>和<code>slope</code>参数分别设定线的截距和斜率。除了<code>abline()</code>以外还有<code>vline()</code>, <code>hline()</code>, <code>geom_segment（）</code>。具体使用参见<a href="http://www.sthda.com/english/wiki/ggplot2-add-straight-lines-to-a-plot-horizontal-vertical-and-regression-lines" title="ggplot2 add straight lines to a plot : horizontal, vertical and regression lines">此页面</a>。</li>
+<li><code>geom_boxplot()：</code>绘制箱型图，<code>outlier.colour</code>, <code>outlier.shape</code>, <code>outlier.size</code>三个参数分别设置异常值的颜色，形状和大小。另外有一个<code>notch</code>参数设置为<code>TRUE</code>时将绘制展示中位数置信区间的箱型图，用以对比两组数据中位数的差异。可以配合<code>geom_dotplot()</code>或<code>geom_jitter()</code>在箱型图中绘制点分布，具体使用参见<a href="http://www.sthda.com/english/wiki/ggplot2-box-plot-quick-start-guide-r-software-and-data-visualization" title="ggplot2 box plot : Quick start guide - R software and data visualization">此页面</a>。</li>
+<li><code>geom_bar()：</code>柱状图，<code>stat</code>参数若为<code>identity</code>则y轴以y值计算，若为<code>bin</code>则y轴以记录数计算，<code>position</code>参数可以为<code>dodge,stake</code>或<code>fill</code>来对比，堆叠或百分比显示柱状图。另外可以使用<code>coord_flip()</code>翻转坐标轴或使用<code>coord_polar(&quot;y&quot;, start=0)</code>来制作饼图。其他更多设置参考<a href="http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization" title="ggplot2 barplots : Quick start guide - R software and data visualization">此页面</a></li>
+<li><code>geom_histogram()：</code>直方图，用于展示数据的分布情况。也可以像柱状图一样使用<code>position</code>参数调整不同组数据的展示方式，<code>alpha</code>参数用于调整图像透明度。更多使用方法参考<a href="http://www.sthda.com/english/wiki/ggplot2-histogram-plot-quick-start-guide-r-software-and-data-visualization" title="ggplot2 histogram plot : Quick start guide - R software and data visualization">此页面</a>。</li>
+<li><code>geom_density()：</code>概率分布图，与直方图效果类似，但是使用曲线围出的面积为1的概率分布图来描述不同值出现的概率，可以配合直方图展示。</li>
+</ul>
+<h3 id="其他常用函数">其他常用函数</h3>
+<h4 id="多面对比-Faceting">多面对比(Faceting)</h4>
+<p><code>facet_wrap(facets = vars(sex))</code>或<code>facet_grid(rows = vars(sex), cols = vars(age))</code>可以分别以两种方式制作多图对比。效果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220426115942939.png" alt="facet_wrap()"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220426115930523.png" alt="facet_grid()"></p>
+<p>要将多图对比时也可以使用<code>图1 + 图2 + plot_layout()</code>的表达方式将多图展示，具体参数及用法参见<a href="https://www.rdocumentation.org/packages/patchwork/versions/1.1.1/topics/plot_layout" title="plot_layout: Define the grid to compose plots in">该网站</a>。</p>
+<h4 id="设置图标签">设置图标签</h4>
+<p><code>geom_text()：</code>该函数可以在图中标出各点的文字信息，用法如<code>geom_text(label=rownames(mtcars))</code>。</p>
+<p><code>geom_labs():</code>可以使用该函数修改图片的各个文字标签，主要参数有<code>title</code>修改图标题，<code>x</code>修改x轴标注，<code>y</code>修改y轴标注，<code>fill</code>修改legend标注等。</p>
+<h4 id="图片主题">图片主题</h4>
+<p><code>theme_gray()：</code>灰色背景与白色格线。</p>
+<p><code>theme_bw()：</code>白色背景与灰色格线。</p>
+<p><code>theme_linedraw()：</code>在theme_bw()的基础上图界有黑线包裹。</p>
+<p><code>theme_light()：</code>浅灰色线与轴，更凸显数据本身。</p>
+<p><code>theme_minimal()：</code>几乎没有背景标记。</p>
+<p><code>theme_classic()：</code>R的经典图片格式，有图片边框无格线。</p>
+<p><code>theme_void()：</code>无任何标记。</p>
+<p><code>theme_dark()：</code>暗灰色背景，适用于颜色丰富的图片。</p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>R</tag>
       </tags>
   </entry>
   <entry>
@@ -1004,6 +1119,44 @@ Asset&amp;=Liability\\
 </table>
 <h3 id="Common-size-B-S">Common size B/S</h3>
 <p>与<code>Common size I/S</code>相似，为以比例形式展示资产负债表，将资产负债表中每个数字除以总资产。</p>
+<h3 id="金融资产-Financial-instruments">金融资产(Financial instruments)</h3>
+ <table>
+    <!--标题-->
+    <tr>
+        <th colspan="2">USGAAP</th>
+        <th colspan="2">IFRS</th>
+    </tr>
+    <tr>
+        <td>Held-to-maturity</td>
+        <td>持有至到期</td>
+        <td>Amortized cost(AC)</td>
+        <td>以摊余成本进行计量的金融资产</td>
+    </tr>
+    <tr>
+        <td>Trading security</td>
+        <td>交易性金融资产</td>
+        <td>Fair value through profit or loss (FVTPL)</td>
+        <td>以公允价值计量且变动计入当期损益的金融资产</td>
+    </tr>
+    <tr>
+        <td>Available-for-sale</td>
+        <td>可供出售金融资产</td>
+        <td>Fair value through other comprehensive income (FVTOCI)</td>
+        <td>以公允价值计量且变动计入其他综合收益的金融资产</td>
+    </tr>
+</table>
+<h4 id="Held-to-maturity">Held-to-maturity</h4>
+<p>持有至到期的金融资产通常为债券，债券的摊销核算方法如下：</p>
+<ol>
+<li>首先把债券每年的现金流和本金按无风险利率折价为现值。</li>
+<li>然后每年<code>年末的资产价值</code>为为当年<code>年初的现值</code>+<code>该现值的无风险利息收益</code>-<code>票面利息</code>。</li>
+<li>当年的<code>摊销费用</code>为<code>年末价值</code>-<code>年初价值</code>。</li>
+</ol>
+<p>其中<code>年末及年初的资产价值</code>计入<code>资产负债表</code>，<code>无风险利息收益</code>计入<code>利润表</code>，<code>票面利息</code>计入<code>现金流表</code>。</p>
+<h4 id="Trading-security">Trading security</h4>
+<p>交易性资产为公司以短线交易为目的而持有的金融资产，该类资产的<code>浮盈浮亏(Unrealized G/L)</code>计入<code>利润表</code>。</p>
+<h4 id="Available-for-sale">Available-for-sale</h4>
+<p>交易性金融资产在IFRS准则下，即可以是债券投资，也可以是股票投资。但在US GAAP准则下可供出售的金融资产只可能是债券。该资产以公允价值计量且变动计入<code>资产负债表的其他综合收益</code>。</p>
 <p>[第13篇]</p>
 ]]></content>
       <categories>
@@ -1012,200 +1165,6 @@ Asset&amp;=Liability\\
       <tags>
         <tag>日常学习</tag>
         <tag>CFA一级</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
-    <url>/2022/02/12/2-typora_picgo_config/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
-<h1>正文</h1>
-<h2 id="创建博文">创建博文</h2>
-<p>先介绍一些在Hexo中发文的基础知识。</p>
-<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
-<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
-<ul>
-<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
-<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
-<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
-<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
-</ul>
-<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
-<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
-<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
-<p>hexo命令创建三类文件的方式分别如下：</p>
-<ul>
-<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
-<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
-<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
-</ul>
-<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
-<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
-<h3 id="Typora是什么">Typora是什么</h3>
-<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
-<h3 id="PicGo是什么">PicGo是什么</h3>
-<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
-<h3 id="具体如何配置">具体如何配置</h3>
-<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
-<h4 id="配置Typora">配置Typora</h4>
-<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
-<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
-<h4 id="配置图床">配置图床</h4>
-<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
-<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
-<h4 id="使用图床">使用图床</h4>
-<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
-<hr>
-<p>以下内容为2022年2月19日补充</p>
-<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
-<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
-<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
-<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
-<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
-<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
-<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
-<blockquote>
-<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
-</blockquote>
-<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
-<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
-<blockquote>
-<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
-</blockquote>
-<hr>
-<h1>最后</h1>
-<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
-<p>[第2篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>日常学习</tag>
-        <tag>Typora</tag>
-        <tag>PicGo</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[数据分析] 使用R做EDA分析的基础知识</title>
-    <url>/2022/04/09/14-R-EDA-basics/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>因为最近想要给公司做一些预测性模型来标注保单的取消风险而提取了一些相关的数据，在使用机器学习模型之前按照惯例需要对数据进行一些<code>探索性分析(EDA, Exploratory Data Analysis)</code>，并可能以此结果来指导机器学习模型的建造。那么在这篇里就先介绍一些EDA分析的例行步骤，以及如何使用<code>R</code>来实现这些步骤。</p>
-<h1>正文</h1>
-<p>我在查找资料的时候发现了一个针对EDA教学且解释非常细致的教学网站，是<a href="https://datacarpentry.org/R-ecology-lesson/index.html" title="Data Analysis and Visualization in R for Ecologists">Data Carpentry</a>为生态学家使用R分析数据做的基础指南，虽然在标题中表现出相当的特殊性，但实际内容却是针对EDA分析的一般性知识。我会根据他的内容和结构大致介绍如何使用R来进行EDA分析。</p>
-<h2 id="读取数据">读取数据</h2>
-<p>使用R做数据分析必须要介绍的一个包就是<a href="https://www.tidyverse.org/" title="Tidyverse">Tidyverse</a>，这是一个集合了数据收集，转换，清洗，可视化等一系列满足数据科学需求的包的集合。<code>Tidyverse</code>中包括的<code>reader</code>包就是用来读取数据的工具，通常我们会使用<code>read_csv()</code>包来将<code>csv文件</code>读取为R中的数据框对象。</p>
-<p>关于<code>read_csv()</code>的参数设置，如果直接以文件名读取文件而不设置任何参数的话，经常会导致如下图所示，第一列数据表头的读取错误，这时我们需要在函数中加入<code>fileEncoding = &quot;UTF-8-BOM&quot;</code>,因为<code>read_csv()</code>默认解码方式是使用<code>无BOM的UTF-8</code>，这样读取一些带有BOM这种文件头的文件就会被错误解码。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220426214059545.png" alt="第一列列名读取错误"></p>
-<p>另外两个我用得比较多的参数是<code>stringsAsFactors</code>和<code>na.strings</code>。<code>stringsAsFactors</code>设置为<code>TRUE</code>时R会将文件中读取的字段按<code>因子(factor)</code>处理，这样当数据中需要作为训练使用的字符串格式字段较多时不需要将他们逐一转换为因子格式。<code>na.strings</code>则被用于认定丢失值，也就是说数据中出现这个参数设置的值时这条数据会被认为<code>NA</code>。<code>read_csv()</code>的使用示例如下 ：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">&lt;-</span> read.csv<span class="punctuation">(</span><span class="string">&quot;data_clean.csv&quot;</span><span class="punctuation">,</span> fileEncoding <span class="operator">=</span> <span class="string">&quot;UTF-8-BOM&quot;</span><span class="punctuation">,</span> stringsAsFactors <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">,</span>na.strings <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;&quot;</span><span class="punctuation">,</span><span class="string">&quot; &quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
-<h2 id="数据检视">数据检视</h2>
-<p>数据拿到手的第一件事是查看数据的大致情况，R有一些简单的公式可以让分析师对数据有一些快速简单的了解。</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="built_in">class</span><span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 返回对象的类型，例如data.frame</span></span><br><span class="line">str<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 返回对象及内部元素的结构概览</span></span><br><span class="line">view<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 使用Rstudio的Data viewer来检视数据，可以看到所有数据并有简单的查找，筛选，排序等功能。</span></span><br><span class="line">head<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 默认检视对象中的前n条数据，n默认为6。类似的还有tail()，用于检视最后n条数据</span></span><br><span class="line">summary<span class="punctuation">(</span>df.raw<span class="punctuation">)</span> <span class="comment"># 用于获取数据框中每列数据的简单统计情况</span></span><br></pre></td></tr></table></figure>
-<h3 id="数据框数据">数据框数据</h3>
-<p><code>数据框格式(data frame)</code>数据是数据分析中最常见的数据格式之一，它的特点是将数据以表格的形式储存，每一列都是一个长度相等的<code>向量(vector)</code>，而每一行则代表一条数据，由于列的本质是向量，因此每列中的数据类型都应该相同。数据框数据的引用方法：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">,</span><span class="number">6</span><span class="punctuation">]</span> <span class="comment">#选出第2行第6列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="number">2</span><span class="punctuation">,</span> <span class="punctuation">]</span> <span class="comment">#选出第2行所有列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="punctuation">,</span> <span class="number">6</span><span class="punctuation">]</span> <span class="comment">#选出所有行第6列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="number">6</span><span class="punctuation">]</span> <span class="comment">#省略逗号时效果同上，选出所有行第6列的数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">2</span><span class="punctuation">,</span> <span class="number">3</span><span class="punctuation">)</span><span class="punctuation">,</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">4</span><span class="punctuation">,</span> <span class="number">5</span><span class="punctuation">)</span><span class="punctuation">]</span> <span class="comment">#选出第1，2，3行第5，6列的所有数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="number">1</span><span class="operator">:</span><span class="number">3</span><span class="punctuation">,</span> <span class="number">5</span><span class="operator">:</span><span class="number">6</span><span class="punctuation">]</span> <span class="comment">#效果同上，1:3表示1至3的整数序列</span></span><br><span class="line">df.raw<span class="punctuation">[[</span><span class="number">1</span><span class="punctuation">]</span><span class="punctuation">]</span> <span class="comment"># 选出所有行第1列数据，以向量格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[[</span><span class="number">1</span><span class="punctuation">,</span> <span class="number">1</span><span class="punctuation">]</span><span class="punctuation">]</span> <span class="comment"># 选出第1行第1列数据，以值的格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="punctuation">,</span> <span class="operator">-</span><span class="number">1</span><span class="punctuation">]</span> <span class="comment"># 数字前加-号表示去除该坐标，选出其余所有数据，以数据框格式返回</span></span><br><span class="line">df.raw<span class="punctuation">[</span><span class="string">&quot;id&quot;</span><span class="punctuation">]</span> <span class="comment">#还可以以列名的格式选择到列，返回格式为数据框</span></span><br><span class="line">df.raw<span class="operator">$</span>id <span class="comment">#$符号加列名表示以向量格式返回该列数据</span></span><br></pre></td></tr></table></figure>
-<h3 id="因子">因子</h3>
-<p><code>因子(factors)</code>是R中存储<code>分类数据(categorical data)</code>时所用的一种特色的数据格式，这些数据的特点是它们会从有限数量的可能值中取值。一个因子类的变量一旦被创建，它就只能从预设集中取值，这些预设集被称为<code>水平值(levels)</code>，而因子变量本身则被以与这些水平集中的<code>标签(labels)</code>一一对应的<code>整数</code>储存。因此虽然因子变量看起来像字符变量，但实际上在数据处理时他们是被当成<code>整型向量</code>处理。</p>
-<h4 id="将其他类型变量转换为因子类型">将其他类型变量转换为因子类型</h4>
-<p>虽然我们在读取数据时已经设置过了将字符串形式数据以因子形式储存，但即使不这样做我们也可以用<code>factor()</code>方程来手动将需要转换的字符型列转换为因子型。</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw<span class="operator">$</span>id <span class="operator">&lt;-</span> factor<span class="punctuation">(</span>df.raw<span class="operator">$</span>id<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
-<h4 id="将因子变量水平值排序">将因子变量水平值排序</h4>
-<p>通常R会按字母顺序排列水平值并编号，但有些时候由于水平值本身有顺序含义(例如大中小)，因此R也提供了手动将水平值排序的功能。</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw<span class="operator">$</span>id <span class="operator">&lt;-</span> factor<span class="punctuation">(</span>df.raw<span class="operator">$</span>id<span class="punctuation">,</span> levels <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;第一&quot;</span>，<span class="string">&quot;第二&quot;</span><span class="punctuation">,</span> <span class="string">&quot;第三&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
-<h4 id="因子型变量转换为其他类型">因子型变量转换为其他类型</h4>
-<p>如果需要将因子类型转换为数字或字符类型需要注意一点，因为因子类型本身以数字形式储存，所以直接对因子类型数据使用<code>as.numeric()</code>会导致变量被直接转换为因子储存的整数索引值，正确方法应该如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="built_in">as.character</span><span class="punctuation">(</span>sex<span class="punctuation">)</span> <span class="comment">#因子型转换为字符型时可以直接使用as.character</span></span><br><span class="line"><span class="built_in">as.numeric</span><span class="punctuation">(</span><span class="built_in">as.character</span><span class="punctuation">(</span>year_fct<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 若要将因子标签转换为数字型，需要先转换为字符型</span></span><br><span class="line"><span class="built_in">as.numeric</span><span class="punctuation">(</span>levels<span class="punctuation">(</span>year_fct<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">[</span>year_fct<span class="punctuation">]</span> <span class="comment"># 效率更高的方法是先将所有标签一一转换为数字，然后将这些数字对应至变量中</span></span><br></pre></td></tr></table></figure>
-<h4 id="因子水平值重命名">因子水平值重命名</h4>
-<p>在R中，如果一个因子变量中存在缺失值，这些缺失值会被默认忽视，他们不会有自己的水平值。但事实情况中存在一些留有信息的缺失值，比如因为特定情况导致特定记录的值无法采集，这种情况下如果忽略这些缺失值实际上是丢失了有效信息，因此不同情况下我们也需要把缺失值放入水平值集中并可能需要重命名。</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">sex <span class="operator">&lt;-</span> surveys<span class="operator">$</span>sex</span><br><span class="line">levels<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#&gt; [1] &quot;F&quot; &quot;M&quot; NA</span></span><br><span class="line">sex <span class="operator">&lt;-</span> addNA<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line">head<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#&gt; [1] M    M    &lt;NA&gt; &lt;NA&gt; &lt;NA&gt; &lt;NA&gt;</span></span><br><span class="line"><span class="comment">#&gt; Levels: F M &lt;NA&gt;</span></span><br><span class="line">levels<span class="punctuation">(</span>sex<span class="punctuation">)</span><span class="punctuation">[</span><span class="number">3</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> <span class="string">&quot;undetermined&quot;</span></span><br><span class="line">head<span class="punctuation">(</span>sex<span class="punctuation">)</span></span><br><span class="line"><span class="comment">#&gt; [1] M            M            undetermined undetermined undetermined</span></span><br><span class="line"><span class="comment">#&gt; [6] undetermined</span></span><br><span class="line"><span class="comment">#&gt; Levels: F M undetermined</span></span><br></pre></td></tr></table></figure>
-<p>总结下来就是使用<code>addNA()</code>可以将缺失值加入因子型变量中，然后使用<code>levels(sex)[3] &lt;- &quot;undetermined&quot;</code>则可以将<code>undetermined</code>赋值给<code>sex</code>的第<code>3</code>个水平值。</p>
-<h2 id="数据清洗">数据清洗</h2>
-<p>在这一步中我们需要挑选，调整，创建一系列的变量，来达到获得理想的适合进行数据分析的数据集的结果。我们首先介绍一些<code>tidyverse</code>中<code>dplyr</code>包的功能，这个包中的函数可以实现上面提到的大部分数据操作。</p>
-<h3 id="挑选和筛选">挑选和筛选</h3>
-<p>要做数据清洗首先需要的第一个功能就是以特定需求挑选所需的数据，<code>dplyr</code>包中的<code>select()</code>和<code>filter()</code>就是分别用来挑选数据列和行的。具体用法如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">select<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> id<span class="punctuation">,</span> sex<span class="punctuation">,</span> age<span class="punctuation">)</span> <span class="comment"># 第一个参数为数据框，其他为需要挑选的列</span></span><br><span class="line">select<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> <span class="operator">-</span>id<span class="punctuation">,</span> <span class="operator">-</span>sex<span class="punctuation">)</span> <span class="comment"># 在列前加-号表示不需要该列</span></span><br><span class="line">filter<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> sex <span class="operator">==</span> <span class="string">&quot;M&quot;</span><span class="punctuation">)</span> <span class="comment"># 筛选符合条件的记录</span></span><br></pre></td></tr></table></figure>
-<p>通常在我们处理数据集时要将数据集先后进行各种操作，如果将他们逐一赋值或嵌套会非常混乱且麻烦，因此<code>dplyr</code>也提供了方便的<code>pipe</code>功能，可以将前一步操作的结果直接输入下一步操作的第一个参数。例如我们想要从<code>df.raw</code>中先筛选出性别为<code>M</code>的记录，然后选出他们的<code>age</code>与<code>id</code>作为数据集：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span> <span class="comment">#将df.raw输入到下一步</span></span><br><span class="line">  filter<span class="punctuation">(</span>sex <span class="operator">==</span> <span class="string">&quot;M&quot;</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span> <span class="comment"># 筛选，第一个参数为df.raw</span></span><br><span class="line">  select<span class="punctuation">(</span>age<span class="punctuation">,</span> id<span class="punctuation">)</span> <span class="comment"># 挑选，第一个参数为filter(df.raw, sex == &quot;M&quot;)</span></span><br></pre></td></tr></table></figure>
-<p>上方步骤中，<code>%&gt;%</code>这个符号是代表<code>pipe</code>的操作符，在<code>Rstudio</code>中可以使用<code>Ctrl + Shift + M</code>来快速输入。</p>
-<h4 id="is-na"><a href="http://is.na">is.na</a>()</h4>
-<p><code>is.na()</code>公式是在用来判断对象是否为缺失值的公式，可以配合<code>filter()</code>公式使用来排除某列中为空的记录：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  filter<span class="punctuation">(</span><span class="operator">!</span><span class="built_in">is.na</span><span class="punctuation">(</span>sex<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 将sex列值缺失的记录筛选出去，!符号代表不需要</span></span><br></pre></td></tr></table></figure>
-<h3 id="创建新列">创建新列</h3>
-<p>通常如果我们需要在数据集中根据已有列创建新列，就需要使用<code>mutate()</code>函数。他的使用方法非常简单：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">mutate<span class="punctuation">(</span>df.raw<span class="punctuation">,</span> salary_in_k <span class="operator">=</span> salary<span class="operator">/</span><span class="number">1000</span><span class="punctuation">)</span> <span class="comment"># 创建一个名叫salary_in_k的列，内容为salary/1000</span></span><br><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">mutate<span class="punctuation">(</span>salary_in_k <span class="operator">=</span> salary<span class="operator">/</span><span class="number">1000</span><span class="punctuation">)</span> <span class="comment"># 以pipe的方式实现上句</span></span><br></pre></td></tr></table></figure>
-<p>而我们通常在创建新列的时候除了进行计算，也会做一些例如判断或将连续变量离散化分组的操作，下面介绍的两个函数就可以帮助完成这两个操作。</p>
-<h4 id="cut">cut()</h4>
-<p><code>cut()</code>函数可以被用来对连续变量进行离散化分组，实际用法如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  mutate<span class="punctuation">(</span>Age <span class="operator">=</span> cut<span class="punctuation">(</span>Age<span class="punctuation">,</span> breaks <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="number">0</span><span class="punctuation">,</span><span class="number">14</span><span class="punctuation">,</span><span class="number">24</span><span class="punctuation">,</span><span class="number">64</span><span class="punctuation">,</span><span class="literal">Inf</span><span class="punctuation">)</span><span class="punctuation">,</span> labels <span class="operator">=</span> <span class="built_in">c</span><span class="punctuation">(</span><span class="string">&quot;Children&quot;</span><span class="punctuation">,</span><span class="string">&quot;Youth&quot;</span><span class="punctuation">,</span><span class="string">&quot;Adult&quot;</span><span class="punctuation">,</span><span class="string">&quot;Senior&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span>include.lowest <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
-<p>该函数中，<code>breaks</code>参数既可以取不同取值点，也可以使用整数表示将区间平分为整数个。<code>include.lowest</code>设定为<code>TRUE</code>时分组区间的最左边区间会取双闭区间。其他参数或具体示例可以参考<a href="https://r-coder.com/cut-r/" title="Cut function in R">该网站</a>。</p>
-<h4 id="ifelse">ifelse()</h4>
-<p><code>ifelse()</code>函数可以用来做各种判断取值，实际用法如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  mutate<span class="punctuation">(</span>NOC <span class="operator">=</span> ifelse<span class="punctuation">(</span><span class="built_in">is.na</span><span class="punctuation">(</span>NOC<span class="punctuation">)</span><span class="punctuation">,</span><span class="number">0</span><span class="punctuation">,</span>NOC<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 若NOC为NA，则使用0，否则使用本身的数值</span></span><br></pre></td></tr></table></figure>
-<h3 id="数据分组计算">数据分组计算</h3>
-<p>有些情况下我们需要对一些数据进行分组的计算和整理，比如统计某个特定分类的数量或者平均值，或者这个分类中各个更小的分类占这个分类数量的半分比等，就可以用<code>group_by()</code>这个函数实现，以我给公司分析的数据中使用的代码举例：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line"><span class="comment"># check the percentage of renewal for each product at each renewal point ---------------</span></span><br><span class="line"><span class="comment"># count the number of records for each group first</span></span><br><span class="line">Renewal_CNT_table <span class="operator">&lt;-</span> df.LAPSED <span class="operator">%&gt;%</span></span><br><span class="line">  group_by<span class="punctuation">(</span>CNTTYPE<span class="punctuation">,</span> MAX_ZRENNO<span class="punctuation">,</span> Lapased_reason_desc<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">  summarise<span class="punctuation">(</span>count <span class="operator">=</span> n<span class="punctuation">(</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># the percentage of each number of renewed times for each product</span></span><br><span class="line">Renewal_percent <span class="operator">&lt;-</span> Renewal_CNT_table <span class="operator">%&gt;%</span> </span><br><span class="line">  group_by<span class="punctuation">(</span>CNTTYPE<span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>Total <span class="operator">=</span> <span class="built_in">sum</span><span class="punctuation">(</span>count<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">  mutate<span class="punctuation">(</span>renewed_prcent <span class="operator">=</span> count<span class="operator">/</span>Total<span class="punctuation">)</span> <span class="operator">%&gt;%</span></span><br><span class="line">  na.omit<span class="punctuation">(</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
-<p>需要注意的一点是在上面代码的第二部分，我们<code>Total = sum(count)</code>的操作虽然是针对所有行，但<code>sum</code>本身却由于前面的<code>group_by(CNTTYPE)</code>只针对<code>CNTTYPE</code>中的每一个<code>factors</code>，以此算出了每个单独的<code>CNTTYPE</code>的和。</p>
-<h4 id="arrange">arrange()</h4>
-<p><code>arrange()</code>函数可以用来将数据框以特定列的数值排列，用法如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">  arrange<span class="punctuation">(</span>sex<span class="punctuation">,</span> salary<span class="punctuation">)</span> <span class="operator">%&gt;%</span> <span class="comment"># arrange默认将列按从小到大，从A到Z的顺序排序</span></span><br><span class="line">  arrange<span class="punctuation">(</span>desc<span class="punctuation">(</span>salary<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment"># 若要从大到小，从Z到A排序则需要加desc()函数</span></span><br></pre></td></tr></table></figure>
-<h4 id="count">count()</h4>
-<p>对数据框对象使用<code>count()</code>函数并指定特定列名，效果等同于以该列分组后计数。实际使用如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">df.raw <span class="operator">%&gt;%</span></span><br><span class="line">    count<span class="punctuation">(</span>sex<span class="punctuation">,</span> sort <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
-<h2 id="数据可视化">数据可视化</h2>
-<p>探索性分析的最后一步就是将处理好的数据进行对比展示从而得出所需信息了，<code>tidyverse</code>中使用<code>ggplot2</code>来进行数据可视化。本节我会首先介绍下<code>ggplot2</code>的函数使用的基本格式，然后介绍一些常见的函数和参数，这里最后附上一个<code>ggplot2</code>的详细的<a href="http://www.sthda.com/english/wiki/ggplot2-essentials" title="ggplot2 - Essentials">文档网站</a>。</p>
-<h3 id="函数格式">函数格式</h3>
-<p>之所以专门要说一说函数的格式是因为<code>ggplot</code>的函数使用格式与其他常见包有较大的区别，当需要在一张图上增加不同功能或元素时不同部分之间使用<code>+</code>号连接。</p>
-<blockquote>
-<p>ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) +  &lt;GEOM_FUNCTION&gt;()</p>
-</blockquote>
-<h3 id="ggplot">ggplot()</h3>
-<p><code>ggplot()</code>是<code>ggplot2</code>作图的最基础的模块，在这个函数内指定作图的数据源，同时在这个函数中我们也可以使用<code>aes()</code>函数设置图片可视化的不同维度。使用方法如下：</p>
-<figure class="highlight r"><table><tr><td class="code"><pre><span class="line">ggplot<span class="punctuation">(</span>data <span class="operator">=</span> df.raw<span class="punctuation">,</span> <span class="comment"># data参数中指定使用的数据集</span></span><br><span class="line">       mapping <span class="operator">=</span> aes<span class="punctuation">(</span>x <span class="operator">=</span> sex<span class="punctuation">,</span> <span class="comment"># x轴维度</span></span><br><span class="line">                     y <span class="operator">=</span> salary<span class="punctuation">,</span> <span class="comment"># y轴维度</span></span><br><span class="line">                    fill <span class="operator">=</span> CNTTYPE<span class="punctuation">)</span><span class="punctuation">)</span> <span class="comment">#填充颜色</span></span><br></pre></td></tr></table></figure>
-<p>需要强调一下<code>aes()</code>的<a href="https://ggplot2.tidyverse.org/reference/aes.html" title="Construct aesthetic mappings">使用方法</a>，该函数本身用来指定需要制作的图的各个参数，可以在<code>ggplot()</code>中设定，也可以在各层<code>GEOM_FUNCTION</code>中单独设置。其中<code>fill</code>这个参数如果使用特定颜色则表示使用改颜色填充图，若使用某个因子型变量则代表在图中使用不同颜色标明这个变量的不同值。</p>
-<h3 id="常用图类型及参数设置">常用图类型及参数设置</h3>
-<ul>
-<li><code>geom_point()：</code>根据数据绘制点图，<code>size</code>, <code>color</code>, <code>shape</code>三个参数分别可以控制点的<code>大小</code>，<code>颜色</code>和<code>形状</code>。可以增加<code>geom_rug()</code>,<code>geom_density_2d()</code>或<code>stat_ellipse()</code>等功能增强显示，具体参见<a href="http://www.sthda.com/english/wiki/ggplot2-scatter-plots-quick-start-guide-r-software-and-data-visualization" title="ggplot2 scatter plots : Quick start guide - R software and data visualization">此页面</a>。</li>
-<li><code>geom_smooth()：</code>对点图绘制回归线，<code>method</code>参数可以选择默认的<code>loess</code>或<code>lm</code>，后者可以通过<code>formula = y ~ poly(x, 3)</code>参数指定回归的次数，<code>se</code>参数设定为<code>TRUE</code>时显示回归线的置信区间，<code>fullrange</code>设定为<code>TRUE</code>时回归线会跨过整个图，<code>level</code>参数是置信水平，默认为<code>0.95</code>。</li>
-<li><code>geom_line()：</code>根据数据点绘制线图，可以使用<code>linetype</code>调整线的形状，在<code>group</code>参数中可以对不同的分组绘图。</li>
-<li><code>geom_abline()：</code>在图中添加线，<code>intercept</code>和<code>slope</code>参数分别设定线的截距和斜率。除了<code>abline()</code>以外还有<code>vline()</code>, <code>hline()</code>, <code>geom_segment（）</code>。具体使用参见<a href="http://www.sthda.com/english/wiki/ggplot2-add-straight-lines-to-a-plot-horizontal-vertical-and-regression-lines" title="ggplot2 add straight lines to a plot : horizontal, vertical and regression lines">此页面</a>。</li>
-<li><code>geom_boxplot()：</code>绘制箱型图，<code>outlier.colour</code>, <code>outlier.shape</code>, <code>outlier.size</code>三个参数分别设置异常值的颜色，形状和大小。另外有一个<code>notch</code>参数设置为<code>TRUE</code>时将绘制展示中位数置信区间的箱型图，用以对比两组数据中位数的差异。可以配合<code>geom_dotplot()</code>或<code>geom_jitter()</code>在箱型图中绘制点分布，具体使用参见<a href="http://www.sthda.com/english/wiki/ggplot2-box-plot-quick-start-guide-r-software-and-data-visualization" title="ggplot2 box plot : Quick start guide - R software and data visualization">此页面</a>。</li>
-<li><code>geom_bar()：</code>柱状图，<code>stat</code>参数若为<code>identity</code>则y轴以y值计算，若为<code>bin</code>则y轴以记录数计算，<code>position</code>参数可以为<code>dodge,stake</code>或<code>fill</code>来对比，堆叠或百分比显示柱状图。另外可以使用<code>coord_flip()</code>翻转坐标轴或使用<code>coord_polar(&quot;y&quot;, start=0)</code>来制作饼图。其他更多设置参考<a href="http://www.sthda.com/english/wiki/ggplot2-barplots-quick-start-guide-r-software-and-data-visualization" title="ggplot2 barplots : Quick start guide - R software and data visualization">此页面</a></li>
-<li><code>geom_histogram()：</code>直方图，用于展示数据的分布情况。也可以像柱状图一样使用<code>position</code>参数调整不同组数据的展示方式，<code>alpha</code>参数用于调整图像透明度。更多使用方法参考<a href="http://www.sthda.com/english/wiki/ggplot2-histogram-plot-quick-start-guide-r-software-and-data-visualization" title="ggplot2 histogram plot : Quick start guide - R software and data visualization">此页面</a>。</li>
-<li><code>geom_density()：</code>概率分布图，与直方图效果类似，但是使用曲线围出的面积为1的概率分布图来描述不同值出现的概率，可以配合直方图展示。</li>
-</ul>
-<h3 id="其他常用函数">其他常用函数</h3>
-<h4 id="多面对比-Faceting">多面对比(Faceting)</h4>
-<p><code>facet_wrap(facets = vars(sex))</code>或<code>facet_grid(rows = vars(sex), cols = vars(age))</code>可以分别以两种方式制作多图对比。效果如下：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220426115942939.png" alt="facet_wrap()"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220426115930523.png" alt="facet_grid()"></p>
-<p>要将多图对比时也可以使用<code>图1 + 图2 + plot_layout()</code>的表达方式将多图展示，具体参数及用法参见<a href="https://www.rdocumentation.org/packages/patchwork/versions/1.1.1/topics/plot_layout" title="plot_layout: Define the grid to compose plots in">该网站</a>。</p>
-<h4 id="设置图标签">设置图标签</h4>
-<p><code>geom_text()：</code>该函数可以在图中标出各点的文字信息，用法如<code>geom_text(label=rownames(mtcars))</code>。</p>
-<p><code>geom_labs():</code>可以使用该函数修改图片的各个文字标签，主要参数有<code>title</code>修改图标题，<code>x</code>修改x轴标注，<code>y</code>修改y轴标注，<code>fill</code>修改legend标注等。</p>
-<h4 id="图片主题">图片主题</h4>
-<p><code>theme_gray()：</code>灰色背景与白色格线。</p>
-<p><code>theme_bw()：</code>白色背景与灰色格线。</p>
-<p><code>theme_linedraw()：</code>在theme_bw()的基础上图界有黑线包裹。</p>
-<p><code>theme_light()：</code>浅灰色线与轴，更凸显数据本身。</p>
-<p><code>theme_minimal()：</code>几乎没有背景标记。</p>
-<p><code>theme_classic()：</code>R的经典图片格式，有图片边框无格线。</p>
-<p><code>theme_void()：</code>无任何标记。</p>
-<p><code>theme_dark()：</code>暗灰色背景，适用于颜色丰富的图片。</p>
-]]></content>
-      <categories>
-        <category>数据分析</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>R</tag>
       </tags>
   </entry>
   <entry>
@@ -1291,6 +1250,85 @@ Asset&amp;=Liability\\
       <tags>
         <tag>工作学习</tag>
         <tag>Excel</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
+    <url>/2022/02/12/2-typora_picgo_config/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
+<h1>正文</h1>
+<h2 id="创建博文">创建博文</h2>
+<p>先介绍一些在Hexo中发文的基础知识。</p>
+<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
+<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
+<ul>
+<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
+<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
+<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
+<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
+</ul>
+<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
+<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
+<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
+<p>hexo命令创建三类文件的方式分别如下：</p>
+<ul>
+<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
+<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
+<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
+</ul>
+<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
+<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
+<h3 id="Typora是什么">Typora是什么</h3>
+<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
+<h3 id="PicGo是什么">PicGo是什么</h3>
+<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
+<h3 id="具体如何配置">具体如何配置</h3>
+<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
+<h4 id="配置Typora">配置Typora</h4>
+<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
+<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
+<h4 id="配置图床">配置图床</h4>
+<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
+<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
+<h4 id="使用图床">使用图床</h4>
+<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
+<hr>
+<p>以下内容为2022年2月19日补充</p>
+<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
+<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
+<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
+<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
+<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
+<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
+<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
+<blockquote>
+<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
+</blockquote>
+<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
+<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
+<blockquote>
+<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
+</blockquote>
+<hr>
+<h1>最后</h1>
+<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
+<p>[第2篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+        <tag>Typora</tag>
+        <tag>PicGo</tag>
       </tags>
   </entry>
   <entry>
@@ -1410,12 +1448,114 @@ Asset&amp;=Liability\\
       </tags>
   </entry>
   <entry>
+    <title>[MS Office] 分割MS Access数据库为前端和后端</title>
+    <url>/2022/02/25/6-MSAccess_database_split/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
+<h1>正文</h1>
+<h2 id="背景介绍-2">背景介绍</h2>
+<p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
+<p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
+<h2 id="Access基本知识">Access基本知识</h2>
+<p>开始分割数据库前先复习一下MS Access的一些<a href="https://support.microsoft.com/en-us/office/database-basics-a849ac16-07c7-4a31-9948-3c8c94a7c204" title="Microsoft Access database Intro">基本知识</a>：</p>
+<p>数据库是用来收集和管理信息的工具。本来信息也都可以储存在一般的列表或者电子表格中，但随着数据规模不断变大，用列表或表格管理的数据可能会出现各种各样的混乱且不利于提取需要的信息。如果数据达到了这种规模，普通的方式就已经不适用于这些数据的管理，这也是像Access这样的<code>数据管理系统(DBMS)</code>出现的原因。</p>
+<p>一个数据库文件中可能有多种<code>对象(obJects)</code>，除了存储数据的<code>表(Table)</code>还有实现其他功能的<code>表单(Forms)</code>，<code>报表(Reports)</code>，<code>宏(Macros)</code>和<code>模块(Modules)</code>。这些对象在一个数据库文件中可能都不只有一个。创建格式在<code>Access 2007</code>之后的文件后缀为<code>.accdb</code>，在此之前的格式后缀都为<code>.mdb</code>，Access版本在2007之后的也可以用来创建<code>.mdb</code>格式的文件。</p>
+<p>通过Access你可以实现这些功能：</p>
+<ul>
+<li>向数据库中添加新的数据</li>
+<li>在数据库中编辑已有的数据</li>
+<li>删除数据库中的数据</li>
+<li>以不同的方式管理和查看数据</li>
+<li>通过报表，邮件，内联网，互联网等方式将数据与他人共享</li>
+</ul>
+<h3 id="数据库物件">数据库物件</h3>
+<h4 id="表-Tables">表(Tables)</h4>
+<p>数据库的表看起来和电子表格一样，被用行列的形式存储，也因为这个好处，想要将电子表格数据导入数据库中是非常方便的。数据库表和电子表格的区别主要在与他们管理和储存数据的方式上。数据库表格中为了避免冗余，会将不同层面的信息分开为不同的表，比如一个电影票的数据库中可能有观影者信息，但每个观影者可能有多张电影票，这样如果每个电影票表中都存储同一个观影者信息就会导致冗余。这个过程被称为<code>标准化(normalization)</code>。</p>
+<p>表中的每一行都是一条<code>记录(record)</code>,每一条记录都以不同<code>字段(fields)</code>的形式储存独立的信息，字段对应表中的列。比如有一条记录是关于某个观影者，那么字段可能包括他的姓，名，性别等。每一条记录代表了一个观影者在不同字段上的信息。</p>
+<p>关于<code>表</code>的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-tables-78ff21ea-2f76-4fb0-8af6-c318d1ee0ea7" title="Introduction to tables">这里</a>。</p>
+<h4 id="表单-Forms">表单(Forms)</h4>
+<p>表单是一个允许用户<code>输入</code>和<code>编辑数据</code>的用户界面。表单里面除了数据的展示，还会有一些带有<code>控制命令</code>的按钮。用户可以不使用表单而直接在表中<code>删增改</code>数据，但使用表单会让这个过程更加清晰方便。设计者可以通过<code>自定义命令按钮</code>来决定用户可以访问修改哪些数据，这也赋予了数据一定程度的安全性，来控制数据库使用者的权限。</p>
+<p>关于表单的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-forms-e8d47343-c937-44e8-a80f-b6a83a1fa3ae" title="Introduction to forms">这里</a>。</p>
+<h4 id="报表-Reports">报表(Reports)</h4>
+<p>报表是用户用来<code>整理总结</code>并<code>展示数据</code>的对象。一个报表的目的通常是某个具体的问题，比如“<code>我们今年在每部电影上的收入是多少</code>”等等，而报表可以让数据变得更加简单易读，用户可以通过报表得到这个设计好的问题在当前数据下的答案。</p>
+<p>关于报表的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-reports-in-access-e0869f59-7536-4d19-8e05-7158dcd3681c" title="Introduction to reports in Access">这里</a>。</p>
+<h4 id="查询-Queries">查询(Queries)</h4>
+<p>查询是所有数据库系统最核心的功能之一，它通过不同的函数<code>连接(JOIN)</code>不同数据库，<code>筛选(FILTER)</code>条件来获取数据库中符合特定条件的数据。查询通常有两种基本类型：<code>选择查询(select query)</code>和<code>动作查询(action query)</code>。前者可以用来获取数据，后者则是用来对数据进行特定操作，例如<code>增加新表，更新数据，删除数据</code>等。</p>
+<p>关于查询的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-queries-a9739a09-d3ff-4f36-8ac3-5760249fb65c" title="Introduction to queries">这里</a>。</p>
+<h4 id="宏-Macros">宏(Macros)</h4>
+<p>Access中的宏是一种用以给数据库<code>增加特定功能</code>的简单的<code>编程语言</code>。比如用户可以用宏编程一些可以完成提取特定数据或报表的按钮，用户点击按钮便会执行这些宏。这个主要用来将一些重复而复杂的人手工作自动化。</p>
+<h4 id="模块-Modules">模块(Modules)</h4>
+<p>与宏一样，模块是用来向数据库添加功能的对象。它们的区别在于宏中使用的方法是从宏操作列表中选择，而编写模块则是使用VBA编程语言进行编程。模块是作为一个单元存储在一起的<code>声明(declarations)</code>，<code>陈述(statements)</code>，和<code>过程(procedures)</code>的集合。</p>
+<p>关于在Access中编程的细节都可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-access-programming-92eb616b-3204-4121-9277-70649e33be4f" title="Introduction to Access programming">这里</a></p>
+<h2 id="操作流程">操作流程</h2>
+<p>熟悉了Access的基本知识，现在我们可以意识到，其实一个Access数据库文件中真正存储数据信息的就只有<code>表(Table)</code>类型，所以我们分割数据库的理论基础就是，我们可以只把需要存储的信息(即表)放在共享网络上(作为<code>后端back-end</code>)，而需求信息的用户只需要使用链接在这些共享的表格上的其他类(作为<code>前端front-end</code>)既可以实时<code>有针对性地</code>访问需求的信息而不需要将整个数据库传输来传输去了。由于用户实际占用的只有他们各自的前端副本，且通过网络传输的只有被需求的一小股信息流(而不是整个数据库)，从而实现数据库的<code>可用性</code>和<code>实时性</code>。参考微软的<a href="https://support.microsoft.com/en-us/office/split-an-access-database-3015ad18-a3a1-4e9c-a7f3-51b1d73498cc" title="Office Support: Split an Access database">官方支持</a>，我接下来就介绍我实用的详细的分割数据库的流程。</p>
+<h3 id="注意事项">注意事项</h3>
+<p>开始之前有些需要注意的点：</p>
+<ul>
+<li>分割数据库前一定要<code>先备份数据</code>，很简单，直接复制一个副本放在一边，或者直接用副本分割。因为数据是非常宝贵的东西，在很多环境下可能一旦失去就是永远失去， 所以一点风险都不应该承担。</li>
+<li>分割数据前要<code>提前通知用户</code>，否则分割时用户输入的数据可能不会被记录在分割后的数据库后端中。</li>
+<li><code>确保用户电脑中的Access版本能够支持你分割后的数据库格式</code>，比如我在分割数据库的同时就帮他们把数据库格式从<code>mdb</code>升级成了<code>accdb</code>，因为公司的Access版本都是统一控制的，而文件格式本身就是向下兼容，没有必要不用功能更多性能更好的新版本格式。</li>
+</ul>
+<h3 id="分割数据库">分割数据库</h3>
+<p>数据库分割的功能是Access自带的，只需要按照下方步骤即可完成：</p>
+<ol>
+<li>
+<p>首先在你的本地电脑中复制一份已有的Access数据库文件，确保左边<code>All Access Objects</code>栏位中没有任何被隐藏的表，如果表被隐藏是不会被自动分割的。(不要问我为什么特别提这点，第一次分割数据库发现一部分数据无法同步，DEBUG好久最后发现原来是因为那部分数据的表被隐藏，导致分割数据库没有把这些表上传至共享文件夹)</p>
+<p>在<code>All Access Objects(所有Access对象)</code>选项上右键，选择<code>Navigation Options(导航选项)</code>，这时会打开一个对话框，将<code>Show Hidden Objects(显示隐藏对象)</code>打勾并且确定。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124556871.png" alt="打开导航选项"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124707290.png" alt="勾选显示隐藏对象并确认"></p>
+<p>这时回到<code>All Access Objects栏</code>中，如果文件中有被隐藏的对象，会看到他们现在呈半透明色，右键点击他们按<code>Unhide in this Group(该组中取消隐藏)</code>即可解除隐藏。确保你要分割的文件中没有隐藏的表。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124841322.png" alt="image-20220301124841322"></p>
+</li>
+<li>
+<p>分割数据库本身就非常简单了，只需要在<code>Database Tools(数据库工具)</code>选项卡上的<code>Move Data(移动数据)</code>组中，点击<code>Access Database(Access数据库)</code>，就会出现图中这个<code>Database Splitter(数据库分割向导)</code>。现在点击<code>Split Database(分割数据库)</code>按钮。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125110106.png" alt="image-20220301125110106"></p>
+</li>
+<li>
+<p>单击<code>Split Database(分割数据库)</code>按钮后就会出现浏览文件路径的对话框，这里就是设定<code>后端</code>的所在地的地方，我们选择到我们已经准备好的共享文件夹中，确保需要使用这个数据库的用户都可以访问这个共享文件夹。数据库名称和文件类型都可以改，但没有必要(<code>除非有特别的理由</code>，否则只有坏处没有好处)。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125246928.png" alt="image-20220301125246928"></p>
+</li>
+<li>
+<p>设置完成后点击<code>Split(分割)</code>Access就会开始自动分割数据库了，原数据库中的<code>表</code>都会被复制到刚刚设定的<code>后端文件</code>中，而这时我们进行这些操作的文件就是<code>前端文件</code>了，<code>表以外的其他对象</code>就都在前端文件中了，前后端是通过网络绑定连接在一起的。数据库分割完成后会弹出<code>分割成功</code>的提示消息。</p>
+</li>
+<li>
+<p>这里加一点是微软的<code>官方教程没有提到</code>的，那就是前后端分割完成后还需要点击<code>Database Tools(数据库工具)</code>选项卡上的<code>Tools(工具)</code>组中的<code>Compact and Repair Database(压缩和修复数据库)</code>，否则前端数据库的大小可能跟分割前一样大。按照微软的说法，这是因为Access的运作方式中即使删除对象，它也不会立即将该对象曾经占用的硬盘空间释放。如果你对数据库中删改的需求很多量也很大的话，你也可以设置自动压缩和修复数据库，方法<a href="https://support.microsoft.com/en-us/office/compact-and-repair-a-database-6ee60f16-aed0-40ac-bf22-85fa9f4005b2" title="Compact and repair a database">参考这里</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125322541.png" alt="image-20220301125322541"></p>
+</li>
+<li>
+<p>最后，为了限制使用者对前后端数据的更改权限，我们把刚刚的前端文件(<code>.accdb格式</code>)保存为已编译的二进制文件(<code>.accde</code>)，既将前端中可以设计更改数据库逻辑的源代码编译保存，这样二进制文件的用户可以照常使用前端需求数据，但无法对他的功能和设计做改变。具体来说只需要在前端文件中点击<code>Save as(另存为)</code>然后按下图中选择并保存在希望的位置即可。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125353890.png" alt="image-20220301125353890"></p>
+</li>
+<li>
+<p>这时候我们已经把后端的数据库放在了共享文件夹中，并且已经有了一个可以连接后端数据库的前端文件，剩下的我们只需要把这些前端文件分发给我们的数据库用户就可以了，通过电子邮件，U盘，或者共享文件夹都可以，用户只要保存一份前端文件的副本在自己的本地硬盘中，确保他们可以通过网络访问共享文件夹，那么他们就可以像以前一样使用表以外的Access的数据提取展示等功能了。</p>
+<h3 id="更改后端数据库">更改后端数据库</h3>
+<p>如果想要更改后端数据库，或者是想把后端数据库的保存位置更改，<code>仅仅只复制粘贴是不行的</code>，因为前端中的连接还是在原来的后端数据库的位置。</p>
+<p>以移动后端数据库的位置为例，假设后端数据库中的表结构和名字都不需要变化，那么要做的就很简单：</p>
+<p><code>首先</code>把后端数据库复制并粘贴到你想要的新位置，<code>然后</code>如图所示点击<code>External Data(外部数据)</code>选项卡上<code>Import&amp;Link(导入和连接)</code>组中的<code>Linked Table Manager(链接表管理器)</code>。在<code>链接表管理器</code>中你可以分别连接当前前端数据库绑定的每一个表的位置，在我们的情况中我们只需要<code>Select All(选择全部)</code>然后点击上方<code>Relink(重新连接)</code>，然后选择到你新复制到的后端数据库位置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125452427.png" alt="image-20220301125452427"></p>
+<p>点击确定之后会有一个弹窗，如果你新的后端数据库没有做任何更改，那么这里<code>不要点Yes</code>。点<code>No</code>它就会开始自动帮你把所有的连接从旧的位置一张表一张表地连接到新位置的每一张同名表上，但如果你点了Yes，它会要求你每一张表给他提供新的名字，除非你真的有表名字的变化否则<code>千万别按错了</code>，不然会浪费很多时间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125530871.png" alt="image-20220301125530871"></p>
+<h1>最后</h1>
+<p>通过这一次帮助其他团队解决效率问题，我复习并且更加了解了MS Access的一些基本功能和结构，同时知道了中小型团队在共享数据时可以使用Access来解决数据库<code>同步性(synchronization)</code>和<code>可用性(availability)</code>问题的解决方案。</p>
+<p>[第6篇]</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Access</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
     <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
     <content><![CDATA[<h1>序言</h1>
 <p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
 <h1>正文</h1>
-<h2 id="背景介绍-2">背景介绍</h2>
+<h2 id="背景介绍-3">背景介绍</h2>
 <p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
 <h2 id="概述">概述</h2>
 <p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
@@ -1744,108 +1884,6 @@ Asset&amp;=Liability\\
       </tags>
   </entry>
   <entry>
-    <title>[MS Office] 分割MS Access数据库为前端和后端</title>
-    <url>/2022/02/25/6-MSAccess_database_split/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
-<h1>正文</h1>
-<h2 id="背景介绍-3">背景介绍</h2>
-<p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
-<p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
-<h2 id="Access基本知识">Access基本知识</h2>
-<p>开始分割数据库前先复习一下MS Access的一些<a href="https://support.microsoft.com/en-us/office/database-basics-a849ac16-07c7-4a31-9948-3c8c94a7c204" title="Microsoft Access database Intro">基本知识</a>：</p>
-<p>数据库是用来收集和管理信息的工具。本来信息也都可以储存在一般的列表或者电子表格中，但随着数据规模不断变大，用列表或表格管理的数据可能会出现各种各样的混乱且不利于提取需要的信息。如果数据达到了这种规模，普通的方式就已经不适用于这些数据的管理，这也是像Access这样的<code>数据管理系统(DBMS)</code>出现的原因。</p>
-<p>一个数据库文件中可能有多种<code>对象(obJects)</code>，除了存储数据的<code>表(Table)</code>还有实现其他功能的<code>表单(Forms)</code>，<code>报表(Reports)</code>，<code>宏(Macros)</code>和<code>模块(Modules)</code>。这些对象在一个数据库文件中可能都不只有一个。创建格式在<code>Access 2007</code>之后的文件后缀为<code>.accdb</code>，在此之前的格式后缀都为<code>.mdb</code>，Access版本在2007之后的也可以用来创建<code>.mdb</code>格式的文件。</p>
-<p>通过Access你可以实现这些功能：</p>
-<ul>
-<li>向数据库中添加新的数据</li>
-<li>在数据库中编辑已有的数据</li>
-<li>删除数据库中的数据</li>
-<li>以不同的方式管理和查看数据</li>
-<li>通过报表，邮件，内联网，互联网等方式将数据与他人共享</li>
-</ul>
-<h3 id="数据库物件">数据库物件</h3>
-<h4 id="表-Tables">表(Tables)</h4>
-<p>数据库的表看起来和电子表格一样，被用行列的形式存储，也因为这个好处，想要将电子表格数据导入数据库中是非常方便的。数据库表和电子表格的区别主要在与他们管理和储存数据的方式上。数据库表格中为了避免冗余，会将不同层面的信息分开为不同的表，比如一个电影票的数据库中可能有观影者信息，但每个观影者可能有多张电影票，这样如果每个电影票表中都存储同一个观影者信息就会导致冗余。这个过程被称为<code>标准化(normalization)</code>。</p>
-<p>表中的每一行都是一条<code>记录(record)</code>,每一条记录都以不同<code>字段(fields)</code>的形式储存独立的信息，字段对应表中的列。比如有一条记录是关于某个观影者，那么字段可能包括他的姓，名，性别等。每一条记录代表了一个观影者在不同字段上的信息。</p>
-<p>关于<code>表</code>的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-tables-78ff21ea-2f76-4fb0-8af6-c318d1ee0ea7" title="Introduction to tables">这里</a>。</p>
-<h4 id="表单-Forms">表单(Forms)</h4>
-<p>表单是一个允许用户<code>输入</code>和<code>编辑数据</code>的用户界面。表单里面除了数据的展示，还会有一些带有<code>控制命令</code>的按钮。用户可以不使用表单而直接在表中<code>删增改</code>数据，但使用表单会让这个过程更加清晰方便。设计者可以通过<code>自定义命令按钮</code>来决定用户可以访问修改哪些数据，这也赋予了数据一定程度的安全性，来控制数据库使用者的权限。</p>
-<p>关于表单的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-forms-e8d47343-c937-44e8-a80f-b6a83a1fa3ae" title="Introduction to forms">这里</a>。</p>
-<h4 id="报表-Reports">报表(Reports)</h4>
-<p>报表是用户用来<code>整理总结</code>并<code>展示数据</code>的对象。一个报表的目的通常是某个具体的问题，比如“<code>我们今年在每部电影上的收入是多少</code>”等等，而报表可以让数据变得更加简单易读，用户可以通过报表得到这个设计好的问题在当前数据下的答案。</p>
-<p>关于报表的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-reports-in-access-e0869f59-7536-4d19-8e05-7158dcd3681c" title="Introduction to reports in Access">这里</a>。</p>
-<h4 id="查询-Queries">查询(Queries)</h4>
-<p>查询是所有数据库系统最核心的功能之一，它通过不同的函数<code>连接(JOIN)</code>不同数据库，<code>筛选(FILTER)</code>条件来获取数据库中符合特定条件的数据。查询通常有两种基本类型：<code>选择查询(select query)</code>和<code>动作查询(action query)</code>。前者可以用来获取数据，后者则是用来对数据进行特定操作，例如<code>增加新表，更新数据，删除数据</code>等。</p>
-<p>关于查询的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-queries-a9739a09-d3ff-4f36-8ac3-5760249fb65c" title="Introduction to queries">这里</a>。</p>
-<h4 id="宏-Macros">宏(Macros)</h4>
-<p>Access中的宏是一种用以给数据库<code>增加特定功能</code>的简单的<code>编程语言</code>。比如用户可以用宏编程一些可以完成提取特定数据或报表的按钮，用户点击按钮便会执行这些宏。这个主要用来将一些重复而复杂的人手工作自动化。</p>
-<h4 id="模块-Modules">模块(Modules)</h4>
-<p>与宏一样，模块是用来向数据库添加功能的对象。它们的区别在于宏中使用的方法是从宏操作列表中选择，而编写模块则是使用VBA编程语言进行编程。模块是作为一个单元存储在一起的<code>声明(declarations)</code>，<code>陈述(statements)</code>，和<code>过程(procedures)</code>的集合。</p>
-<p>关于在Access中编程的细节都可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-access-programming-92eb616b-3204-4121-9277-70649e33be4f" title="Introduction to Access programming">这里</a></p>
-<h2 id="操作流程">操作流程</h2>
-<p>熟悉了Access的基本知识，现在我们可以意识到，其实一个Access数据库文件中真正存储数据信息的就只有<code>表(Table)</code>类型，所以我们分割数据库的理论基础就是，我们可以只把需要存储的信息(即表)放在共享网络上(作为<code>后端back-end</code>)，而需求信息的用户只需要使用链接在这些共享的表格上的其他类(作为<code>前端front-end</code>)既可以实时<code>有针对性地</code>访问需求的信息而不需要将整个数据库传输来传输去了。由于用户实际占用的只有他们各自的前端副本，且通过网络传输的只有被需求的一小股信息流(而不是整个数据库)，从而实现数据库的<code>可用性</code>和<code>实时性</code>。参考微软的<a href="https://support.microsoft.com/en-us/office/split-an-access-database-3015ad18-a3a1-4e9c-a7f3-51b1d73498cc" title="Office Support: Split an Access database">官方支持</a>，我接下来就介绍我实用的详细的分割数据库的流程。</p>
-<h3 id="注意事项">注意事项</h3>
-<p>开始之前有些需要注意的点：</p>
-<ul>
-<li>分割数据库前一定要<code>先备份数据</code>，很简单，直接复制一个副本放在一边，或者直接用副本分割。因为数据是非常宝贵的东西，在很多环境下可能一旦失去就是永远失去， 所以一点风险都不应该承担。</li>
-<li>分割数据前要<code>提前通知用户</code>，否则分割时用户输入的数据可能不会被记录在分割后的数据库后端中。</li>
-<li><code>确保用户电脑中的Access版本能够支持你分割后的数据库格式</code>，比如我在分割数据库的同时就帮他们把数据库格式从<code>mdb</code>升级成了<code>accdb</code>，因为公司的Access版本都是统一控制的，而文件格式本身就是向下兼容，没有必要不用功能更多性能更好的新版本格式。</li>
-</ul>
-<h3 id="分割数据库">分割数据库</h3>
-<p>数据库分割的功能是Access自带的，只需要按照下方步骤即可完成：</p>
-<ol>
-<li>
-<p>首先在你的本地电脑中复制一份已有的Access数据库文件，确保左边<code>All Access Objects</code>栏位中没有任何被隐藏的表，如果表被隐藏是不会被自动分割的。(不要问我为什么特别提这点，第一次分割数据库发现一部分数据无法同步，DEBUG好久最后发现原来是因为那部分数据的表被隐藏，导致分割数据库没有把这些表上传至共享文件夹)</p>
-<p>在<code>All Access Objects(所有Access对象)</code>选项上右键，选择<code>Navigation Options(导航选项)</code>，这时会打开一个对话框，将<code>Show Hidden Objects(显示隐藏对象)</code>打勾并且确定。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124556871.png" alt="打开导航选项"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124707290.png" alt="勾选显示隐藏对象并确认"></p>
-<p>这时回到<code>All Access Objects栏</code>中，如果文件中有被隐藏的对象，会看到他们现在呈半透明色，右键点击他们按<code>Unhide in this Group(该组中取消隐藏)</code>即可解除隐藏。确保你要分割的文件中没有隐藏的表。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124841322.png" alt="image-20220301124841322"></p>
-</li>
-<li>
-<p>分割数据库本身就非常简单了，只需要在<code>Database Tools(数据库工具)</code>选项卡上的<code>Move Data(移动数据)</code>组中，点击<code>Access Database(Access数据库)</code>，就会出现图中这个<code>Database Splitter(数据库分割向导)</code>。现在点击<code>Split Database(分割数据库)</code>按钮。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125110106.png" alt="image-20220301125110106"></p>
-</li>
-<li>
-<p>单击<code>Split Database(分割数据库)</code>按钮后就会出现浏览文件路径的对话框，这里就是设定<code>后端</code>的所在地的地方，我们选择到我们已经准备好的共享文件夹中，确保需要使用这个数据库的用户都可以访问这个共享文件夹。数据库名称和文件类型都可以改，但没有必要(<code>除非有特别的理由</code>，否则只有坏处没有好处)。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125246928.png" alt="image-20220301125246928"></p>
-</li>
-<li>
-<p>设置完成后点击<code>Split(分割)</code>Access就会开始自动分割数据库了，原数据库中的<code>表</code>都会被复制到刚刚设定的<code>后端文件</code>中，而这时我们进行这些操作的文件就是<code>前端文件</code>了，<code>表以外的其他对象</code>就都在前端文件中了，前后端是通过网络绑定连接在一起的。数据库分割完成后会弹出<code>分割成功</code>的提示消息。</p>
-</li>
-<li>
-<p>这里加一点是微软的<code>官方教程没有提到</code>的，那就是前后端分割完成后还需要点击<code>Database Tools(数据库工具)</code>选项卡上的<code>Tools(工具)</code>组中的<code>Compact and Repair Database(压缩和修复数据库)</code>，否则前端数据库的大小可能跟分割前一样大。按照微软的说法，这是因为Access的运作方式中即使删除对象，它也不会立即将该对象曾经占用的硬盘空间释放。如果你对数据库中删改的需求很多量也很大的话，你也可以设置自动压缩和修复数据库，方法<a href="https://support.microsoft.com/en-us/office/compact-and-repair-a-database-6ee60f16-aed0-40ac-bf22-85fa9f4005b2" title="Compact and repair a database">参考这里</a>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125322541.png" alt="image-20220301125322541"></p>
-</li>
-<li>
-<p>最后，为了限制使用者对前后端数据的更改权限，我们把刚刚的前端文件(<code>.accdb格式</code>)保存为已编译的二进制文件(<code>.accde</code>)，既将前端中可以设计更改数据库逻辑的源代码编译保存，这样二进制文件的用户可以照常使用前端需求数据，但无法对他的功能和设计做改变。具体来说只需要在前端文件中点击<code>Save as(另存为)</code>然后按下图中选择并保存在希望的位置即可。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125353890.png" alt="image-20220301125353890"></p>
-</li>
-<li>
-<p>这时候我们已经把后端的数据库放在了共享文件夹中，并且已经有了一个可以连接后端数据库的前端文件，剩下的我们只需要把这些前端文件分发给我们的数据库用户就可以了，通过电子邮件，U盘，或者共享文件夹都可以，用户只要保存一份前端文件的副本在自己的本地硬盘中，确保他们可以通过网络访问共享文件夹，那么他们就可以像以前一样使用表以外的Access的数据提取展示等功能了。</p>
-<h3 id="更改后端数据库">更改后端数据库</h3>
-<p>如果想要更改后端数据库，或者是想把后端数据库的保存位置更改，<code>仅仅只复制粘贴是不行的</code>，因为前端中的连接还是在原来的后端数据库的位置。</p>
-<p>以移动后端数据库的位置为例，假设后端数据库中的表结构和名字都不需要变化，那么要做的就很简单：</p>
-<p><code>首先</code>把后端数据库复制并粘贴到你想要的新位置，<code>然后</code>如图所示点击<code>External Data(外部数据)</code>选项卡上<code>Import&amp;Link(导入和连接)</code>组中的<code>Linked Table Manager(链接表管理器)</code>。在<code>链接表管理器</code>中你可以分别连接当前前端数据库绑定的每一个表的位置，在我们的情况中我们只需要<code>Select All(选择全部)</code>然后点击上方<code>Relink(重新连接)</code>，然后选择到你新复制到的后端数据库位置。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125452427.png" alt="image-20220301125452427"></p>
-<p>点击确定之后会有一个弹窗，如果你新的后端数据库没有做任何更改，那么这里<code>不要点Yes</code>。点<code>No</code>它就会开始自动帮你把所有的连接从旧的位置一张表一张表地连接到新位置的每一张同名表上，但如果你点了Yes，它会要求你每一张表给他提供新的名字，除非你真的有表名字的变化否则<code>千万别按错了</code>，不然会浪费很多时间。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125530871.png" alt="image-20220301125530871"></p>
-<h1>最后</h1>
-<p>通过这一次帮助其他团队解决效率问题，我复习并且更加了解了MS Access的一些基本功能和结构，同时知道了中小型团队在共享数据时可以使用Access来解决数据库<code>同步性(synchronization)</code>和<code>可用性(availability)</code>问题的解决方案。</p>
-<p>[第6篇]</p>
-</li>
-</ol>
-]]></content>
-      <categories>
-        <category>MS Office</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>Access</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[信息安全]解码微信PC版中以dat格式存储的聊天图片</title>
     <url>/2022/03/04/8-decrypt-wechat-pics/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -1860,7 +1898,7 @@ Asset&amp;=Liability\\
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathrm">0xffd8</span><span class="mspace"> </span><span class="mord">⊕</span></span><span class="mspace"> </span><span class="mord mathnormal">x</span><span class="mspace"> </span><span class="mord"><span class="mord">⊕</span><span class="mspace"> </span><span class="mord mathrm">0xffd8</span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.4306em;"></span><span class="mord mathnormal">x</span></span></span></span></span></p>
 <p>然后使用这个计算出来的<code>x</code>将<code>dat文件</code>中的所有字节都进行异或运算就可以得到原来的图片数据了。我们可以先小试一下实际是不是这样。</p>
 <h2 id="小实验">小实验</h2>
-<p>我们就借用<a href="https://blog.csdn.net/ainivip/article/details/111772428" title="微信Dat文件解码">这位大佬</a>的代码和思路，先随便拿张图试试。先用我大佬0总推荐的<a href="https://www.sublimetext.com/" title="Sublime Text website">sublime text编辑器</a>的十六进制模式查看一下这个被抽中的幸运图片的内容：</p>
+<p>我们就借用<a href="https://blog.csdn.net/ainivip/article/details/111772428" title="微信Dat文件解码">这位大佬</a>的代码和思路，先随便拿张图试试。先用<a href="https://www.sublimetext.com/" title="Sublime Text website">sublime text编辑器</a>的十六进制模式查看一下这个被抽中的幸运图片的内容：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220305125220649.png" alt="dat文件开头是'6641'"></p>
 <p>这时用计算器的程序员模式算一下<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mi mathvariant="normal">x</mi><mn>6641</mn><mo>⊕</mo><mn>0</mn><mi mathvariant="normal">x</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">f</mi><mi mathvariant="normal">d</mi><mn>8</mn></mrow><annotation encoding="application/x-tex">\mathrm{0x6641\oplus 0xffd8}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7778em;vertical-align:-0.0833em;"></span><span class="mord"><span class="mord mathrm">0x6641</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">⊕</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathrm">0xffd8</span></span></span></span></span>的结果：</p>
 <p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220305125751063.png" alt="结果是'9999'，因此可知x是'99'"></p>
