@@ -332,208 +332,6 @@
       </tags>
   </entry>
   <entry>
-    <title>[金融分析] CFA一级考试学习计划</title>
-    <url>/2022/03/31/12-CFA-level-1-overview/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>虽然知道CFA考试对我目前的工作没有帮助，但考虑到作为&quot;数据科学家&quot;以后可能从事的行业并不单一，加之我各种金融相关的学术背景，还是准备几个认可度较高的证考一考相比其其他证性价比会更高一些，也开拓一下今后的发展空间。今天开始准备CFA一级的考试，先在这里做个计划，首先定下目标是通过2022年11月份的CFA一级考试，同时将日语与英语的学习时间以每周4:2:1的比例分配。</p>
-<h1>正文</h1>
-<p>CFA考试对我来说算是比较陌生的，虽然听考过的同学说一级基本都是大学学过的内容，但具体这是什么东西，要考哪些内容以及考试的形式等等都需要先了解一下。而从现在3月31日至11月之间还有7个月的时间，相比起盲目复习，还是有必要在开始之前规划一下每段时间的学习计划。</p>
-<h2 id="成为持证人">成为持证人</h2>
-<p>要成为一名认证的CFA持证人需要4步：</p>
-<ol>
-<li><code>通过CFA考试：</code>CFA计划由三级课程组成，每一级拥有各自的考试，通过三级考试是成为持证人的必要条件。</li>
-<li><code>获得认证的工作经验：</code>工作经验可以在加入CFA计划前后的任何阶段完成，但工作经验必须与投资决策过程与投资相关。</li>
-<li><code>提交介绍信：</code>要成为持证人还需要提供2-3封专业人员的介绍信，介绍你的工作经验和专业性。</li>
-<li><code>提交申请：</code>最后要提交申请成为CFA协会成员，经核准后可以成为CFA持证人。</li>
-</ol>
-<h2 id="CFA考试介绍">CFA考试介绍</h2>
-<p>本节的内容我都引自<a href="https://www.cfainstitute.org/" title="CFA Institute">CFA官网</a>，先弄清楚关于CFA考试的一些基本概念。CFA全称<code>特许金融分析师(Charted Financial Analyst)</code>，CFA协会是一家全球性投资专业人士会员组织，其为投资业发表研究成果，开展职业发展项目和制定自愿的、以道德为基础的专业和投资表现报告标准。其组织在全球160多个国家和地区拥有超过165000名CFA持证人。</p>
-<h3 id="考试级别">考试级别</h3>
-<p>CFA考试一共分为三级，分别为levelⅠ，levelⅡ和levelⅢ，他们的对比如下：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>levelⅠ</th>
-<th>levelⅡ</th>
-<th>levelⅢ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>必要条件</td>
-<td>CFA登记入门要求</td>
-<td>通过levelⅠ考试</td>
-<td>通过levelⅡ考试</td>
-</tr>
-<tr>
-<td>问题形式</td>
-<td>单项选择题</td>
-<td>基于案例的单项选择题</td>
-<td>基于案例的简答题和单项选择题</td>
-</tr>
-<tr>
-<td>结果通知时间</td>
-<td>考试结束60天内</td>
-<td>考试结束60天内</td>
-<td>考试结束90天内</td>
-</tr>
-<tr>
-<td>10年平均通过率</td>
-<td>42%</td>
-<td>45%</td>
-<td>54%</td>
-</tr>
-</tbody>
-</table>
-<h3 id="考试形式">考试形式</h3>
-<p>从2021年起CFA考试形式从笔试改为机考。选定考试月份后，可以根据自己需求选择考试时间和地点，选定后如果要更改时间需要多花250美元费用。CFA一级考试总题量180个，考试时间长度共4.5小时：</p>
-<ul>
-<li>30分钟宣誓，指导和调研</li>
-<li>135分钟完成第一部分</li>
-<li>中途休息30分钟</li>
-<li>135分钟完成第二部分</li>
-</ul>
-<p>考试可以允许使用计算器，但计算器只能是Texas Instruments BA II Plus 或 Hewlett Packard 12C。同一个参试者两次考试中间间隔时间不能短于6个月，也即不论是未通过考试重考或是通过考试参加下级考试都必须预约6个月以后的考试。</p>
-<h3 id="考试内容">考试内容</h3>
-<p>考试一共涵盖十个科目，每级考试中各个科目内容的比重不同，首先介绍一些这些科目的大致内容：</p>
-<h4 id="道德和职业标准-Ethical-and-Professional-Standards">道德和职业标准(Ethical and Professional Standards)</h4>
-<p>这科重点内容包括道德，道德行为相关的挑战以及投资行业的职业道德标准。</p>
-<h4 id="量化方法-Quantitative-Methods">量化方法(Quantitative Methods)</h4>
-<p>这科内容主要包括金融分析和投资决策中使用的量化方法与技术。将投资回报分布的重要特征包括集中趋势，位置，和分散度等重要的数据属性以描述性的统计数字方式展示。内容还包括概率论及其在投资决策中的风险量化中的应用。</p>
-<h4 id="经济学-Economics">经济学(Economics)</h4>
-<p>在这部分中，我们首先会介绍单一消费者和公司供需关系的基本概念分析。我们还会涵盖公司运营的不同市场结构，宏观经济学原理和概念，包括总产量，收入水平衡量，总供需分析，以及经济增长因素分析等。最后还有一些商业周期和他们对经济活动的影响等。</p>
-<h4 id="财务报表分析-Financial-Statement-Analysis">财务报表分析(Financial Statement Analysis)</h4>
-<p>该科目在2020年叫<code>财务报告和分析</code>，在本部分我们提供财务报告过程和财务披露标准的解释，其中主要强调基本的财务报表知识以及一些不同的会计方法会对财务报表产生的影响及分析方法。我们主要考察主要财务报表并提供财务报表分析的基本方法。</p>
-<h4 id="公司发行人-Corporate-Issuers">公司发行人(Corporate Issuers)</h4>
-<p>该科目在2020年叫<code>公司金融</code>，这部分中我们主要介绍公司治理和投资金融决策等。我们会介绍分析和理解公司治理和股东管理的主要知识，并且介绍环境和社会观点对投资越来越大的冲击。我们还会介绍公司使用对资产负债结构的调整来实现他们的短期运营需要。</p>
-<h4 id="股权投资-Equity-Investments">股权投资(Equity Investments)</h4>
-<p>我们在这部分主要涵盖了股权投资，证券市场，和指数交易等等内容，并且介绍如何分析行业，公司，股票证券以及基本的股权估值模型。投资全球性的资产对于长期投资回报与多样化目标非常重要。</p>
-<h4 id="固定收益-Fixed-Income">固定收益(Fixed Income)</h4>
-<p>在这部分我们主要介绍固定收益证券产品和他们的市场，回报衡量，风险因子，估值方式和驱动因子等等。我们还会介绍回报和固收证券的计算方法，资产的证券化，债券回报和风险的基本知识以及信用风险的基本原理和分析。</p>
-<h4 id="衍生品-Derivatives">衍生品(Derivatives)</h4>
-<p>在这科中我们主要介绍一些基础金融衍生品以及衍生品市场的框架知识，然后我们会介绍诸如期货，期权，远期，互换交易和或有债权等衍生品的重要特征以及定价原理等等。最后我们会研究金融衍生品使用无风险套利模型定价的方法。</p>
-<h4 id="另类投资-Alternative-Investments">另类投资(Alternative Investments)</h4>
-<p>这部分内容介绍包括对冲基金，私人资产，房地产，货物和基础设施等另类投资。我们主要讨论如何使用另类投资做投资多样化并实现更高的投资回报。</p>
-<h4 id="投资组合管理及理财-Portfolio-Management-and-Wealth-Planning">投资组合管理及理财(Portfolio Management and Wealth Planning)</h4>
-<p>在此科目中我们会他讨论投资组合和风险管理的基础知识，包括投资回报，风险指标，投资组合规划和搭建。我们主要考察个体和机构投资者在可用的投资解决方案中满足他们的需要。我们使用资本资产定价模型(CAPM)来优化组合风险。</p>
-<p>看过各科目介绍后发现确实除了<code>道德标准</code>和<code>另类投资</code>两科以外，其他都是本科和一硕反复学反复考的内容，同学说裸考通过我也不是很奇怪了。这几科内容在三级考试中的占比各有不同：</p>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>levelⅠ</th>
-<th>levelⅡ</th>
-<th>levelⅢ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>道德和职业标准</td>
-<td>15-20</td>
-<td>10-15</td>
-<td>10-15</td>
-</tr>
-<tr>
-<td>量化方法</td>
-<td>8-12</td>
-<td>5-10</td>
-<td>0</td>
-</tr>
-<tr>
-<td>经济学</td>
-<td>8-12</td>
-<td>5-10</td>
-<td>5-10</td>
-</tr>
-<tr>
-<td>财务报表分析</td>
-<td>13-17</td>
-<td>10-15</td>
-<td>0</td>
-</tr>
-<tr>
-<td>公司发行人</td>
-<td>8-12</td>
-<td>5-10</td>
-<td>0</td>
-</tr>
-<tr>
-<td>股权投资</td>
-<td>10-12</td>
-<td>10-15</td>
-<td>10-15</td>
-</tr>
-<tr>
-<td>固定收益</td>
-<td>10-12</td>
-<td>10-15</td>
-<td>15-20</td>
-</tr>
-<tr>
-<td>衍生品</td>
-<td>5-8</td>
-<td>5-10</td>
-<td>5-10</td>
-</tr>
-<tr>
-<td>另类投资</td>
-<td>5-8</td>
-<td>5-10</td>
-<td>5-10</td>
-</tr>
-<tr>
-<td>投资组合管理及理财</td>
-<td>5-8</td>
-<td>10-15</td>
-<td>35-40</td>
-</tr>
-</tbody>
-</table>
-<p>能够看出来考试不同阶段对考生不同方面的能力要求是有变化的，前两级对各个科目的能力都有考察，而级别越低其对基本知识和能力的考察越多，到第三级则侧重考研参试者的实战投资组合管理等能力。</p>
-<h3 id="考试费用">考试费用</h3>
-<p>第一次参加考试的人员需要缴纳450美元的注册费，在此之上2023年2月之前的考试，每次考试的考试费为1000美元，如果提前6个月预约考试可以得到300美元折扣，即700美元的早鸟考试费。从2023年2月的考试开始，注册费会调整为350美金，而早鸟考试费和标准考试费会分别上涨到900美元和1200美元。</p>
-<h2 id="学习计划">学习计划</h2>
-<p>参考网上各位大神的经验，我计划分两轮复习，第一轮从4月1日至7月31日，第二轮从8月1日至9月30日，剩下一个月时间主要做题目模考，查漏补缺。</p>
-<p>关于第一轮复习时间安排，我计划先从自己以前学得不牢但分数占比较高的部分学起：</p>
-<table>
-<thead>
-<tr>
-<th>月份</th>
-<th>主要学习科目</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>4月</td>
-<td>财务报表分析</td>
-</tr>
-<tr>
-<td>5月</td>
-<td>公司发行人，经济学</td>
-</tr>
-<tr>
-<td>6月</td>
-<td>股权投资，固定收益，衍生品，另类投资</td>
-</tr>
-<tr>
-<td>7月</td>
-<td>量化方法，投资组合管理及理财，道德和职业标准</td>
-</tr>
-</tbody>
-</table>
-<h1>最后</h1>
-<p>CFA不是我唯一的学习目标，所以我不会拿出所有的精力学它，我每周安排四天，每天1-2小时的学习时间，每周的其他3天我将安排日语和英语的学习。上面的这份学习计划，我会根据实际情况调整。</p>
-]]></content>
-      <categories>
-        <category>金融分析</category>
-      </categories>
-      <tags>
-        <tag>日常学习</tag>
-        <tag>CFA一级</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[金融分析] CFA一级《财务报表分析》学习笔记</title>
     <url>/2022/04/06/13-CFA-level1-financial-statement-analysis/</url>
     <content><![CDATA[<h1>概览</h1>
@@ -1264,6 +1062,66 @@ Asset&amp;=Liability\\
 <p>假设股东权益的增加只与留存收益的增加有关，一个公司的<code>长期净增长率</code>为<code>净资产收益率</code>乘<code>留存率</code>。表示为下式：</p>
 <p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>g</mi><mo stretchy="false">(</mo><mi>s</mi><mi>u</mi><mi>s</mi><mi>t</mi><mi>a</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>b</mi><mi>l</mi><mi>e</mi><mtext> </mtext><mi>g</mi><mi>r</mi><mi>o</mi><mi>w</mi><mi>t</mi><mi>h</mi><mtext> </mtext><mi>r</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo stretchy="false">)</mo><mo>=</mo><mi>R</mi><mi>O</mi><mi>E</mi><mo>×</mo><mi>R</mi><mi>R</mi><mo>=</mo><mi>R</mi><mi>O</mi><mi>E</mi><mo>×</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>d</mi><mi>i</mi><mi>v</mi><mtext> </mtext><mi>d</mi><mi>e</mi><mi>c</mi><mi>l</mi><mi>a</mi><mi>r</mi><mi>e</mi><mi>d</mi></mrow><mrow><mi>O</mi><mi>p</mi><mi>e</mi><mi>r</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>n</mi><mi>g</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>c</mi><mi>o</mi><mi>m</mi><mi>e</mi><mtext> </mtext><mi>a</mi><mi>f</mi><mi>t</mi><mi>e</mi><mi>r</mi><mtext> </mtext><mi>t</mi><mi>a</mi><mi>x</mi><mi>e</mi><mi>s</mi></mrow></mfrac><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">g(sustainable\ growth\ rate)=ROE\times RR=ROE \times(1-\frac{div\ declared}{Operating\ income\ after\ taxes})
 </annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mopen">(</span><span class="mord mathnormal">s</span><span class="mord mathnormal">u</span><span class="mord mathnormal">s</span><span class="mord mathnormal">t</span><span class="mord mathnormal">ainab</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">ro</span><span class="mord mathnormal">wt</span><span class="mord mathnormal">h</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">ROE</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal" style="margin-right:0.00773em;">RR</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">ROE</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:2.2519em;vertical-align:-0.8804em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">Op</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">in</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal">co</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace"> </span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mord mathnormal">es</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">d</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">ec</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">re</span><span class="mord mathnormal">d</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span><span class="mclose">)</span></span></span></span></span></p>
+<h1>Session 8</h1>
+<h2 id="Reading-25-存货">Reading 25 存货</h2>
+<p>资产负债表中计算存货的主要公式为：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>C</mi><mi>O</mi><mi>G</mi><mi>S</mi><mo stretchy="false">(</mo><mtext>已售货物成本</mtext><mo stretchy="false">)</mo><mo>=</mo><mtext>初始存货</mtext><mo>+</mo><mtext>采购</mtext><mo>−</mo><mtext>年终存货</mtext></mrow><annotation encoding="application/x-tex">COGS(已售货物成本) = 初始存货+采购-年终存货
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">COGS</span><span class="mopen">(</span><span class="mord cjk_fallback">已售货物成本</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord cjk_fallback">初始存货</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord cjk_fallback">采购</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">年终存货</span></span></span></span></span></p>
+<h3 id="资本化成本vs费用化成本">资本化成本vs费用化成本</h3>
+<p>公司在生产过程中发生的成本可以被计入产品成本或生产费用，计入产品成本的成本被计入资产负债表中，该成本被<code>资本化(capitalized)</code>，计入生产费用的成本被计入利润表中，该成本被<code>费用化(expensed)</code>。成本资本化或费用化的标准以其成本发生时间在产品达到可销售状态前后为分界线。</p>
+<p><code>资本化成本：</code>原料采购成本，转化成本(工厂人工与费用等)，俗称料工费。成本资本化可以将成本发生时间递延，产品销售时才确认成本。</p>
+<p><code>费用化成本：</code>产品仓储成本，管理成本，销售成本，生产过程中发生的非正常浪费。</p>
+<h3 id="存货计价方法">存货计价方法</h3>
+<p>在IFRS准则下，存货的计价方法有<code>个别计价法(Specific identification)</code>，<code>先进先出法(FIFO)</code>，<code>加权平均法(Weighted average cost)</code>等三种方法，在US GAAP准则下除了这三种计价方法外还有一种<code>后进先出法(LIFO)</code>。</p>
+<table>
+<thead>
+<tr>
+<th>个别计价法</th>
+<th>先进先出法</th>
+<th>加权平均法</th>
+<th>后进先出法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>每件商品以其实际的成本计算，其成本与存货价值计算最为准确，但操作成本较高。该方法通常用于销量少单价高的商品，例如珠宝奢侈品等。</td>
+<td>大部分公司使用的计价方法，卖出的存货总以库存中最老的存货成本计算。通常导致成本被低估，但存货价值较为准确。</td>
+<td>存货价值以库存存货的平均价值计算，该方法使用也较少。</td>
+<td>只有US GAAP 准则中可以使用，卖出的存货总以库存中最新的存货成本计算。通常可以使货物成本被准确反映，但存货价值被低估。</td>
+</tr>
+</tbody>
+</table>
+<p><code>先进先出法</code>和<code>后进先出法</code>由于前者导致<code>成本被低估</code>，通常相较后者会导致更高的息税前利润与更高的赋税，从而导致更低的经营性现金流，以及更低的存货周转率等。当我们改变计价方法时，其他方法<code>改为后进先出法不需要追溯调整</code>，但其他改变都需要追溯调整。</p>
+<h3 id="存货的核算体系-Periodic-vs-Perpetual">存货的核算体系(Periodic vs Perpetual)</h3>
+<p>存货的核算体系有<code>定期盘存制(Periodic)</code>和<code>永续盘存制(Perpetual)</code>的区别之分。定期盘存制通常在每个会计月末进行库存和成本的核算，而永续盘存制则是一直以最新的价值来核算库存和成本。<code>先进先出法和个别计价法</code>在两个核算体系下算出的库存和成本价值<code>结果相同</code>，<code>后进先出法和加权平均法则不一样</code>。</p>
+<h3 id="后进先出法转为先进先出法">后进先出法转为先进先出法</h3>
+<p>为了对比使用FIFO和LIFO的两家公司的财务报表数据，金融分析师通常需要将LIFO的核算结果调整为FIFO。其转换的最关键的概念则是<code>LIFO Reserve</code>，当美国公司基于US GAAP准则以LIFO方法核算成本与库存时，他们需要同时披露<code>LIFO Reserve</code>的数值，该数值为<code>FIFO口径下的存货与LIFO口径下存货价值的差异</code>。</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mtext>存</mtext><msub><mtext>货</mtext><mrow><mi>F</mi><mi>I</mi><mi>F</mi><mi>O</mi></mrow></msub><mo>=</mo><mtext>存</mtext><msub><mtext>货</mtext><mrow><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi></mrow></msub><mo>+</mo><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi><mtext> </mtext><mi>R</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mspace linebreak="newline"></mspace><mi>C</mi><mi>O</mi><mi>G</mi><msub><mi>S</mi><mrow><mi>F</mi><mi>I</mi><mi>F</mi><mi>O</mi></mrow></msub><mo>=</mo><mi>C</mi><mi>O</mi><mi>G</mi><msub><mi>S</mi><mrow><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi></mrow></msub><mo>−</mo><mi mathvariant="normal">Δ</mi><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi><mtext> </mtext><mi>R</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mtext>（</mtext><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi><mtext> </mtext><mi>R</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mtext>为时点数，在利润表需要记为变动值）</mtext><mspace linebreak="newline"></mspace><mi>N</mi><msub><mi>I</mi><mrow><mi>F</mi><mi>I</mi><mi>F</mi><mi>O</mi></mrow></msub><mo>=</mo><mi>N</mi><msub><mi>I</mi><mrow><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi></mrow></msub><mo>+</mo><mi mathvariant="normal">Δ</mi><mi>L</mi><mi>I</mi><mi>F</mi><mi>O</mi><mtext> </mtext><mi>R</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mo>×</mo><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>T</mi><mi>a</mi><mi>x</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">存货_{FIFO}=存货_{LIFO}+LIFO\ Reserve\\
+COGS_{FIFO}=COGS_{LIFO}-\Delta LIFO\ Reserve（LIFO\ Reserve为时点数，在利润表需要记为变动值）\\
+NI_{FIFO}=NI_{LIFO}+\Delta LIFO\ Reserve\times (1-Tax)
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord cjk_fallback">存</span><span class="mord"><span class="mord cjk_fallback">货</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">FO</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord cjk_fallback">存</span><span class="mord"><span class="mord cjk_fallback">货</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">FO</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">FO</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal" style="margin-right:0.02778em;">eser</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal">COG</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">FO</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal">COG</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.05764em;">S</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0576em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">FO</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">FO</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal" style="margin-right:0.02778em;">eser</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord cjk_fallback">（</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">FO</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal" style="margin-right:0.02778em;">eser</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord cjk_fallback">为时点数，在利润表需要记为变动值）</span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.13889em;">F</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">FO</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0785em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">L</span><span class="mord mathnormal mtight" style="margin-right:0.07847em;">I</span><span class="mord mathnormal mtight" style="margin-right:0.02778em;">FO</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.7667em;vertical-align:-0.0833em;"></span><span class="mord">Δ</span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mord mathnormal" style="margin-right:0.02778em;">FO</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="mord mathnormal" style="margin-right:0.02778em;">eser</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">T</span><span class="mord mathnormal">a</span><span class="mord mathnormal">x</span><span class="mclose">)</span></span></span></span></span></p>
+<h3 id="后进先出法的清算-LIFO-Liquidation">后进先出法的清算(LIFO Liquidation)</h3>
+<p>使用后进先出法计算COGS时可能由于公司生产效率下降使库存中的更便宜的旧存货慢慢被消耗导致在物价上涨阶段反而出现产品成本下降的现象，这个现象被称为<code>LIFO Liquidation</code>。如果一家公司出现该现象，首先说明当前COGS没有反映真实成本，其次LIFO Reserve会出现下降(因为库存量会有下降)。</p>
+<h3 id="存货的减值-Inventory-Impairment">存货的减值(Inventory Impairment)</h3>
+<p>存货的价值为历史成本估算，但可能出现特殊情况导致存货账面价值不能反映其真实价值，这时需要对其进行减值计算。</p>
+<table>
+<thead>
+<tr>
+<th>US GAAP</th>
+<th>IFRS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>账面价值</code>与<code>市场价值</code>中取其低者。<br />市场价值既是存货的<code>重置成本(replacement cost)</code>，且重置成本最低为<code>可实现净值-normal profit margin</code>，最高为可实现净值。</td>
+<td><code>账面价值</code>与<code>可实现净值</code>中取其低者。<br /><code>可实现净值(Net realizable value) = 售价-销售成本</code></td>
+</tr>
+<tr>
+<td>当存货账面价值高于市场价值时，存货应当在资产负债表中被减值为市场价值，减值以Loss计入利润表，减值后<code>不可以</code>转回。</td>
+<td>当存货账面价值高于其可实现净值时，存货应当在资产负债表中被减值为可实现净值，减值以Loss计入利润表，IFRS准则中可以被最多重新转回至账面价值，转回以Gain计入利润表。</td>
+</tr>
+</tbody>
+</table>
 <p>[第13篇]</p>
 ]]></content>
       <categories>
@@ -1276,82 +1134,205 @@ Asset&amp;=Liability\\
       </tags>
   </entry>
   <entry>
-    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
-    <url>/2022/02/12/2-typora_picgo_config/</url>
+    <title>[金融分析] CFA一级考试学习计划</title>
+    <url>/2022/03/31/12-CFA-level-1-overview/</url>
     <content><![CDATA[<h1>序言</h1>
-<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
+<p>虽然知道CFA考试对我目前的工作没有帮助，但考虑到作为&quot;数据科学家&quot;以后可能从事的行业并不单一，加之我各种金融相关的学术背景，还是准备几个认可度较高的证考一考相比其其他证性价比会更高一些，也开拓一下今后的发展空间。今天开始准备CFA一级的考试，先在这里做个计划，首先定下目标是通过2022年11月份的CFA一级考试，同时将日语与英语的学习时间以每周4:2:1的比例分配。</p>
 <h1>正文</h1>
-<h2 id="创建博文">创建博文</h2>
-<p>先介绍一些在Hexo中发文的基础知识。</p>
-<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
-<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
+<p>CFA考试对我来说算是比较陌生的，虽然听考过的同学说一级基本都是大学学过的内容，但具体这是什么东西，要考哪些内容以及考试的形式等等都需要先了解一下。而从现在3月31日至11月之间还有7个月的时间，相比起盲目复习，还是有必要在开始之前规划一下每段时间的学习计划。</p>
+<h2 id="成为持证人">成为持证人</h2>
+<p>要成为一名认证的CFA持证人需要4步：</p>
+<ol>
+<li><code>通过CFA考试：</code>CFA计划由三级课程组成，每一级拥有各自的考试，通过三级考试是成为持证人的必要条件。</li>
+<li><code>获得认证的工作经验：</code>工作经验可以在加入CFA计划前后的任何阶段完成，但工作经验必须与投资决策过程与投资相关。</li>
+<li><code>提交介绍信：</code>要成为持证人还需要提供2-3封专业人员的介绍信，介绍你的工作经验和专业性。</li>
+<li><code>提交申请：</code>最后要提交申请成为CFA协会成员，经核准后可以成为CFA持证人。</li>
+</ol>
+<h2 id="CFA考试介绍">CFA考试介绍</h2>
+<p>本节的内容我都引自<a href="https://www.cfainstitute.org/" title="CFA Institute">CFA官网</a>，先弄清楚关于CFA考试的一些基本概念。CFA全称<code>特许金融分析师(Charted Financial Analyst)</code>，CFA协会是一家全球性投资专业人士会员组织，其为投资业发表研究成果，开展职业发展项目和制定自愿的、以道德为基础的专业和投资表现报告标准。其组织在全球160多个国家和地区拥有超过165000名CFA持证人。</p>
+<h3 id="考试级别">考试级别</h3>
+<p>CFA考试一共分为三级，分别为levelⅠ，levelⅡ和levelⅢ，他们的对比如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>levelⅠ</th>
+<th>levelⅡ</th>
+<th>levelⅢ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>必要条件</td>
+<td>CFA登记入门要求</td>
+<td>通过levelⅠ考试</td>
+<td>通过levelⅡ考试</td>
+</tr>
+<tr>
+<td>问题形式</td>
+<td>单项选择题</td>
+<td>基于案例的单项选择题</td>
+<td>基于案例的简答题和单项选择题</td>
+</tr>
+<tr>
+<td>结果通知时间</td>
+<td>考试结束60天内</td>
+<td>考试结束60天内</td>
+<td>考试结束90天内</td>
+</tr>
+<tr>
+<td>10年平均通过率</td>
+<td>42%</td>
+<td>45%</td>
+<td>54%</td>
+</tr>
+</tbody>
+</table>
+<h3 id="考试形式">考试形式</h3>
+<p>从2021年起CFA考试形式从笔试改为机考。选定考试月份后，可以根据自己需求选择考试时间和地点，选定后如果要更改时间需要多花250美元费用。CFA一级考试总题量180个，考试时间长度共4.5小时：</p>
 <ul>
-<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
-<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
-<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
-<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
+<li>30分钟宣誓，指导和调研</li>
+<li>135分钟完成第一部分</li>
+<li>中途休息30分钟</li>
+<li>135分钟完成第二部分</li>
 </ul>
-<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
-<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
-<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
-<p>hexo命令创建三类文件的方式分别如下：</p>
-<ul>
-<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
-<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
-<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
-</ul>
-<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
-<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
-<h3 id="Typora是什么">Typora是什么</h3>
-<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
-<h3 id="PicGo是什么">PicGo是什么</h3>
-<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
-<h3 id="具体如何配置">具体如何配置</h3>
-<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
-<h4 id="配置Typora">配置Typora</h4>
-<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
-<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
-<h4 id="配置图床">配置图床</h4>
-<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
-<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
-<h4 id="使用图床">使用图床</h4>
-<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
-<hr>
-<p>以下内容为2022年2月19日补充</p>
-<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
-<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
-<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
-<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
-<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
-<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
-<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
-<blockquote>
-<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
-</blockquote>
-<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
-<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
-<blockquote>
-<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
-</blockquote>
-<hr>
+<p>考试可以允许使用计算器，但计算器只能是Texas Instruments BA II Plus 或 Hewlett Packard 12C。同一个参试者两次考试中间间隔时间不能短于6个月，也即不论是未通过考试重考或是通过考试参加下级考试都必须预约6个月以后的考试。</p>
+<h3 id="考试内容">考试内容</h3>
+<p>考试一共涵盖十个科目，每级考试中各个科目内容的比重不同，首先介绍一些这些科目的大致内容：</p>
+<h4 id="道德和职业标准-Ethical-and-Professional-Standards">道德和职业标准(Ethical and Professional Standards)</h4>
+<p>这科重点内容包括道德，道德行为相关的挑战以及投资行业的职业道德标准。</p>
+<h4 id="量化方法-Quantitative-Methods">量化方法(Quantitative Methods)</h4>
+<p>这科内容主要包括金融分析和投资决策中使用的量化方法与技术。将投资回报分布的重要特征包括集中趋势，位置，和分散度等重要的数据属性以描述性的统计数字方式展示。内容还包括概率论及其在投资决策中的风险量化中的应用。</p>
+<h4 id="经济学-Economics">经济学(Economics)</h4>
+<p>在这部分中，我们首先会介绍单一消费者和公司供需关系的基本概念分析。我们还会涵盖公司运营的不同市场结构，宏观经济学原理和概念，包括总产量，收入水平衡量，总供需分析，以及经济增长因素分析等。最后还有一些商业周期和他们对经济活动的影响等。</p>
+<h4 id="财务报表分析-Financial-Statement-Analysis">财务报表分析(Financial Statement Analysis)</h4>
+<p>该科目在2020年叫<code>财务报告和分析</code>，在本部分我们提供财务报告过程和财务披露标准的解释，其中主要强调基本的财务报表知识以及一些不同的会计方法会对财务报表产生的影响及分析方法。我们主要考察主要财务报表并提供财务报表分析的基本方法。</p>
+<h4 id="公司发行人-Corporate-Issuers">公司发行人(Corporate Issuers)</h4>
+<p>该科目在2020年叫<code>公司金融</code>，这部分中我们主要介绍公司治理和投资金融决策等。我们会介绍分析和理解公司治理和股东管理的主要知识，并且介绍环境和社会观点对投资越来越大的冲击。我们还会介绍公司使用对资产负债结构的调整来实现他们的短期运营需要。</p>
+<h4 id="股权投资-Equity-Investments">股权投资(Equity Investments)</h4>
+<p>我们在这部分主要涵盖了股权投资，证券市场，和指数交易等等内容，并且介绍如何分析行业，公司，股票证券以及基本的股权估值模型。投资全球性的资产对于长期投资回报与多样化目标非常重要。</p>
+<h4 id="固定收益-Fixed-Income">固定收益(Fixed Income)</h4>
+<p>在这部分我们主要介绍固定收益证券产品和他们的市场，回报衡量，风险因子，估值方式和驱动因子等等。我们还会介绍回报和固收证券的计算方法，资产的证券化，债券回报和风险的基本知识以及信用风险的基本原理和分析。</p>
+<h4 id="衍生品-Derivatives">衍生品(Derivatives)</h4>
+<p>在这科中我们主要介绍一些基础金融衍生品以及衍生品市场的框架知识，然后我们会介绍诸如期货，期权，远期，互换交易和或有债权等衍生品的重要特征以及定价原理等等。最后我们会研究金融衍生品使用无风险套利模型定价的方法。</p>
+<h4 id="另类投资-Alternative-Investments">另类投资(Alternative Investments)</h4>
+<p>这部分内容介绍包括对冲基金，私人资产，房地产，货物和基础设施等另类投资。我们主要讨论如何使用另类投资做投资多样化并实现更高的投资回报。</p>
+<h4 id="投资组合管理及理财-Portfolio-Management-and-Wealth-Planning">投资组合管理及理财(Portfolio Management and Wealth Planning)</h4>
+<p>在此科目中我们会他讨论投资组合和风险管理的基础知识，包括投资回报，风险指标，投资组合规划和搭建。我们主要考察个体和机构投资者在可用的投资解决方案中满足他们的需要。我们使用资本资产定价模型(CAPM)来优化组合风险。</p>
+<p>看过各科目介绍后发现确实除了<code>道德标准</code>和<code>另类投资</code>两科以外，其他都是本科和一硕反复学反复考的内容，同学说裸考通过我也不是很奇怪了。这几科内容在三级考试中的占比各有不同：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>levelⅠ</th>
+<th>levelⅡ</th>
+<th>levelⅢ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>道德和职业标准</td>
+<td>15-20</td>
+<td>10-15</td>
+<td>10-15</td>
+</tr>
+<tr>
+<td>量化方法</td>
+<td>8-12</td>
+<td>5-10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>经济学</td>
+<td>8-12</td>
+<td>5-10</td>
+<td>5-10</td>
+</tr>
+<tr>
+<td>财务报表分析</td>
+<td>13-17</td>
+<td>10-15</td>
+<td>0</td>
+</tr>
+<tr>
+<td>公司发行人</td>
+<td>8-12</td>
+<td>5-10</td>
+<td>0</td>
+</tr>
+<tr>
+<td>股权投资</td>
+<td>10-12</td>
+<td>10-15</td>
+<td>10-15</td>
+</tr>
+<tr>
+<td>固定收益</td>
+<td>10-12</td>
+<td>10-15</td>
+<td>15-20</td>
+</tr>
+<tr>
+<td>衍生品</td>
+<td>5-8</td>
+<td>5-10</td>
+<td>5-10</td>
+</tr>
+<tr>
+<td>另类投资</td>
+<td>5-8</td>
+<td>5-10</td>
+<td>5-10</td>
+</tr>
+<tr>
+<td>投资组合管理及理财</td>
+<td>5-8</td>
+<td>10-15</td>
+<td>35-40</td>
+</tr>
+</tbody>
+</table>
+<p>能够看出来考试不同阶段对考生不同方面的能力要求是有变化的，前两级对各个科目的能力都有考察，而级别越低其对基本知识和能力的考察越多，到第三级则侧重考研参试者的实战投资组合管理等能力。</p>
+<h3 id="考试费用">考试费用</h3>
+<p>第一次参加考试的人员需要缴纳450美元的注册费，在此之上2023年2月之前的考试，每次考试的考试费为1000美元，如果提前6个月预约考试可以得到300美元折扣，即700美元的早鸟考试费。从2023年2月的考试开始，注册费会调整为350美金，而早鸟考试费和标准考试费会分别上涨到900美元和1200美元。</p>
+<h2 id="学习计划">学习计划</h2>
+<p>参考网上各位大神的经验，我计划分两轮复习，第一轮从4月1日至7月31日，第二轮从8月1日至9月30日，剩下一个月时间主要做题目模考，查漏补缺。</p>
+<p>关于第一轮复习时间安排，我计划先从自己以前学得不牢但分数占比较高的部分学起：</p>
+<table>
+<thead>
+<tr>
+<th>月份</th>
+<th>主要学习科目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>4月</td>
+<td>财务报表分析</td>
+</tr>
+<tr>
+<td>5月</td>
+<td>公司发行人，经济学</td>
+</tr>
+<tr>
+<td>6月</td>
+<td>股权投资，固定收益，衍生品，另类投资</td>
+</tr>
+<tr>
+<td>7月</td>
+<td>量化方法，投资组合管理及理财，道德和职业标准</td>
+</tr>
+</tbody>
+</table>
 <h1>最后</h1>
-<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
-<p>[第2篇]</p>
+<p>CFA不是我唯一的学习目标，所以我不会拿出所有的精力学它，我每周安排四天，每天1-2小时的学习时间，每周的其他3天我将安排日语和英语的学习。上面的这份学习计划，我会根据实际情况调整。</p>
 ]]></content>
       <categories>
-        <category>博客维护</category>
+        <category>金融分析</category>
       </categories>
       <tags>
-        <tag>GitHub</tag>
         <tag>日常学习</tag>
-        <tag>Typora</tag>
-        <tag>PicGo</tag>
+        <tag>CFA一级</tag>
       </tags>
   </entry>
   <entry>
@@ -1470,88 +1451,82 @@ Asset&amp;=Liability\\
       </tags>
   </entry>
   <entry>
-    <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
-    <url>/2022/02/19/3-excel-tool-develop-1/</url>
-    <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
-<mark class="hl-label default">本文中的出现的数据均经过随机扭曲处理，仅工具排版，逻辑与公式可供参考。</mark> 
-<hr>
-<h1>序言</h1>
-<p>上周为公司的月度保费报告做了一些升级调整，主要是涉及产品保费量展示部分由以前的<code>静态展示固定产品保费</code>改为<code>按保费量动态展示产品排行</code>。其中涉及的Excel公式技巧包括但不限于<code>OFFSET应用</code>，<code>动态排名展示</code>，<code>合并单元格文字</code>等。</p>
-<p>原工具中有三张表格，其中有互相参考验证数据正确性的<code>Tracking cells</code>，这里面我只讲稍微复杂一些的最后一张，且数据经过随机数扭曲，所以本文中展示的表格中的<code>Tracking cells</code>不会正常显示。</p>
+    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
+    <url>/2022/02/12/2-typora_picgo_config/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
 <h1>正文</h1>
-<p>该工具的最终目的是使用系统中生成的原始数据利用excel的公式功能自动整理计算数据并以要求形式展示。工具的目的是为了减少人力成本，因此一个原则是尽最大可能减少工具使用人在工具定板后使用时投入的成本，在此原则之上再尽力减少制作工具本身需要的时间和精力成本。本篇中我会分别介绍这个工具的版面设计以及从已有数据结构到需求的展示样式的逐步实现方法以及其中设计的一些可以广泛应用的小技巧。</p>
-<h2 id="工具版面设计">工具版面设计</h2>
-<p>我设计Excel工具时一个习惯的guideline是将数据分为至少三个部分：</p>
-<ol>
-<li>不改变原数据的结构，以所得即所用的原则组成一个<code>数据输入区</code>，用这样的数据做成的工具可以减少该工具在后续使用中对使用人<code>“调整原数据”</code>的需求，从而降低使用成本。</li>
-<li>将数据以标准形式整理并计算的<code>数据处理区</code>，这个部分通常会包含标准化的数据分类，这样做的目的是将原数据在该区域内透明地以标准化方式整理计算，以方便后续数据展示，并使各部分公式易于阅读和后续维护修改。</li>
-<li>最后是数据的输出形式，即<code>数据展示区</code>，这个部分通常是按<code>数据使用人</code>的需求调整，也即在工具制作期间制作人通常不能控制的部分，我们最后的目的就是将处理好的数据按使用人需求展示。</li>
-</ol>
-<p>本工具的版面既是根据上述习惯排版：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/img_20220220131551.png" alt="工具版面分为“数据输入区”，“数据处理区”和“数据展示区”三个部分"></p>
-<h2 id="工具设计思路">工具设计思路</h2>
-<p>在开始设计工具之前需要理清最重要的两点，第一是到手的原数据结构，第二就是最终需要展示的信息。在这个案例中，我们提取出来的原数据为月度数据，包含信息有4列，分别是<code>险种</code>，<code>新/续业务</code>，<code>本/上年信息</code>以及<code>保费</code>本身。其中每个险种分别会有本/上年的新/续业务保费，这样<code>2x2=4</code>种的组合。因此可以知道标准格式中只需要包含<code>所有可能险种数x4</code>行既可以展示所有可能的输入组合。</p>
-<p>此时开始分析需要展示的信息，所需展示的信息可以分为3部分：首先是将险种按当前年度总保费的大小排名并展示前8个险种，将此之外的保费信息加总归入<code>Other</code>类。其次将各月保费按需求的时间维度分组加总展示(如月度，季度，半年度，当前合计等)。最后只需要动态地将未展示出来的险种名合并展示作为备注即可。</p>
-<p>为满足该需求，我的设计是将保费性质信息作为标准化维度放在数据处理区的最左边并以月份为列名排列所有数据输入区的数据，排列后在处理区将各险种按当年保费(新续业务加总)排出大小并标识，最后在展示区以<code>OFFSET</code>为引用处理区不同月度数据的方法，以降低制作工具本身所需的时间，提高公式的<code>可读性</code>和<code>修改弹性</code>。</p>
-<h2 id="实现方法">实现方法</h2>
-<p>此章中我不会事无巨细介绍所有出现的技巧，如果想要详细了解建议在最后链接中下载该工具样本自己研究，我的公式应该都是trackable的，这里我只会分别介绍几个可以广泛应用到其他需求中的方法和公式。</p>
-<h3 id="如何跳行-列引用数据">如何跳行/列引用数据</h3>
-<p>这是制作该工具时我使用的第一个小技巧，答案非常简单，既是<code>OFFSET</code>。在工具中可以看到，原数据中每月数据有4列信息，而数据处理区中我们只希望每1列展示一个月信息，这样导致的问题是如果不使用OFFSET而将处理区中的<code>SUMIFS</code>公式直接向右复制，则会使每个引用信息仅向右移动1列，从而导致<code>引用区域错位</code>。因此我们需要左边处理区每向右移动1列，公式中的引用区同步向右移动4列，才能将所有引用信息移动至原数据中的<code>下月中相应区域</code>。</p>
-<p>以处理区中最左上角的公式为例：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220151308158.png" alt="=SUMIFS(OFFSET($VV$177,,EUU$177,,ED30,OFFSET($TT$177,,EC30,OFFSET($SS$177,,EB30)/1000000"></p>
+<h2 id="创建博文">创建博文</h2>
+<p>先介绍一些在Hexo中发文的基础知识。</p>
+<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
+<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
+<ul>
+<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
+<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
+<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
+<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
+</ul>
+<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
+<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
+<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
+<p>hexo命令创建三类文件的方式分别如下：</p>
+<ul>
+<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
+<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
+<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
+</ul>
+<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
+<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
+<h3 id="Typora是什么">Typora是什么</h3>
+<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
+<h3 id="PicGo是什么">PicGo是什么</h3>
+<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
+<h3 id="具体如何配置">具体如何配置</h3>
+<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
+<h4 id="配置Typora">配置Typora</h4>
+<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
+<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
+<h4 id="配置图床">配置图床</h4>
+<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
+<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
+<h4 id="使用图床">使用图床</h4>
+<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
+<hr>
+<p>以下内容为2022年2月19日补充</p>
+<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
+<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
+<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
+<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
+<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
+<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
+<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
 <blockquote>
-<p>=SUMIFS(OFFSET($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>O</mi><mi>F</mi><mi>F</mi><mi>S</mi><mi>E</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">28,,),OFFSET(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">OFFSET</span><span class="mopen">(</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>D30,OFFSET($T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>C30,OFFSET($S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
+<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
 </blockquote>
-<p>该公式除去OFFSET便是非常简单的SUMIF公式如下，即将原数据中的信息按标准模板加总排列：</p>
+<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
+<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
 <blockquote>
-<p>=SUMIFS($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>D30,$T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>C30,$S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
+<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
 </blockquote>
-<p>那么OFFSET是怎么用的呢？OFFSET函数本身的作用就是以公式参数的方法来移动改变引用区域，他的参数如下：</p>
-<blockquote>
-<p>=OFFSET(Reference, rows, cols, [height],[width])</p>
-</blockquote>
-<p>其中<code>Reference</code>为引用的区域，后面的四个参数分别代表在<code>Reference</code>的基础上要移动的<code>行数</code>，<code>列数</code>，<code>高度</code>，<code>宽度</code>，<code>正数代表向右/向下，负数反之</code>。</p>
-<p>以我们的公式为例，<code>OFFSET($V$30:$V$177,,E$28,,)</code>即代表将<code>$V$30:$V$177</code>移动<code>E$28</code>标注的列数(此处为0，即不移动)，其他参数未设置则用<code>,</code>隔开。到这里我只需要将每个月的列上以等差数列向右排列引用所需移动的列数，即可以一个公式为每个月需要引用的原数据找到正确的引用位置。同样的方法在<code>数据展示区</code>也大量的使用，因此可以用一个公式以改变最少参数的方法来填入表格中。</p>
-<p>OFFSET这样的公式非常明显，是为了减轻工具制作和维护的成本而存在的，因为用到不同的公式越少，后期维护时就越简单，毕竟这里你也可以选择人手将不同月份的引用区域拖动到他们合适的位置，不过制作和维护的成本将大大增加。</p>
-<h3 id="仅对当前第一次出现的元素计算">仅对当前第一次出现的元素计算</h3>
-<p>我们想要将产品按当前合计保费量排名，也即将当年的新/续保费加总并排名，但我们却不能直接使用SUMIF加总，因为按照我的版面设计，如果直接全部加总排行时每个产品会有两个相同的保费，从而影响排行名次。因此我们要想办法使每个产品名后仅出现一个加总保费。好在我们的数据处理区是标准化设计，上半部分全部是当年数据且每个险种按NB-RN的顺序规律排列。因此我们可以是用公式从上至下仅仅对该元素第一次出现时进行计算。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220152214570.png" alt="=IF(COUNTIF($BB30,$B30)=1,SUM(OFFSET(E30:P30,,,2,)),0)"></p>
-<blockquote>
-<p>=IF(COUNTIF($B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B30,$B30)=1,SUM(OFFSET(E30:P30,2,)),0)</p>
-</blockquote>
-<p>这个公式分为两个部分，其中<code>IF</code>部分为重点，即判断语句<code>COUNTIF($B$30:$B30,$B30)=1</code>。需要注意其中<code>$B$30:$B30</code>中<code>:</code>后的<code>B30</code>仅仅固定了列数，因此该公式在下拉时该引用区域也会相应拉长。这就使得这个<code>COUNTIF</code>公式可以实现计算<code>从上到下到目前为止B列该元素出现过的次数</code>。而此时将判断语句写为<code>该COUNTIF为1</code>则表示从上到下第一次出现这个元素时，则计算后面的<code>SUM(OFFSET(E30:P30,,,2,))</code>，否则返回0。</p>
-<p>这个<code>SUM</code>函数中的<code>OFFSET</code> 的<code>height</code>参数被设置为<code>2</code>，因此加总包括该引用处在内的向下共<code>2</code>个单元格。以此实现每个出现的产品进行一次NB和RN的数值加总。</p>
-<h3 id="将出现过的数字按大小排名">将出现过的数字按大小排名</h3>
-<p>上一步中我们已经得到了每一个产品的当年总保费，那么使用<code>RANK.EQ</code>函数既可以对保费量进行排名从而使每个险种得到一个相应的排名。本来此时在展示区左边我只需要手动输入1,2,3便可以自动展示排名为1,2,3的产品名，但此处有一个特殊需求，那就是由于下架，要将PAM这个产品的除出排名，直接并入Other分类。但由于PAM还是有续保保费，因此它每个月的保费量也并不是固定的，虽然我可以使用<code>IF</code>函数将<code>PAM</code>的排名直接设定为<code>999</code>，但我们依然需要一个可以动态将已有数字从小到大排列的方法，否则会出现的问题是假设<code>PAM</code>实际排名是<code>6</code>，但它被公式设定为排名<code>999</code>，这会导致手动输入的<code>6</code>后面将没有可以引用的数据，我们需要自动将上方排列设置为4,5,7来跳过排名为<code>6</code>的<code>PAM</code>。</p>
-<p>我想到的办法是SMALL公式：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220153736776.png" alt="=SMALL($AA$103,ROW(A2)/2)"></p>
-<blockquote>
-<p>=SMALL($A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A$103,ROW(A2)/2)</p>
-</blockquote>
-<p>该公式可用参数为<code>SMALL(array,k)</code>，其作用既是返回该数据中第<code>K</code>个最小值，同理的还有<code>LARGE</code>函数。</p>
-<p>在这里的使用方法既是展示<code>在数据处理区中出现的排行数中排行第ROW(A2)/2的最小值</code>，使用<code>ROW(A2)</code>就可以使该<code>K</code>值随着公式的下拉而增加，<code>ROW(A2)</code>返回的是<code>A2</code>单元格的行数，也即<code>2</code>。该数值<code>/2</code>则可以使每个数值出现两次，以此匹配每个险种名显示两次以匹配NB和RN这两行数据，因为<code>A2</code>和<code>A3</code>两行的计算结果分别是<code>1</code>和<code>1.5</code>，都会被公式向下取整认定为<code>1</code>，同理如果希望数值重复<code>N</code>次，则<code>/N</code>即可实现，注意不要让商小于<code>1</code>。</p>
-<h3 id="IF公式的数组应用">IF公式的数组应用</h3>
-<p>最后的一个展示要求是将Other分类中，也即保费排名未在前八位但本年有保费收入的产品名备注出来:</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220170737896.png" alt="=CONCAT(&quot;*The Other Products contains &quot;,IF(($QQAAAABB$103,3)&amp;&quot;, &quot;,&quot;&quot;))"></p>
-<blockquote>
-<p>=CONCAT(“*The Other Products contains “,IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;”, “,””))</p>
-</blockquote>
-<p>这个公式中的主要知识点便是<strong>IF公式的数组应用</strong></p>
-<blockquote>
-<p>IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;“, “,””)</p>
-</blockquote>
-<p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;MAX($A$6:$A$21))</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有同时满足这两个条件的行(两个1相乘才返回1)，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
+<hr>
 <h1>最后</h1>
-<p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
-<p>该工具的一个副本放在这里,有兴趣可以看看：<a href="/attachment/Product_ranking.xlsx">下载链接</a></p>
-<p>[第3篇]</p>
+<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
+<p>[第2篇]</p>
 ]]></content>
       <categories>
-        <category>MS Office</category>
+        <category>博客维护</category>
       </categories>
       <tags>
-        <tag>工作学习</tag>
-        <tag>Excel</tag>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+        <tag>Typora</tag>
+        <tag>PicGo</tag>
       </tags>
   </entry>
   <entry>
@@ -1668,6 +1643,91 @@ Asset&amp;=Liability\\
         <tag>工作学习</tag>
         <tag>Python</tag>
         <tag>Selenium</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
+    <url>/2022/02/19/3-excel-tool-develop-1/</url>
+    <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
+<mark class="hl-label default">本文中的出现的数据均经过随机扭曲处理，仅工具排版，逻辑与公式可供参考。</mark> 
+<hr>
+<h1>序言</h1>
+<p>上周为公司的月度保费报告做了一些升级调整，主要是涉及产品保费量展示部分由以前的<code>静态展示固定产品保费</code>改为<code>按保费量动态展示产品排行</code>。其中涉及的Excel公式技巧包括但不限于<code>OFFSET应用</code>，<code>动态排名展示</code>，<code>合并单元格文字</code>等。</p>
+<p>原工具中有三张表格，其中有互相参考验证数据正确性的<code>Tracking cells</code>，这里面我只讲稍微复杂一些的最后一张，且数据经过随机数扭曲，所以本文中展示的表格中的<code>Tracking cells</code>不会正常显示。</p>
+<h1>正文</h1>
+<p>该工具的最终目的是使用系统中生成的原始数据利用excel的公式功能自动整理计算数据并以要求形式展示。工具的目的是为了减少人力成本，因此一个原则是尽最大可能减少工具使用人在工具定板后使用时投入的成本，在此原则之上再尽力减少制作工具本身需要的时间和精力成本。本篇中我会分别介绍这个工具的版面设计以及从已有数据结构到需求的展示样式的逐步实现方法以及其中设计的一些可以广泛应用的小技巧。</p>
+<h2 id="工具版面设计">工具版面设计</h2>
+<p>我设计Excel工具时一个习惯的guideline是将数据分为至少三个部分：</p>
+<ol>
+<li>不改变原数据的结构，以所得即所用的原则组成一个<code>数据输入区</code>，用这样的数据做成的工具可以减少该工具在后续使用中对使用人<code>“调整原数据”</code>的需求，从而降低使用成本。</li>
+<li>将数据以标准形式整理并计算的<code>数据处理区</code>，这个部分通常会包含标准化的数据分类，这样做的目的是将原数据在该区域内透明地以标准化方式整理计算，以方便后续数据展示，并使各部分公式易于阅读和后续维护修改。</li>
+<li>最后是数据的输出形式，即<code>数据展示区</code>，这个部分通常是按<code>数据使用人</code>的需求调整，也即在工具制作期间制作人通常不能控制的部分，我们最后的目的就是将处理好的数据按使用人需求展示。</li>
+</ol>
+<p>本工具的版面既是根据上述习惯排版：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/img_20220220131551.png" alt="工具版面分为“数据输入区”，“数据处理区”和“数据展示区”三个部分"></p>
+<h2 id="工具设计思路">工具设计思路</h2>
+<p>在开始设计工具之前需要理清最重要的两点，第一是到手的原数据结构，第二就是最终需要展示的信息。在这个案例中，我们提取出来的原数据为月度数据，包含信息有4列，分别是<code>险种</code>，<code>新/续业务</code>，<code>本/上年信息</code>以及<code>保费</code>本身。其中每个险种分别会有本/上年的新/续业务保费，这样<code>2x2=4</code>种的组合。因此可以知道标准格式中只需要包含<code>所有可能险种数x4</code>行既可以展示所有可能的输入组合。</p>
+<p>此时开始分析需要展示的信息，所需展示的信息可以分为3部分：首先是将险种按当前年度总保费的大小排名并展示前8个险种，将此之外的保费信息加总归入<code>Other</code>类。其次将各月保费按需求的时间维度分组加总展示(如月度，季度，半年度，当前合计等)。最后只需要动态地将未展示出来的险种名合并展示作为备注即可。</p>
+<p>为满足该需求，我的设计是将保费性质信息作为标准化维度放在数据处理区的最左边并以月份为列名排列所有数据输入区的数据，排列后在处理区将各险种按当年保费(新续业务加总)排出大小并标识，最后在展示区以<code>OFFSET</code>为引用处理区不同月度数据的方法，以降低制作工具本身所需的时间，提高公式的<code>可读性</code>和<code>修改弹性</code>。</p>
+<h2 id="实现方法">实现方法</h2>
+<p>此章中我不会事无巨细介绍所有出现的技巧，如果想要详细了解建议在最后链接中下载该工具样本自己研究，我的公式应该都是trackable的，这里我只会分别介绍几个可以广泛应用到其他需求中的方法和公式。</p>
+<h3 id="如何跳行-列引用数据">如何跳行/列引用数据</h3>
+<p>这是制作该工具时我使用的第一个小技巧，答案非常简单，既是<code>OFFSET</code>。在工具中可以看到，原数据中每月数据有4列信息，而数据处理区中我们只希望每1列展示一个月信息，这样导致的问题是如果不使用OFFSET而将处理区中的<code>SUMIFS</code>公式直接向右复制，则会使每个引用信息仅向右移动1列，从而导致<code>引用区域错位</code>。因此我们需要左边处理区每向右移动1列，公式中的引用区同步向右移动4列，才能将所有引用信息移动至原数据中的<code>下月中相应区域</code>。</p>
+<p>以处理区中最左上角的公式为例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220151308158.png" alt="=SUMIFS(OFFSET($VV$177,,EUU$177,,ED30,OFFSET($TT$177,,EC30,OFFSET($SS$177,,EB30)/1000000"></p>
+<blockquote>
+<p>=SUMIFS(OFFSET($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>O</mi><mi>F</mi><mi>F</mi><mi>S</mi><mi>E</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">28,,),OFFSET(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">OFFSET</span><span class="mopen">(</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>D30,OFFSET($T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>C30,OFFSET($S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
+</blockquote>
+<p>该公式除去OFFSET便是非常简单的SUMIF公式如下，即将原数据中的信息按标准模板加总排列：</p>
+<blockquote>
+<p>=SUMIFS($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>D30,$T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>C30,$S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
+</blockquote>
+<p>那么OFFSET是怎么用的呢？OFFSET函数本身的作用就是以公式参数的方法来移动改变引用区域，他的参数如下：</p>
+<blockquote>
+<p>=OFFSET(Reference, rows, cols, [height],[width])</p>
+</blockquote>
+<p>其中<code>Reference</code>为引用的区域，后面的四个参数分别代表在<code>Reference</code>的基础上要移动的<code>行数</code>，<code>列数</code>，<code>高度</code>，<code>宽度</code>，<code>正数代表向右/向下，负数反之</code>。</p>
+<p>以我们的公式为例，<code>OFFSET($V$30:$V$177,,E$28,,)</code>即代表将<code>$V$30:$V$177</code>移动<code>E$28</code>标注的列数(此处为0，即不移动)，其他参数未设置则用<code>,</code>隔开。到这里我只需要将每个月的列上以等差数列向右排列引用所需移动的列数，即可以一个公式为每个月需要引用的原数据找到正确的引用位置。同样的方法在<code>数据展示区</code>也大量的使用，因此可以用一个公式以改变最少参数的方法来填入表格中。</p>
+<p>OFFSET这样的公式非常明显，是为了减轻工具制作和维护的成本而存在的，因为用到不同的公式越少，后期维护时就越简单，毕竟这里你也可以选择人手将不同月份的引用区域拖动到他们合适的位置，不过制作和维护的成本将大大增加。</p>
+<h3 id="仅对当前第一次出现的元素计算">仅对当前第一次出现的元素计算</h3>
+<p>我们想要将产品按当前合计保费量排名，也即将当年的新/续保费加总并排名，但我们却不能直接使用SUMIF加总，因为按照我的版面设计，如果直接全部加总排行时每个产品会有两个相同的保费，从而影响排行名次。因此我们要想办法使每个产品名后仅出现一个加总保费。好在我们的数据处理区是标准化设计，上半部分全部是当年数据且每个险种按NB-RN的顺序规律排列。因此我们可以是用公式从上至下仅仅对该元素第一次出现时进行计算。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220152214570.png" alt="=IF(COUNTIF($BB30,$B30)=1,SUM(OFFSET(E30:P30,,,2,)),0)"></p>
+<blockquote>
+<p>=IF(COUNTIF($B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B30,$B30)=1,SUM(OFFSET(E30:P30,2,)),0)</p>
+</blockquote>
+<p>这个公式分为两个部分，其中<code>IF</code>部分为重点，即判断语句<code>COUNTIF($B$30:$B30,$B30)=1</code>。需要注意其中<code>$B$30:$B30</code>中<code>:</code>后的<code>B30</code>仅仅固定了列数，因此该公式在下拉时该引用区域也会相应拉长。这就使得这个<code>COUNTIF</code>公式可以实现计算<code>从上到下到目前为止B列该元素出现过的次数</code>。而此时将判断语句写为<code>该COUNTIF为1</code>则表示从上到下第一次出现这个元素时，则计算后面的<code>SUM(OFFSET(E30:P30,,,2,))</code>，否则返回0。</p>
+<p>这个<code>SUM</code>函数中的<code>OFFSET</code> 的<code>height</code>参数被设置为<code>2</code>，因此加总包括该引用处在内的向下共<code>2</code>个单元格。以此实现每个出现的产品进行一次NB和RN的数值加总。</p>
+<h3 id="将出现过的数字按大小排名">将出现过的数字按大小排名</h3>
+<p>上一步中我们已经得到了每一个产品的当年总保费，那么使用<code>RANK.EQ</code>函数既可以对保费量进行排名从而使每个险种得到一个相应的排名。本来此时在展示区左边我只需要手动输入1,2,3便可以自动展示排名为1,2,3的产品名，但此处有一个特殊需求，那就是由于下架，要将PAM这个产品的除出排名，直接并入Other分类。但由于PAM还是有续保保费，因此它每个月的保费量也并不是固定的，虽然我可以使用<code>IF</code>函数将<code>PAM</code>的排名直接设定为<code>999</code>，但我们依然需要一个可以动态将已有数字从小到大排列的方法，否则会出现的问题是假设<code>PAM</code>实际排名是<code>6</code>，但它被公式设定为排名<code>999</code>，这会导致手动输入的<code>6</code>后面将没有可以引用的数据，我们需要自动将上方排列设置为4,5,7来跳过排名为<code>6</code>的<code>PAM</code>。</p>
+<p>我想到的办法是SMALL公式：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220153736776.png" alt="=SMALL($AA$103,ROW(A2)/2)"></p>
+<blockquote>
+<p>=SMALL($A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A$103,ROW(A2)/2)</p>
+</blockquote>
+<p>该公式可用参数为<code>SMALL(array,k)</code>，其作用既是返回该数据中第<code>K</code>个最小值，同理的还有<code>LARGE</code>函数。</p>
+<p>在这里的使用方法既是展示<code>在数据处理区中出现的排行数中排行第ROW(A2)/2的最小值</code>，使用<code>ROW(A2)</code>就可以使该<code>K</code>值随着公式的下拉而增加，<code>ROW(A2)</code>返回的是<code>A2</code>单元格的行数，也即<code>2</code>。该数值<code>/2</code>则可以使每个数值出现两次，以此匹配每个险种名显示两次以匹配NB和RN这两行数据，因为<code>A2</code>和<code>A3</code>两行的计算结果分别是<code>1</code>和<code>1.5</code>，都会被公式向下取整认定为<code>1</code>，同理如果希望数值重复<code>N</code>次，则<code>/N</code>即可实现，注意不要让商小于<code>1</code>。</p>
+<h3 id="IF公式的数组应用">IF公式的数组应用</h3>
+<p>最后的一个展示要求是将Other分类中，也即保费排名未在前八位但本年有保费收入的产品名备注出来:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220170737896.png" alt="=CONCAT(&quot;*The Other Products contains &quot;,IF(($QQAAAABB$103,3)&amp;&quot;, &quot;,&quot;&quot;))"></p>
+<blockquote>
+<p>=CONCAT(“*The Other Products contains “,IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;”, “,””))</p>
+</blockquote>
+<p>这个公式中的主要知识点便是<strong>IF公式的数组应用</strong></p>
+<blockquote>
+<p>IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;“, “,””)</p>
+</blockquote>
+<p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;MAX($A$6:$A$21))</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有同时满足这两个条件的行(两个1相乘才返回1)，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
+<h1>最后</h1>
+<p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
+<p>该工具的一个副本放在这里,有兴趣可以看看：<a href="/attachment/Product_ranking.xlsx">下载链接</a></p>
+<p>[第3篇]</p>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Excel</tag>
       </tags>
   </entry>
   <entry>
@@ -2107,6 +2167,54 @@ Asset&amp;=Liability\\
       </tags>
   </entry>
   <entry>
+    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
+    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
+<h1>正文</h1>
+<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
+<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
+<blockquote>
+<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
+</blockquote>
+<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
+<h2 id="清除缓存">清除缓存</h2>
+<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
+<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
+<h2 id="引用版本号">引用版本号</h2>
+<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
+<blockquote>
+<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
+</blockquote>
+<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
+<blockquote>
+<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
+</blockquote>
+<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
+<h2 id="解决办法">解决办法</h2>
+<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
+<h2 id="一个疑惑">一个疑惑</h2>
+<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
+<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
+<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
+<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
+<h1>最后</h1>
+<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
+<p>[第9篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
+        <tag>Github</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[信息安全]解码微信PC版中以dat格式存储的聊天图片</title>
     <url>/2022/03/04/8-decrypt-wechat-pics/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -2158,54 +2266,6 @@ Asset&amp;=Liability\\
         <tag>日常学习</tag>
         <tag>微信</tag>
         <tag>解码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
-    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
-<h1>正文</h1>
-<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
-<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
-<blockquote>
-<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
-</blockquote>
-<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
-<h2 id="清除缓存">清除缓存</h2>
-<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
-<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
-<h2 id="引用版本号">引用版本号</h2>
-<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
-<blockquote>
-<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
-</blockquote>
-<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
-<blockquote>
-<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
-</blockquote>
-<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
-<h2 id="解决办法">解决办法</h2>
-<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
-<h2 id="一个疑惑">一个疑惑</h2>
-<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
-<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
-<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
-<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
-<h1>最后</h1>
-<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
-<p>[第9篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-        <tag>Github</tag>
       </tags>
   </entry>
 </search>
