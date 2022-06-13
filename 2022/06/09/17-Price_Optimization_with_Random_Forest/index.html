@@ -1,0 +1,503 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>[数据分析]基于数据挖掘分类算法的续保价格优化模型记录 | HideOnRubbish | RayHLei</title><meta name="keywords" content="工作学习,R,数据挖掘"><meta name="author" content="RayHLei"><meta name="copyright" content="RayHLei"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[第17篇]本篇记录了我尝试使用分类模型(Classification model)对价格敏感客户分类以达成续保价格优化的项目。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[数据分析]基于数据挖掘分类算法的续保价格优化模型记录">
+<meta property="og:url" content="http://raylei.space/2022/06/09/17-Price_Optimization_with_Random_Forest/index.html">
+<meta property="og:site_name" content="HideOnRubbish | RayHLei">
+<meta property="og:description" content="[第17篇]本篇记录了我尝试使用分类模型(Classification model)对价格敏感客户分类以达成续保价格优化的项目。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/17-Price_Optimization_with_Random_Forest.jpg">
+<meta property="article:published_time" content="2022-06-08T19:53:32.000Z">
+<meta property="article:modified_time" content="2022-06-13T13:17:36.999Z">
+<meta property="article:author" content="RayHLei">
+<meta property="article:tag" content="工作学习">
+<meta property="article:tag" content="R">
+<meta property="article:tag" content="数据挖掘">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/17-Price_Optimization_with_Random_Forest.jpg"><link rel="shortcut icon" href="/img/logo.png"><link rel="canonical" href="http://raylei.space/2022/06/09/17-Price_Optimization_with_Random_Forest/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0db3a3c6777e617edaf2659e819e2c15";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-BQ5ZYHEF37"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BQ5ZYHEF37');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&amp;family=Nunito:wght@200&amp;family=Quicksand:wght@300&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":1,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"Author: RayHLei","link":"Link: ","source":"Source: HideOnRubbish | RayHLei","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#888888","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[数据分析]基于数据挖掘分类算法的续保价格优化模型记录',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-06-13 21:17:36'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="HideOnRubbish | RayHLei" type="application/rss+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="/img/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">17</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">23</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/data.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">HideOnRubbish | RayHLei</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">[数据分析]基于数据挖掘分类算法的续保价格优化模型记录</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-06-08T19:53:32.000Z" title="Created 2022-06-09 03:53:32">2022-06-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-06-13T13:17:36.999Z" title="Updated 2022-06-13 21:17:36">2022-06-13</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">4.5k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>14min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="[数据分析]基于数据挖掘分类算法的续保价格优化模型记录"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>序言</h1>
+<p>所谓机器学习就是使用计算机算法让程序从已有数据中学习知识并应用，因此数据挖掘作为从数据中提炼规则的学科，其也是机器学习的最热门的分支之一。本篇缘起是因为老板想要一个可以预测保单续保与否的模型，我在收集数据准备模型的过程中想到了这个利用<code>预测模型(Predictive Model)</code>优化保险定价的<code>指导模型(Prescriptive Model)</code>。一言蔽之就是通过分类模型找出容易被保险定价影响的群体并建议放弃加价以获得其续保。本篇就记录一下这个项目的具体实现过程和表现评估。</p>
+<h1>正文</h1>
+<h2 id="预测模型">预测模型</h2>
+<p>项目第一步是构建一个可以预测续保结果的预测模型，本节会从随机森林模型的数据集构建、参数调整、表现评估等方便记录整个预测模型的构建过程。使用该模型进行实际运用的指导模型的建造和评估会在下一节详解。</p>
+<h3 id="数据收集">数据收集</h3>
+<p>任何数据挖掘的第一步也是最重要的一步都是数据收集和整理，原数据的质量会直接影响到最后模型的表现。我在做这个项目的时候只用到了公司数据库的数据，而且由于不同险种的可用数据不太一样，我为了提高预测模型的准确性先选定了研究“家居保险”，因此我首先和业务的同事们开会讨论了一下他们认为的可能对家居保险续保有预测效果的保单特征，例如代理的渠道和佣金，顾客的年龄、性别、忠诚度，保单信息中的楼龄、付款方式等等。我具体收集的一些特征如下：</p>
+<table>
+    <tr>
+        <th>分类</th>
+        <th>数据</th>  
+        <th>描述</th>  
+    </tr>
+    <tr>
+        <td rowspan="4">保单信息</td>
+        <td>原始保费</td>  
+        <td>家居险的原始保费与其保额及单位面积有关，因此认为可以一定程度上反应客户的财务水平</td>  
+    </tr>
+    <tr>
+        <td>保费增长</td>
+        <td>计算得出的续保保费与续保前保费的增长率，是本数据集中公司在续保过程中唯一可以控制的因素</td>  
+    </tr>
+    <tr>
+        <td>理赔数量&理赔金额</td>
+        <td>反应客户的理赔方面的特征，因为认为理赔情况可能影响客户的续保决定</td>  
+    </tr>
+    <tr>
+        <td>产品相关信息</td>
+        <td>一些仅与家具险相关的数据信息，例如客户是否选购特殊保障条款，所保单位楼龄的分层等</td>  
+    </tr>
+    <tr>
+        <td rowspan="2">代理信息</td>
+        <td>代理渠道</td>
+        <td>不同的代理商提供给客户的服务体验不同，可能导致续保决策的差异</td>  
+    </tr>
+    <tr>
+        <td>佣金水平</td>
+        <td>不同的代理商的佣金水平的差异可能反映至代理商对客户的态度区别</td>  
+    </tr>
+    <tr>
+        <td rowspan="3">客户信息</td>
+        <td>客户年龄</td>
+        <td>根据本项目开始前的探索性数据分析得知，客户年龄与其续保行为具有较高的相关性，年龄越大的客户越倾向于续保</td>  
+    </tr>
+    <tr>
+        <td>客户性别</td>
+        <td>性别被认为是客户分层的重要维度，但需要注意该特征的使用具有敏感性，不应在会体现出性别区别对待的模型上使用该特征</td>  
+    </tr>
+    <tr>
+        <td>客户忠诚度</td>
+        <td>选择两个信息用来衡量客户的忠诚度，分别是客户持有我司的总保单数和客户与我司合作的总年数</td>  
+    </tr>
+</table>
+<p>基于以上这些数据维度，我收集了公司2021年经过续保流程的可续保家居保险保单，并且将<code>续保结果(Lapsed or Renewed)</code>作为数据集的目标分类。</p>
+<h3 id="数据清洗-2">数据清洗</h3>
+<p>总体来说由于数据都是来自于公司自己的数据库中，因此没有太多需要清洗的地方，主要值得说的就是对于缺失值的处理方法。由于公司没有特别收集家居险客户的个人资料，因此客户的性别与年龄数据都是来自于其购买其他如意外险等需要年龄性别信息的投保资料，这也导致客户信息的这一块有非常多的缺失值。下图中是我收集到的保单的性别与年龄分布，这两个信息都有多于一半的保单有信息缺失。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220610155151775.png" alt="客户数据的缺失值，其中性别N代表“Prefer not to say”"></p>
+<p>但因为这两个特征从经验判断都是对于续保决策的预测相当有帮助的，而同时由于大量保单都有系统性缺失数据，因此我既不能舍弃掉这两个特征同时又不能直接删除或估算(Impute)缺失值。同时由于这些值是系统性缺失，所以我可以合理假设缺失值本身也带有一些信息(由于某些原因这些客户没有提供个人信息)。因此我的处理方式就是将缺失值加入水平值。代码上实现也很简单：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 使用addNA将缺失值加入因子特征的水平值</span></span><br><span class="line">df.pre <span class="operator">&lt;-</span> df.pre <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>CLIENT_GENDER <span class="operator">=</span> addNA<span class="punctuation">(</span>CLIENT_GENDER<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>CLIENT_AGE <span class="operator">=</span> addNA<span class="punctuation">(</span>CLIENT_AGE<span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line"><span class="comment"># 实际数据处理中不仅这两个特征有缺失值，因此我写了个循环将所有缺失值命名为“NA”</span></span><br><span class="line"><span class="comment"># 需要注意的是这一步一定要做，否则后期训练时Random forest包的算法不会将NA计入导致报错。</span></span><br><span class="line"><span class="keyword">for</span><span class="punctuation">(</span>i <span class="keyword">in</span> <span class="built_in">names</span><span class="punctuation">(</span>df.pre<span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="keyword">if</span><span class="punctuation">(</span><span class="built_in">class</span><span class="punctuation">(</span>df.pre<span class="punctuation">[[</span>i<span class="punctuation">]</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="operator">==</span><span class="string">&quot;factor&quot;</span><span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">    levels<span class="punctuation">(</span>df.pre<span class="punctuation">[[</span>i<span class="punctuation">]</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">[</span><span class="built_in">is.na</span><span class="punctuation">(</span>levels<span class="punctuation">(</span>df.pre<span class="punctuation">[[</span>i<span class="punctuation">]</span><span class="punctuation">]</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">]</span> <span class="operator">&lt;-</span> <span class="string">&quot;NA&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的一点是虽然使用<code>addNA()</code>公式就已经把缺失值加入了因子变量的水平值中，但还需要进行第二步对水平变量赋值的操作，否则R的<code>RandomForest</code>算法会错误处理这些NA变量，导致报错。具体可以参考<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/24829674/r-random-forest-error-type-of-predictors-in-new-data-do-not-match" title="r random forest error - type of predictors in new data do not match">这个问题</a>。</p>
+<h3 id="处理不平衡数据">处理不平衡数据</h3>
+<p>由于我们想要预测的目标分类是某个保单的续保结果，但我司家居险的保单续保率实际达到95%以上，这也就导致我们的数据一定是非常不平衡的，而我们想要预测的却是小数据量的部分标签，如果不加处理就直接以这个比例训练模型的话会导致模型在预测小数据量标签时的表现严重欠拟合。</p>
+<p>在简单对比尝试了普通的<code>欠采样(Undersampling)</code>、<code>过采样(Oversampling)</code>与<code>SMOTE方法</code>后，后发现SMOTE训练出的模型效果最能满足我们所需的较高<code>精确度(Precision)</code>。我们不需要将所有不续保的保单预测出来，但我们希望在我们预测会不续保的保单尽可能不要出错，因为每多预测错一个保单就意味着我们要多付出一份不必要的成本，不同处理方法的训练效果会在后面的模型评估中展示。数据最后处理的处理效果如下：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220610161859969.png" alt="使用SMOTE算法得到平衡数据集"></p>
+<p>代码如下，其中：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ROSE包提供欠采样和过采样方法，performanceEstimation提供SMOTE方法</span></span><br><span class="line">library<span class="punctuation">(</span>ROSE<span class="punctuation">)</span></span><br><span class="line">library<span class="punctuation">(</span>performanceEstimation<span class="punctuation">)</span></span><br><span class="line"><span class="comment"># 随机抽取样本的80%作为训练集，其余20%作为测试集。</span></span><br><span class="line">sampling <span class="operator">&lt;-</span> sample<span class="punctuation">(</span>nrow<span class="punctuation">(</span>df.GWPRaise<span class="punctuation">)</span><span class="punctuation">,</span><span class="number">0.8</span><span class="operator">*</span>nrow<span class="punctuation">(</span>df.GWPRaise<span class="punctuation">)</span><span class="punctuation">,</span>replace <span class="operator">=</span> <span class="literal">FALSE</span><span class="punctuation">)</span></span><br><span class="line">TrainSet <span class="operator">&lt;-</span> df.GWPRaise<span class="punctuation">[</span>sampling<span class="punctuation">,</span><span class="punctuation">]</span></span><br><span class="line">TestSet <span class="operator">&lt;-</span> df.GWPRaise<span class="punctuation">[</span><span class="operator">-</span>sampling<span class="punctuation">,</span><span class="punctuation">]</span></span><br><span class="line"><span class="comment"># 使用欠采样方法将Renewed数据降至与过采样同水平</span></span><br><span class="line">balanced_train_under <span class="operator">&lt;-</span> ovun.sample<span class="punctuation">(</span>IS_LAPSED<span class="operator">~</span>.<span class="punctuation">,</span> data <span class="operator">=</span> TrainSet<span class="punctuation">,</span> method <span class="operator">=</span> <span class="string">&quot;under&quot;</span><span class="punctuation">)</span><span class="operator">$</span>data</span><br><span class="line"><span class="comment"># 使用SMOTE方法为每个minority生成3个新数据，并为每个新生成的数据从majority中选择1.5个数据放入最终数据集。</span></span><br><span class="line">balanced_train <span class="operator">&lt;-</span> smote<span class="punctuation">(</span>IS_LAPSED<span class="operator">~</span>.<span class="punctuation">,</span> TrainSet<span class="punctuation">,</span> perc.under <span class="operator">=</span> <span class="number">1.5</span><span class="punctuation">,</span> perc.over <span class="operator">=</span> <span class="number">3</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h3 id="随机森林参数调整">随机森林参数调整</h3>
+<p>随机森林的算法本质是一个决策树的<code>投票模型(ensemble model)</code>，其做法是从所有数据中随机抽取一部分样本 (2/3)作为训练集，并随机抽取这些样本的特定数量的特征训练决策树。每个单个决策树默认使用<code>基尼不纯度(Gini Impurity)</code>作为<code>信息增益(Information Gain)</code>的衡量方法，在每个选出的特征值中找出分类目标标签获得最大信息增益的特征作为当个节点的分支，直到将所有抽选的特征分完(也就是让决策树不剪枝完全生长)。以同样的方式随机生成指定数量的决策树，然后使用这些决策树对每一个记录分别分类，以投票的方式决定该记录的最终分类。</p>
+<p>随机森林的好处就在于其使用随机数据和随机特征训练模型，使其相较普通决策树<code>泛化(generalization)</code>效果更好，过拟合风险小。而其弱点在于分类过程不透明，与深度学习模型相似属于<code>黑箱模型(Black-box)</code>。因此通常如果我们想要通过数据挖掘算法获取一些数据间的关系和规则时，可以使用决策树算法来揭示。但如果像本项目这样需要一个尽可能准确的预测模型，则可以使用随机森林模型。</p>
+<p>在我们使用R的<code>RandomForest包</code>进行随机森林模型训练的时候有两个参数会较大的影响我们的模型表现，一个是生成的决策树数量<code>ntree</code>，一个是随机选取的特征数量<code>mtry</code>。我在这里将两个参数在合理的范围内测试并使用<code>AUC(Area Under ROC Curve)</code>作为模型表现的指标选出了最优的参数分别为<code>ntree=300, mtry=6</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220613112629364.png" alt="ntree=300, mtry=6 generate the highest AUC"></p>
+<p>代码如下：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 分别尝试ntree在200-600区间，mtry在2-8的区间时模型的AUC变化</span></span><br><span class="line">par<span class="punctuation">(</span>mfrow<span class="operator">=</span><span class="built_in">c</span><span class="punctuation">(</span><span class="number">5</span><span class="punctuation">,</span> <span class="number">4</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="keyword">for</span><span class="punctuation">(</span>i <span class="keyword">in</span> seq<span class="punctuation">(</span><span class="number">200</span><span class="punctuation">,</span><span class="number">600</span><span class="punctuation">,</span><span class="number">100</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="keyword">for</span><span class="punctuation">(</span>j <span class="keyword">in</span> seq<span class="punctuation">(</span><span class="number">2</span><span class="punctuation">,</span><span class="number">8</span><span class="punctuation">,</span><span class="number">2</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="punctuation">&#123;</span></span><br><span class="line">    model <span class="operator">&lt;-</span> randomForest<span class="punctuation">(</span>IS_LAPSED<span class="operator">~</span>.<span class="punctuation">,</span> data <span class="operator">=</span> balanced_train<span class="punctuation">,</span> importance <span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">,</span> ntree <span class="operator">=</span> i<span class="punctuation">,</span> mtry <span class="operator">=</span> j<span class="punctuation">)</span></span><br><span class="line">    Predictions <span class="operator">&lt;-</span> predict<span class="punctuation">(</span>model<span class="punctuation">,</span> newdata <span class="operator">=</span> TestSet<span class="punctuation">)</span></span><br><span class="line">    ModelROC <span class="operator">&lt;-</span> roc<span class="punctuation">(</span>TestSet<span class="operator">$</span>IS_LAPSED<span class="punctuation">,</span><span class="built_in">as.numeric</span><span class="punctuation">(</span>Predictions<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">    plot<span class="punctuation">(</span>ModelROC<span class="punctuation">,</span>print.auc <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">,</span> auc.polygon <span class="operator">=</span> <span class="literal">TRUE</span><span class="punctuation">,</span> grid <span class="operator">=</span> <span class="number">0.2</span><span class="punctuation">,</span> max.auc.polygon<span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">,</span> print.thres<span class="operator">=</span><span class="literal">TRUE</span><span class="punctuation">,</span>main<span class="operator">=</span>paste<span class="punctuation">(</span><span class="string">&quot;ROC Curve for ntree =&quot;</span><span class="punctuation">,</span> i<span class="punctuation">,</span> <span class="string">&quot; and mtry =&quot;</span><span class="punctuation">,</span> j<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<h3 id="预测模型表现评估">预测模型表现评估</h3>
+<p>使用测试集对不同训练集训练出的随机森林模型进行表现评估，发现SMOTE调整后的训练集最符合我们<code>高精准度前提下的高正确率</code>的要求。<code>混淆矩阵(Confusion matrix)</code>对比如下：</p>
+<table>
+    <tr>
+        <th colspan="8" align="center">预测标签</th>  
+    </tr>
+    <tr>
+        <th rowspan="4">实际标签</th>
+        <th rowspan="2"></th>
+        <th colspan="2" align="center">SMOTE</th>
+        <th colspan="2" align="center">欠采样</th>  
+        <th colspan="2" align="center">欠采样+过采样</th>  
+    </tr>
+    <tr>
+        <th>Renew</th>    
+        <th>Lapse</th>    
+        <th>Renew</th>    
+        <th>Lapse</th>  
+        <th>Renew</th>    
+        <th>Lapse</th> 
+    </tr>
+    <tr>
+        <th>Renew</th> 
+        <td>9,963</td>    
+        <td style="color:red">1,649</td>    
+        <td>7,264</td>    
+        <td>4,348</td>  
+        <td>9,212</td>    
+        <td>2,390</td> 
+    </tr>
+    <tr>
+        <th>Lapse</th> 
+        <td>382</td>    
+        <td style="color:red">249</td>    
+        <td>184</td>    
+        <td>447</td>  
+        <td>292</td>    
+        <td>349</td> 
+    </tr>
+</table>
+<p>精准度与正确率的对比如下：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>SMOTE</th>
+<th>欠采样</th>
+<th>欠采样+过采样</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>精准度(Precision)</td>
+<td><font color="red">13.1%</font></td>
+<td>9.3%</td>
+<td>12.7%</td>
+</tr>
+<tr>
+<td>正确率(Accuracy)</td>
+<td><font color="red">83.4%</font></td>
+<td>62.3%</td>
+<td>78.1%</td>
+</tr>
+<tr>
+<td>回归率(Recall)</td>
+<td>39.5%</td>
+<td>70.8%</td>
+<td>54.4%</td>
+</tr>
+</tbody>
+</table>
+<p>从上面这些评估中可以看出来即使是表现最好的SMOTE数据集训练出的的预测模型，在预测不续保保单时精准度也非常之低，根本原因就是在于实践中续保保单数量远大于不续保保单，而我们的数据集中没有包含足够的区分这两者的信息(因为客户不续保的根本动机可能性非常多，例如可能被其他保险人接触或出于其本身经济考虑)，因此预测效果一定不会非常好，只要高于阳性标签比例的5.1%就说明已经是有用的预测模型。</p>
+<p>一个更好的消息是我们实际上关注的是我们可以通过调整保费来留住的客户，而这些被标注为<code>不续保</code>的1,898个客户中实际可能并不全是因为保费变化而被标注为不续保，下一节我会介绍一下我基于这个预测模型提出的指导模型的用法，以及其价值评估。</p>
+<h2 id="指导模型">指导模型</h2>
+<h3 id="变量重要性">变量重要性</h3>
+<p>虽然随机森林模型本身是一个黑箱模型，但我们其实<a target="_blank" rel="noopener" href="https://www.listendata.com/2014/11/random-forest-with-r.html" title="A COMPLETE GUIDE TO RANDOM FOREST IN R">也有办法</a>评估不同变量在预测中的<code>重要性(Importance)</code>。其基本思想就是根据移除不同的特征后模型预测准确度的变化大小来评估每个特征变量的重要性，而从下面这张图中我们除了知道客户忠诚度是准确预测其续保决策的最重要的变量之外，还知道保费变化也对客户的续保决策有较重要的影响。这也是我们可以使用这个预测模型来分类对保费变化敏感的客户并针对性调整保费变化决策以增加总体续保率的理论基础。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220613163543195.png" alt="GWP_Raise既是保费增长率"></p>
+<h3 id="模型架构">模型架构</h3>
+<p>简单来讲我想到的指导模型的使用方法就是通过调整测试集中预测不续保保单的保费增长率来确定该保单的不续保决策是否由于保费增长影响。若预测模型认为保费增长率调整后预测结果可从不续保转为续保，则说明模型认为该保单受保费增长影响而不续保。模型流程图如下：</p>
+<div id="flowchart-0" class="flow-chart"></div>
+<h3 id="指导模型评估">指导模型评估</h3>
+<p>我们依然可以使用我们最早分出来的测试集来测试这个模型的表现，首先看一看测试集中这个模型对续保率的增益和成本：</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Label Changed</th>
+<th>Label NOT Changed</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TP</td>
+<td><font color="red">77</font></td>
+<td>220</td>
+</tr>
+<tr>
+<td>FP</td>
+<td><font color="red">215</font></td>
+<td>1,393</td>
+</tr>
+<tr>
+<td>TN</td>
+<td>2</td>
+<td>9,981</td>
+</tr>
+<tr>
+<td>FN</td>
+<td>0</td>
+<td>355</td>
+</tr>
+</tbody>
+</table>
+<p>在上面这个表中，我对比了不同预测结果与指导模型划分的“价格敏感”保单的分布。其中<code>Label Changed</code>列便是在上方指导模型中被标记为<code>“因受保费增长影响可能不续保”</code>的保单。也就是说，在这一列中被预测为<code>Positive</code>的保单就是我们实际操作中建议免除保费增长的保单。而这其中的<code>FP(False Positive)</code>则是被标记为<code>不续保</code>但实际即使保费增长也会<code>续保</code>的保单。</p>
+<p>这也即是说在我们的测试集中，这77笔TP保单的保费会成为模型实践后的收入(因为阻止了这77笔保单的不续保)，而这292笔Positive保单原本应该涨的保费则是该模型的成本(放弃了292个保单的涨价)。而测试集中这292笔保单的平均涨价保费是90港币，77笔TP保单的续保总保费是103,472.6港币，平均至292个保单相当于每放弃90港币的涨价预期可以获得354.3港币的保费收入。</p>
+<p>而这77个TP保单占所有652个不续保保单的12%，即是说我们的模型预期可以使12%本会不续保的保单续保，将整体续保率从94.7%升至95.3%。</p>
+<p>代码如下：</p>
+<figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 将原测试集的预测结果记录下来</span></span><br><span class="line">Results <span class="operator">&lt;-</span> cbind <span class="punctuation">(</span>TestSet<span class="punctuation">,</span> as.data.frame<span class="punctuation">(</span>Predictions<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">Results <span class="operator">&lt;-</span> Results <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>Result<span class="operator">=</span>ifelse<span class="punctuation">(</span>Predictions <span class="operator">==</span> <span class="string">&quot;Y&quot;</span><span class="punctuation">,</span> ifelse<span class="punctuation">(</span>IS_LAPSED<span class="operator">==</span><span class="string">&quot;Y&quot;</span><span class="punctuation">,</span><span class="string">&quot;TP&quot;</span><span class="punctuation">,</span><span class="string">&quot;FP&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span> ifelse<span class="punctuation">(</span>IS_LAPSED<span class="operator">==</span><span class="string">&quot;N&quot;</span><span class="punctuation">,</span> <span class="string">&quot;TN&quot;</span><span class="punctuation">,</span><span class="string">&quot;FN&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># 将保费增长大于0且预测为不续保的保单保费增长调整为0</span></span><br><span class="line">df.TestnoRaise <span class="operator">&lt;-</span> Results <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>GWP_Raise <span class="operator">=</span> ifelse<span class="punctuation">(</span>GWP_Raise<span class="operator">&gt;</span><span class="number">0</span><span class="operator">&amp;</span>Predictions<span class="operator">==</span><span class="string">&quot;Y&quot;</span><span class="punctuation">,</span> <span class="number">0</span><span class="punctuation">,</span> GWP_Raise<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line"><span class="comment"># 对调整后的数据集的预测结果记录下来并对比两个结果的变化</span></span><br><span class="line">TestPredictions <span class="operator">&lt;-</span> predict<span class="punctuation">(</span>model<span class="punctuation">,</span> newdata <span class="operator">=</span> df.TestnoRaise<span class="punctuation">)</span></span><br><span class="line">df.TestnoRaise <span class="operator">&lt;-</span> cbind<span class="punctuation">(</span>df.TestnoRaise<span class="punctuation">,</span> as.data.frame<span class="punctuation">(</span>TestPredictions<span class="punctuation">)</span><span class="punctuation">)</span></span><br><span class="line">df.TestnoRaise <span class="operator">&lt;-</span> df.TestnoRaise <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>GWPnoRaiseResult <span class="operator">=</span> ifelse<span class="punctuation">(</span>Predictions <span class="operator">==</span> <span class="string">&quot;Y&quot;</span><span class="punctuation">,</span> ifelse<span class="punctuation">(</span>TestPredictions <span class="operator">==</span> <span class="string">&quot;Y&quot;</span><span class="punctuation">,</span> <span class="string">&quot;Not Changed&quot;</span><span class="punctuation">,</span><span class="string">&quot;Changed&quot;</span><span class="punctuation">)</span><span class="punctuation">,</span>ifelse<span class="punctuation">(</span>TestPredictions<span class="operator">==</span><span class="string">&quot;Y&quot;</span><span class="punctuation">,</span><span class="string">&quot;Changed&quot;</span><span class="punctuation">,</span><span class="string">&quot;Not Changed&quot;</span><span class="punctuation">)</span><span class="punctuation">)</span><span class="punctuation">)</span> <span class="operator">%&gt;%</span> </span><br><span class="line">  mutate<span class="punctuation">(</span>GWPChanges <span class="operator">=</span> RENEWAL_GWP<span class="operator">-</span>PRORIG<span class="punctuation">)</span></span><br><span class="line">table<span class="punctuation">(</span>df.TestnoRaise<span class="operator">$</span>Result<span class="punctuation">,</span> df.TestnoRaise<span class="operator">$</span>GWPnoRaiseResult<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<h2 id="使用聚类分析对预测结果优化的尝试">使用聚类分析对预测结果优化的尝试</h2>
+<p>有一个我在优化模型时失败的尝试我觉得也值得记录一下，当时的想法就是想看一看能不能用<code>聚类分析(Clustering analysis)</code>的方法找到一些FP与TP保单中可能被随机森林模型忽略的信息，因此我尝试在预测模型预测阳性的保单上使用<code>K-means Clustering</code>并看一看是否有明显FP数量大于TP的聚类。结果举例如下：</p>
+<table>
+<thead>
+<tr>
+<th>Clusters</th>
+<th>1</th>
+<th>2</th>
+<th>3</th>
+<th>4</th>
+<th>5</th>
+<th>6</th>
+<th>7</th>
+<th>8</th>
+<th>9</th>
+<th>10</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FP</td>
+<td>18</td>
+<td>2</td>
+<td>20</td>
+<td>147</td>
+<td>34</td>
+<td>186</td>
+<td>12</td>
+<td>27</td>
+<td>49</td>
+<td>245</td>
+</tr>
+<tr>
+<td>TP</td>
+<td>7</td>
+<td>1</td>
+<td>6</td>
+<td>63</td>
+<td>20</td>
+<td>94</td>
+<td>9</td>
+<td>24</td>
+<td>30</td>
+<td>90</td>
+</tr>
+</tbody>
+</table>
+<p>可以看出来没有聚类能明显区分这些FP和TP的保单，因此可能确实说明我们的数据集中的信息已经不足以更细地区分这些保单了。</p>
+<h1>最后</h1>
+<p>这个模型只是最初版对于项目可行性的尝试，很多对数据集的处理 (特征选择，使用numerical或categorical变量等)或模型选择(使用随机森林、神经网络或支持向量机分类等)都没有太过深入以追求最好的效果，同时保费增加的调整也可以根据实际情况更细分层(例如分为增长5%、增长10%等)而减少额外的成本，但到这里其实我们已经从一定程度上获得了可行的结果。之后在模型实际投产前我可能会需要在这个基础上使用<code>Weka</code>更深地探究模型的最优化。</p>
+<p>[第17篇]</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.2.7/raphael.min.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/flowchart/1.6.5/flowchart.min.js"></script><textarea id="flowchart-0-code" style="display: none">st=>start: 开始
+i=>inputoutput: 将一张保单资料输入预测模型
+cond1=>condition: 预测结果是否为不续保？
+cond2=>condition: 该保单是否有保费增长？
+cond3=>condition: 预测结果是否变为续保？
+op1=>operation: 下一张保单
+op2=>operation: 将保单保费增长改为0
+o2=>inputoutput: 将保单再次输入预测模型
+o3=>inputoutput: 标记该保单因受保费增长影响可能不续保
+e=>end: 结束
+st->i->cond1
+cond1(no)->op1->i
+cond1(yes)->cond2
+cond2(no)->op1->i
+cond2(yes)->op2->o2->cond3
+cond3(yes)->o3->e
+cond3(no)->op1->i</textarea><textarea id="flowchart-0-options" style="display: none">"scale:2"</textarea><script>  var code = document.getElementById("flowchart-0-code").value;  var options = JSON.parse(decodeURIComponent(document.getElementById("flowchart-0-options").value));  var diagram = flowchart.parse(code);  diagram.drawSVG("flowchart-0", options);</script></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">RayHLei</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://raylei.space/2022/06/09/17-Price_Optimization_with_Random_Forest/">http://raylei.space/2022/06/09/17-Price_Optimization_with_Random_Forest/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B7%A5%E4%BD%9C%E5%AD%A6%E4%B9%A0/">工作学习</a><a class="post-meta__tags" href="/tags/R/">R</a><a class="post-meta__tags" href="/tags/%E6%95%B0%E6%8D%AE%E6%8C%96%E6%8E%98/">数据挖掘</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/17-Price_Optimization_with_Random_Forest.jpg" data-sites="facebook,twitter,wechat,weibo,qq,douban"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2022/06/02/16-CFA-level1-Corporate-Issuers/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/16-CFA-level1-Corporate-Issuers.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">[金融分析] CFA一级《公司金融》学习笔记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/04/09/14-R-EDA-basics/" title="[数据分析] 使用R做EDA分析的基础知识"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/14-R-EDA-basics.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-09</div><div class="title">[数据分析] 使用R做EDA分析的基础知识</div></div></a></div><div><a href="/2022/03/27/11-MSAccess-documentation-tool/" title="[MS Office]使用 MS Access 开发文档管理查询工具"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/11-MSAccess-documentation-tool.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-27</div><div class="title">[MS Office]使用 MS Access 开发文档管理查询工具</div></div></a></div><div><a href="/2022/03/09/10-introduction-to-different-db/" title="[数据分析]常用数据库类型对比介绍"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/10-introduction-to-different-db.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-09</div><div class="title">[数据分析]常用数据库类型对比介绍</div></div></a></div><div><a href="/2022/05/15/15-A_quotation_printing_tool/" title="[MS Office]Access报价出单排版打印工具开发记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/15-A_quotation_printing_tool.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-15</div><div class="title">[MS Office]Access报价出单排版打印工具开发记录</div></div></a></div><div><a href="/2022/02/19/3-excel-tool-develop-1/" title="[MS Office] 设计Excel报告模板动态展示前n项产品"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/3-excel-tool-develop-1.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-19</div><div class="title">[MS Office] 设计Excel报告模板动态展示前n项产品</div></div></a></div><div><a href="/2022/02/21/4-Selenium_documentation_learning/" title="[编程算法] 公司项目需要的自动化测试Selenium文档解读"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/4-Selenium_documentation_learning.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-21</div><div class="title">[编程算法] 公司项目需要的自动化测试Selenium文档解读</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Livere</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81NTQ0NC8zMTkxMQ=="></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.</span> <span class="toc-text">预测模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%94%B6%E9%9B%86"><span class="toc-number">2.1.1.</span> <span class="toc-text">数据收集</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97-2"><span class="toc-number">2.1.2.</span> <span class="toc-text">数据清洗</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E4%B8%8D%E5%B9%B3%E8%A1%A1%E6%95%B0%E6%8D%AE"><span class="toc-number">2.1.3.</span> <span class="toc-text">处理不平衡数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9A%8F%E6%9C%BA%E6%A3%AE%E6%9E%97%E5%8F%82%E6%95%B0%E8%B0%83%E6%95%B4"><span class="toc-number">2.1.4.</span> <span class="toc-text">随机森林参数调整</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E6%B5%8B%E6%A8%A1%E5%9E%8B%E8%A1%A8%E7%8E%B0%E8%AF%84%E4%BC%B0"><span class="toc-number">2.1.5.</span> <span class="toc-text">预测模型表现评估</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8C%87%E5%AF%BC%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.2.</span> <span class="toc-text">指导模型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%98%E9%87%8F%E9%87%8D%E8%A6%81%E6%80%A7"><span class="toc-number">2.2.1.</span> <span class="toc-text">变量重要性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A8%A1%E5%9E%8B%E6%9E%B6%E6%9E%84"><span class="toc-number">2.2.2.</span> <span class="toc-text">模型架构</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8C%87%E5%AF%BC%E6%A8%A1%E5%9E%8B%E8%AF%84%E4%BC%B0"><span class="toc-number">2.2.3.</span> <span class="toc-text">指导模型评估</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E8%81%9A%E7%B1%BB%E5%88%86%E6%9E%90%E5%AF%B9%E9%A2%84%E6%B5%8B%E7%BB%93%E6%9E%9C%E4%BC%98%E5%8C%96%E7%9A%84%E5%B0%9D%E8%AF%95"><span class="toc-number">2.3.</span> <span class="toc-text">使用聚类分析对预测结果优化的尝试</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">最后</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/data.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 By RayHLei</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hey! What have you learned today!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">简</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !true) {
+  if (true) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://raylei.space/2022/06/09/17-Price_Optimization_with_Random_Forest/'
+    this.page.identifier = '2022/06/09/17-Price_Optimization_with_Random_Forest/'
+    this.page.title = '[数据分析]基于数据挖掘分类算法的续保价格优化模型记录'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://rayhlei.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Livere' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="canvas_nest" defer="defer" color="133,133,133" opacity="0.7" zIndex="-1" count="200" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":60,"vOffset":-40},"mobile":{"show":true,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
