@@ -11,6 +11,15 @@
   </url>
   
   <url>
+    <loc>http://raylei.space/2022/02/21/4-Selenium_documentation_learning/</loc>
+    
+    <lastmod>2022-06-19</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://raylei.space/2022/06/18/18-CFA-level1-Economics/</loc>
     
     <lastmod>2022-06-18</lastmod>
@@ -155,15 +164,6 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/2022/02/21/4-Selenium_documentation_learning/</loc>
-    
-    <lastmod>2022-03-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://raylei.space/2022/02/25/6-MSAccess_database_split/</loc>
     
     <lastmod>2022-03-01</lastmod>
@@ -281,14 +281,14 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/tags/R/</loc>
+    <loc>http://raylei.space/tags/%E8%B4%A2%E5%8A%A1%E6%8A%A5%E8%A1%A8%E5%88%86%E6%9E%90/</loc>
     <lastmod>2022-06-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
   </url>
   
   <url>
-    <loc>http://raylei.space/tags/%E8%B4%A2%E5%8A%A1%E6%8A%A5%E8%A1%A8%E5%88%86%E6%9E%90/</loc>
+    <loc>http://raylei.space/tags/R/</loc>
     <lastmod>2022-06-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -316,27 +316,6 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/tags/Python/</loc>
-    <lastmod>2022-06-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/tags/BeautifulSoup/</loc>
-    <lastmod>2022-06-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/tags/%E7%BD%91%E9%A1%B5%E7%88%AC%E8%99%AB/</loc>
-    <lastmod>2022-06-19</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
     <loc>http://raylei.space/tags/Typora/</loc>
     <lastmod>2022-06-19</lastmod>
     <changefreq>weekly</changefreq>
@@ -352,6 +331,27 @@
   
   <url>
     <loc>http://raylei.space/tags/Excel/</loc>
+    <lastmod>2022-06-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/Python/</loc>
+    <lastmod>2022-06-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/BeautifulSoup/</loc>
+    <lastmod>2022-06-19</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/%E7%BD%91%E9%A1%B5%E7%88%AC%E8%99%AB/</loc>
     <lastmod>2022-06-19</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
