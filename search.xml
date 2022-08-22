@@ -1,177 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>[数据分析]常用数据库类型对比介绍</title>
-    <url>/2022/03/09/10-introduction-to-different-db/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>由于我本科并不是学的计算机，所以其实很多计算机基础的知识我都不太了解。最近在做一些数据库相关的工作的时候发现公司数据库系统使用的<code>IBM DB2</code>在操作和逻辑上似乎和之前用过的<code>Oracle</code>有一些差异，因此也发现我原来连这些不同数据库之间到底有些什么联系或者差异都不知道。所以今天想要系统地了解一下不同的数据库之间的关系和差异。</p>
-<h1>正文</h1>
-<p>接下来我会先从数据库的<code>基本特性</code>的概念开始介绍，因为正是因为这些特性很多不可以兼得，所以才衍生出各种各样不同的数据库类型。之后再看一看各个有名的数据库各自有什么特点，最后再讲讲公司用的<code>DB2数据库</code>在实际操作中与<code>Oracle</code>到底有什么细节上的区别和联系。</p>
-<h2 id="影响数据库选择的因素">影响数据库选择的因素</h2>
-<p>知乎的<a href="https://www.zhihu.com/question/414923789" title="[知乎] 数据库种类有哪些，各有什么特点？">民工哥</a>在他的回答中列出了几项影响数据库选择的因素，因为这些因素可能不能同时达成，或者达成有额外成本，因此不同的数据库可能为满足不同的生产需求对这些因素的实现程度和效率都有区别。他的总结是下面这些点：</p>
-<ul>
-<li><code>数据量：</code>是否海量数据，单表数据量太大会考验数据库的性能</li>
-<li><code>数据结构：</code>结构化 (每条记录的结构都一样) 还是非结构化的 (不同记录的结构可以不一样)</li>
-<li><code>是否宽表：</code>一条记录是 10 个域，还是成百上千个域</li>
-<li><code>数据属性：</code>是基本数据 (比如用户信息)、业务数据 (比如用户行为)、辅助数据 (比如日志)、缓存数据</li>
-<li><code>是否要求事务性：</code>一个事务由多个操作组成，必须全部成功或全部回滚，不允许部分成功</li>
-<li><code>实时性：</code>对写延迟，或读延迟有没有要求，比如有的业务允许写延迟高但要求读延迟低</li>
-<li><code>查询量：</code>比如有的业务要求查询大量记录的少数列，有的要求查询少数记录的所有列</li>
-<li><code>排序要求：</code>比如有的业务是针对时间序列操作的</li>
-<li><code>可靠性要求：</code>对数据丢失的容忍度</li>
-<li><code>一致性要求：</code>是否要求读到的一定是最新写入的数据</li>
-<li><code>对增删查改的要求：</code>有的业务要能快速的对单条数据做增删查改 (比如用户信息)，有的要求批量导入，有的不需要修改删除单条记录 (比如日志、用户行为)，有的要求检索少量数据 (比如日志)，有的要求快速读取大量数据 (比如展示报表)，有的要求大量读取并计算数据 (比如分析用户行为)</li>
-<li><code>是否需要支持多表操作</code></li>
-</ul>
-<h2 id="关系型数据库和非关系型数据库-参考资料">关系型数据库和非关系型数据库(<a href="https://www.altexsoft.com/blog/business/comparing-database-management-systems-mysql-postgresql-mssql-server-mongodb-elasticsearch-and-others/" title="Comparing Database Management Systems: MySQL, PostgreSQL, MSSQL Server, MongoDB, Elasticsearch, and others">参考资料</a>)</h2>
-<p><code>关系型数据库(Relational or SQL)</code>和<code>非关系型数据库(Non-relational or NoSQL)</code>是目前数据库系统的两个大类，虽然目前工作中有机会接触到的主要都是关系型数据库，但作为新兴的大数据工具以及与关系型数据库功能互补的非关系型数据库，<code>NoSQL</code>现在在数据库业界的势头也非常之猛，因此这里也简单了解一下。</p>
-<h3 id="关系型数据库-Relational-DBMS">关系型数据库(Relational DBMS)</h3>
-<p><code>关系型数据库</code>的特点顾名思义就是用<code>相互联系的表(tables)</code>来存储数据，<code>结构化查询语言(Structured Query Language, 也即SQL)</code>是这套数据库系统的核心，人们用这套语言来管理关系型数据库，也因此这类数据库就被称为<code>SQL database</code>。关系型数据库需要提前定义<code>模式(Schema)</code>，也就是说数据库中存储的数据的<code>属性(attributes)</code>及其数据格式需要被严格定义，而每条<code>数据(records)</code>都在相应属性上有一个值，也就是说不同数据之间的关系非常明确。</p>
-<h4 id="可扩展性-Scalability">可扩展性(Scalability)</h4>
-<p>关系型数据库一般只能<code>纵向扩展</code>，也就是说在同一个服务器中增加更多算力和空间(CPU,GPU,RAM等)，而如果要将关系型数据库分布在多个服务器上的话则需要改变数据结构等复杂操作。</p>
-<h4 id="性能-Performance">性能(Performance)</h4>
-<p>关系型数据库在处理<code>中小型数据规模</code>时性能较好，如果在数据库中加入<code>索引(index)</code>还能更加增强数据库<code>查询(QUERY)</code>和<code>连接(JOIN)</code>的效率。但如果数据量和用户访问量更大时，这类数据库性能就可能不足。</p>
-<h4 id="安全性-Security">安全性(Security)</h4>
-<p>由于数据高度结构化，关系型数据库的安全性保障不需要太麻烦。由于关系型数据库拥有<code>ACID</code>四大特性，分别是<code>原子性(Atomicity)</code>，<code>一致性(Consistency)</code>，<code>隔离性(Isolation)</code>和<code>持久性(Durability)</code>。这几个特性使得储存在关系型数据库中的数据有较高的<code>完整性(Integrity)</code>，这类数据库非常适合应用在金融电商等对数据完整性要求较高的应用场景。</p>
-<h3 id="非关系型数据库-NoSQL">非关系型数据库(NoSQL)</h3>
-<p><code>非关系型数据库</code>是各种非表结构数据库的共称，这类数据库有一些代表性的模型：</p>
-<ul>
-<li><code>文档类(Document-oriented)：</code>用JSON格式的文档存储，提取，管理数据。<code>代表有MongoDB</code>。</li>
-<li><code>键值类(Key-value)：</code>这类数据库通常有一个哈希表，表中有一个特定的键和一个指针指向特定的数据，也就是说每一个值都与一个数据一一对应。代表有<code>Redis</code>。</li>
-<li><code>图形类(Graph)：</code>使用图结构存储数据，将数据以边缘节点的形式存储，其中节点(node)代表的是数据，而边缘(edge)则代表数据之间的关系，这类数据库主要用来构建数据间的关系图谱。代表有<code>Neo4J</code>。</li>
-<li><code>列存储类(Wide-column)：</code>将数据存储在非常多的列中，每一条数据都由键指向可能不同的列中，也即每条数据都可能拥有不同的属性。代表有<code>Cassandra</code>。</li>
-</ul>
-<h4 id="可扩展性-Scalability-2">可扩展性(Scalability)</h4>
-<p><code>非关系型数据库</code>在数据量和访问量增加时，可以通过<code>横向扩容</code>(即增加更多服务器)来扩展容量。这些服务器共享数据，每个服务器仅储存一部分数据，这样每个服务器需要处理的平均访问次数也会减少。由于他们没有结构性的表，因此扩展不需要额外的操作。</p>
-<h4 id="性能-Performance-2">性能(Performance)</h4>
-<p>由于<code>非关系型数据库</code>的分布式特性，其性能普遍较高。这类数据库可以无限制地储存各种类型和格式的数据，改变已有的数据格式也会比较方便。</p>
-<h4 id="安全性-Security-2">安全性(Security)</h4>
-<p>安全性是<code>非关系型数据库</code>的一个主要弱点，更高的自由度就是以数据的完整性为代价。</p>
-<h2 id="主要关系型数据库对比">主要关系型数据库对比</h2>
-<p>由于非关系型数据库目前不在我的业务范围内，我就侧重对比研究一下关系型数据库的几个代表：<code>Oracle</code>, <code>MySQL</code>, <code>MS SQL Server</code>, <code>PostgreSQL</code>和<code>IBM DB2</code>。<a href="https://db-engines.com/en/ranking_trend" title="DB-Engines Ranking - Trend Popularity">DB-Engines网站</a>对各大数据库的流行趋势针对其在公共网络(如搜索引擎，开放职位描述，技术论坛等)上的出现频次进行打分排名：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220314010452079.png" alt="Oracle,MySQL,MS SQL Server, PostgreSQL,IBM DB2近年流行趋势对比"></p>
-<p>可以看到尽管有下降趋势，<code>Oracle</code>, <code>MySQL</code>和<code>MS SQL Server</code>依然有绝对的热度，而相对的<code>PostgreSQL</code>近年趋势猛升，而<code>IBM DB2</code>作为关系型数据库的开拓者，其在近年的主要客户群体仅集中在金融行业(以银行，证券，保险，基金公司等，行业代表有花旗，渣打，汇丰，摩根斯坦利以及我司等，哈哈)，因此在大众的讨论热度比其他数据库要低。</p>
-<h3 id="Oracle">Oracle</h3>
-<p>大名鼎鼎的甲骨文公司，说他们开发的数据库管理系统是业界最著名应该也不会有太多人有异议。其目前支持将各种关系型及非关系型数据库在同一个数据库中管理。基本支持所有主流操作平台，性能好，功能强，稳定性好，安全性强但价格昂贵(免费版功能有限)。目前甲骨文开发的主要关注点在云计算方面。</p>
-<p>其主要优点包括<code>创新力强，技术支持及文档资源完备，具备存储处理海量数据的能力</code>。主要缺点就是<code>贵(标准版单价17,500美元，企业版单价47,000美元)，且匹配其高性能其也需要较高的硬件和人员支持才能稳定运行</code>。</p>
-<p>如果你有数以亿计的OLTP或数据仓库数据需要储存和处理且预算充足的话，Oracle是一个可以考虑的选择。</p>
-<h3 id="MySQL">MySQL</h3>
-<p>MySQL如今也是甲骨文公司的明星产品，是现在最知名的关系型数据库之一，与Oracle不同，MySQL是开源的。MySQL由C和C++编写而成，是网页开发组合LAMP的一大组成部分，其名字<code>LAMP</code>分别指<code>Linux(操作系统)</code>, <code>Apache(网页服务器)</code>, <code>MySQL(数据库)</code>和<code>PHP(脚本语言)</code>。可以在大部分主流平台运行。</p>
-<p>其主要优点包括<code>免费安装，使用简单，结构不复杂，易于调试且支持云服务</code>。主要缺点在于<code>其底层代码逻辑不适于大型数据库，非完全开源导致一些特定功能不能被免费实现，另外有一些SQL标准操作不被MySQL支持</code>。</p>
-<p>如果你只是想做一些小型的网页数据库，或者是数据量不大，复杂度不高的数据管理系统。</p>
-<h3 id="MS-SQL-Server">MS SQL Server</h3>
-<p>MS SQL Server是微软早期为与IBM在数据库领域竞争而开发的关系型数据库产品，它的主要特点继承了微软的发家秘诀，即可视化，易操作但只能在Windows环境中运行。操作MS SQL Server数据的语言是在SQL标准上发展的<code>Transact-SQL</code>语言。</p>
-<p>其主要优点包括<code>针对不同应用场景的涵盖不同功能的各种版本，提供各种商业所需的数据相关附加服务，丰富的文档和社区支持以及云服务</code>等。主要缺点包括<code>贵，支持平台单一，调试复杂</code>。</p>
-<p>如果你的的公司订阅了微软的其他产品服务，选择MS SQL Server可能是个不错的选择，微软对其不同产品之间的互动集成做得还是不错的，有助于增强用户体验。</p>
-<h3 id="PostgreSQL">PostgreSQL</h3>
-<p>PostgreSQL是开源的对象-关系数据库(object-relational database),其相较其他普通关系数据库的差别在于用户可以在PostgreSQL中编程实现自定义对象以实现存储更复杂的数据结构。PostgreSQL与MySQL有许多共同点并在此之上加强了扩展性与合规性，也因此它可以适用于各种不同的数据规模。可以在微软, iOS, 安卓等平台上运行。</p>
-<p>其主要优点包括<code>可扩展性高，支持JSON, XML, H-Store等用户自定义的数据格式，拥有易于使用的第三方增强工具，完全开源</code>等。主要缺点在于<code>其文档没有统一标准，且数据库缺少完整性检查工具</code>。</p>
-<p>如果你希望自己的数据库存储格式可以定制化并实现一定的数据分析功能，PostgreSQL可以是较好的选择。其在金融电信行业使用较多。</p>
-<h3 id="IBM-DB2">IBM DB2</h3>
-<p>尽管现在的热度不高，但DB2被认为是关系型数据库的开山鼻祖。其由C和C++编写，可以在UNIX，Linux，Windows服务器版本等多种环境下执行。</p>
-<p>DB2的主要优点在于他<code>经过多年大量的实用测试没有出过大的问题，是一个非常值得信赖稳定的的数据库系统，其适用大规模数据且性能也较高</code>。主要缺点可能包括<code>文档和用户界面陈旧对新手不友好，操作较为复杂</code>。</p>
-<p>目前DB2的主要用户都是金融公司，这些公司创建数据库比较早，但对技术变革不敏感，且依赖数据库的安全性和稳定性，因此留存为DB2用户。</p>
-<h2 id="DB2与Oracle-SQL语法差别（参考资料）">DB2与Oracle SQL语法差别（<a href="https://www.cnblogs.com/wuxl360/p/5563019.html" title="DB2、ORACLE SQL写法的主要区别">参考资料</a>）</h2>
-<p>由于我自己学的是Oracle的语法，但现在工作需要使用DB2的语法，因此找了一下网上大神们整理的这两者的区别汇总，发现<code>邬兴亮大神</code>的总结就是我想找的：</p>
-<h3 id="数据类型转换函数">数据类型转换函数</h3>
-<table>
-<thead>
-<tr>
-<th></th>
-<th>整形转字符</th>
-<th>字符转整形</th>
-<th>字符转浮点</th>
-<th>浮点转字符</th>
-<th>字符转日期</th>
-<th>字符转时间</th>
-<th>日期转字符</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Oracle</td>
-<td>to_char(1)</td>
-<td>to_number(‘1’)</td>
-<td>to_number(‘1.1’)</td>
-<td>to_char(1.1)</td>
-<td>to_date(‘2007-04-26’,‘yyyy-mm-dd’)</td>
-<td>to_date(‘2007-04-26 08:08:08’,‘yyyy-mm-dd hh25:mi:ss’)</td>
-<td>to_char(to_date(‘2007-04-29’,‘yyyy-mm-dd’),‘yyyy-mm-dd’)</td>
-</tr>
-<tr>
-<td>DB2</td>
-<td>char(1)</td>
-<td>int(‘1’)</td>
-<td>double(‘1.1’)</td>
-<td>char(1.1)</td>
-<td>date(‘2007-04-26’)</td>
-<td>to_date(‘2007-04-26 08:08:08’,‘yyyy-mm-dd hh25:mi:ss’)</td>
-<td>char(date(‘2007-04-29’))</td>
-</tr>
-<tr>
-<td>兼容写法</td>
-<td>cast(1 as char)</td>
-<td>cast(‘1’ as int)</td>
-<td>无</td>
-<td>无</td>
-<td>无</td>
-<td>相同</td>
-<td>无</td>
-</tr>
-</tbody>
-</table>
-<h3 id="Where条件弱类型判断">Where条件弱类型判断</h3>
-<p>在<code>Oracle</code>中使用<code>&quot;Where 字符型字段 in (整型)&quot;</code>是允许的，<code>DB2</code>则会报错：</p>
-<blockquote>
-<p>SELECT ‘abc’ FROM XXX WHERE ‘1’ in (1) 在Oracle下可通过，在DB2中会报错。</p>
-</blockquote>
-<p>在<code>Oracle中</code>使用<code>&quot;Where 字符型字段=整型&quot;</code>是允许的，<code>DB2</code>则会报错：</p>
-<blockquote>
-<p>SELECT ‘abc’ FROM XXX WHERE ‘1’=1 在Oracle下可通过，在DB2中会报错。</p>
-</blockquote>
-<h3 id="DATE数据类型">DATE数据类型</h3>
-<p><code>Oracle</code>中<code>DATE型</code>带有<code>时分秒</code>，但<code>DB2</code>下<code>DATE型</code>只带有<code>年月日</code>且可以作为字符串直接操作，<code>DB2</code>中要记录<code>时分秒</code>必须使用<code>时间戳型(TIMESTAMP)</code>, DB2的日期和时间戳都可以被直接用字符串指定。</p>
-<h3 id="Decode函数">Decode函数</h3>
-<p><code>Oracle</code>中使用<code>decode()</code>函数来做判断语句：</p>
-<blockquote>
-<p>decode(sex,0,‘男’,1.‘女’) 即为将sex域中的0换为男，1换为女。</p>
-</blockquote>
-<p>在<code>DB2</code>中要实现这个功能需要用<code>CASE WHEN</code>写法：</p>
-<blockquote>
-<p>CASE sex WHEN  0 THEN ‘男’ WHEN 1 THEN ‘女’ ELSE ‘其他’ END</p>
-</blockquote>
-<h3 id="NVL函数">NVL函数</h3>
-<p>在<code>Oracle</code>中<code>NVL</code>函数主要用来处理空值，即将域中空值替换为指定值：</p>
-<blockquote>
-<p>SELECT NVL(F_AREAID,‘空’) FROM MASA_USER</p>
-</blockquote>
-<p>在<code>DB2</code>中需要使用兼容性写法<code>COALESCE</code></p>
-<blockquote>
-<p>SELECT COALESCE(F_AREAID,‘空’,F_AREAID) FROM MASA_USER</p>
-</blockquote>
-<h3 id="获取系统当前日期">获取系统当前日期</h3>
-<p>在<code>Oracle</code>中使用<code>SYSDATE</code>,而在<code>DB2</code>中使用<code>CURRENT DATE</code></p>
-<h3 id="获取特定数量的数据">获取特定数量的数据</h3>
-<p>在<code>Oracle</code>中使用<code>ROWNUM</code>:</p>
-<blockquote>
-<p>SELECT * FROM TABLE WHERE ROWNUM &lt;= 10</p>
-</blockquote>
-<p>在<code>DB2</code>中使用<code>FETCH</code>：</p>
-<blockquote>
-<p>SELECT * FROM TABLE FETCH FIRST 10 ROWS ONLY</p>
-</blockquote>
-<h1>最后</h1>
-<p>这一篇写了很久，主要是确实对数据库的理解不深，需要看的资料比较多，最后主要学到的对我来说有用的东西可能还是<code>操作层面</code>的<code>SQL语法</code>，如果以后的工作中还发现新的区别再来这里补充。</p>
-]]></content>
-      <categories>
-        <category>数据分析</category>
-      </categories>
-      <tags>
-        <tag>Database</tag>
-        <tag>工作学习</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[博客维护]基于Hexo框架搭建个人网站的实现记录</title>
     <url>/2022/02/10/1-blog_setup_notes/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -327,9 +156,9 @@
         <category>MS Office</category>
       </categories>
       <tags>
-        <tag>工作学习</tag>
         <tag>Access</tag>
         <tag>VBA</tag>
+        <tag>工作学习</tag>
       </tags>
   </entry>
   <entry>
@@ -532,6 +361,177 @@
       <tags>
         <tag>日常学习</tag>
         <tag>CFA一级</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[数据分析]常用数据库类型对比介绍</title>
+    <url>/2022/03/09/10-introduction-to-different-db/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>由于我本科并不是学的计算机，所以其实很多计算机基础的知识我都不太了解。最近在做一些数据库相关的工作的时候发现公司数据库系统使用的<code>IBM DB2</code>在操作和逻辑上似乎和之前用过的<code>Oracle</code>有一些差异，因此也发现我原来连这些不同数据库之间到底有些什么联系或者差异都不知道。所以今天想要系统地了解一下不同的数据库之间的关系和差异。</p>
+<h1>正文</h1>
+<p>接下来我会先从数据库的<code>基本特性</code>的概念开始介绍，因为正是因为这些特性很多不可以兼得，所以才衍生出各种各样不同的数据库类型。之后再看一看各个有名的数据库各自有什么特点，最后再讲讲公司用的<code>DB2数据库</code>在实际操作中与<code>Oracle</code>到底有什么细节上的区别和联系。</p>
+<h2 id="影响数据库选择的因素">影响数据库选择的因素</h2>
+<p>知乎的<a href="https://www.zhihu.com/question/414923789" title="[知乎] 数据库种类有哪些，各有什么特点？">民工哥</a>在他的回答中列出了几项影响数据库选择的因素，因为这些因素可能不能同时达成，或者达成有额外成本，因此不同的数据库可能为满足不同的生产需求对这些因素的实现程度和效率都有区别。他的总结是下面这些点：</p>
+<ul>
+<li><code>数据量：</code>是否海量数据，单表数据量太大会考验数据库的性能</li>
+<li><code>数据结构：</code>结构化 (每条记录的结构都一样) 还是非结构化的 (不同记录的结构可以不一样)</li>
+<li><code>是否宽表：</code>一条记录是 10 个域，还是成百上千个域</li>
+<li><code>数据属性：</code>是基本数据 (比如用户信息)、业务数据 (比如用户行为)、辅助数据 (比如日志)、缓存数据</li>
+<li><code>是否要求事务性：</code>一个事务由多个操作组成，必须全部成功或全部回滚，不允许部分成功</li>
+<li><code>实时性：</code>对写延迟，或读延迟有没有要求，比如有的业务允许写延迟高但要求读延迟低</li>
+<li><code>查询量：</code>比如有的业务要求查询大量记录的少数列，有的要求查询少数记录的所有列</li>
+<li><code>排序要求：</code>比如有的业务是针对时间序列操作的</li>
+<li><code>可靠性要求：</code>对数据丢失的容忍度</li>
+<li><code>一致性要求：</code>是否要求读到的一定是最新写入的数据</li>
+<li><code>对增删查改的要求：</code>有的业务要能快速的对单条数据做增删查改 (比如用户信息)，有的要求批量导入，有的不需要修改删除单条记录 (比如日志、用户行为)，有的要求检索少量数据 (比如日志)，有的要求快速读取大量数据 (比如展示报表)，有的要求大量读取并计算数据 (比如分析用户行为)</li>
+<li><code>是否需要支持多表操作</code></li>
+</ul>
+<h2 id="关系型数据库和非关系型数据库-参考资料">关系型数据库和非关系型数据库(<a href="https://www.altexsoft.com/blog/business/comparing-database-management-systems-mysql-postgresql-mssql-server-mongodb-elasticsearch-and-others/" title="Comparing Database Management Systems: MySQL, PostgreSQL, MSSQL Server, MongoDB, Elasticsearch, and others">参考资料</a>)</h2>
+<p><code>关系型数据库(Relational or SQL)</code>和<code>非关系型数据库(Non-relational or NoSQL)</code>是目前数据库系统的两个大类，虽然目前工作中有机会接触到的主要都是关系型数据库，但作为新兴的大数据工具以及与关系型数据库功能互补的非关系型数据库，<code>NoSQL</code>现在在数据库业界的势头也非常之猛，因此这里也简单了解一下。</p>
+<h3 id="关系型数据库-Relational-DBMS">关系型数据库(Relational DBMS)</h3>
+<p><code>关系型数据库</code>的特点顾名思义就是用<code>相互联系的表(tables)</code>来存储数据，<code>结构化查询语言(Structured Query Language, 也即SQL)</code>是这套数据库系统的核心，人们用这套语言来管理关系型数据库，也因此这类数据库就被称为<code>SQL database</code>。关系型数据库需要提前定义<code>模式(Schema)</code>，也就是说数据库中存储的数据的<code>属性(attributes)</code>及其数据格式需要被严格定义，而每条<code>数据(records)</code>都在相应属性上有一个值，也就是说不同数据之间的关系非常明确。</p>
+<h4 id="可扩展性-Scalability">可扩展性(Scalability)</h4>
+<p>关系型数据库一般只能<code>纵向扩展</code>，也就是说在同一个服务器中增加更多算力和空间(CPU,GPU,RAM等)，而如果要将关系型数据库分布在多个服务器上的话则需要改变数据结构等复杂操作。</p>
+<h4 id="性能-Performance">性能(Performance)</h4>
+<p>关系型数据库在处理<code>中小型数据规模</code>时性能较好，如果在数据库中加入<code>索引(index)</code>还能更加增强数据库<code>查询(QUERY)</code>和<code>连接(JOIN)</code>的效率。但如果数据量和用户访问量更大时，这类数据库性能就可能不足。</p>
+<h4 id="安全性-Security">安全性(Security)</h4>
+<p>由于数据高度结构化，关系型数据库的安全性保障不需要太麻烦。由于关系型数据库拥有<code>ACID</code>四大特性，分别是<code>原子性(Atomicity)</code>，<code>一致性(Consistency)</code>，<code>隔离性(Isolation)</code>和<code>持久性(Durability)</code>。这几个特性使得储存在关系型数据库中的数据有较高的<code>完整性(Integrity)</code>，这类数据库非常适合应用在金融电商等对数据完整性要求较高的应用场景。</p>
+<h3 id="非关系型数据库-NoSQL">非关系型数据库(NoSQL)</h3>
+<p><code>非关系型数据库</code>是各种非表结构数据库的共称，这类数据库有一些代表性的模型：</p>
+<ul>
+<li><code>文档类(Document-oriented)：</code>用JSON格式的文档存储，提取，管理数据。<code>代表有MongoDB</code>。</li>
+<li><code>键值类(Key-value)：</code>这类数据库通常有一个哈希表，表中有一个特定的键和一个指针指向特定的数据，也就是说每一个值都与一个数据一一对应。代表有<code>Redis</code>。</li>
+<li><code>图形类(Graph)：</code>使用图结构存储数据，将数据以边缘节点的形式存储，其中节点(node)代表的是数据，而边缘(edge)则代表数据之间的关系，这类数据库主要用来构建数据间的关系图谱。代表有<code>Neo4J</code>。</li>
+<li><code>列存储类(Wide-column)：</code>将数据存储在非常多的列中，每一条数据都由键指向可能不同的列中，也即每条数据都可能拥有不同的属性。代表有<code>Cassandra</code>。</li>
+</ul>
+<h4 id="可扩展性-Scalability-2">可扩展性(Scalability)</h4>
+<p><code>非关系型数据库</code>在数据量和访问量增加时，可以通过<code>横向扩容</code>(即增加更多服务器)来扩展容量。这些服务器共享数据，每个服务器仅储存一部分数据，这样每个服务器需要处理的平均访问次数也会减少。由于他们没有结构性的表，因此扩展不需要额外的操作。</p>
+<h4 id="性能-Performance-2">性能(Performance)</h4>
+<p>由于<code>非关系型数据库</code>的分布式特性，其性能普遍较高。这类数据库可以无限制地储存各种类型和格式的数据，改变已有的数据格式也会比较方便。</p>
+<h4 id="安全性-Security-2">安全性(Security)</h4>
+<p>安全性是<code>非关系型数据库</code>的一个主要弱点，更高的自由度就是以数据的完整性为代价。</p>
+<h2 id="主要关系型数据库对比">主要关系型数据库对比</h2>
+<p>由于非关系型数据库目前不在我的业务范围内，我就侧重对比研究一下关系型数据库的几个代表：<code>Oracle</code>, <code>MySQL</code>, <code>MS SQL Server</code>, <code>PostgreSQL</code>和<code>IBM DB2</code>。<a href="https://db-engines.com/en/ranking_trend" title="DB-Engines Ranking - Trend Popularity">DB-Engines网站</a>对各大数据库的流行趋势针对其在公共网络(如搜索引擎，开放职位描述，技术论坛等)上的出现频次进行打分排名：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220314010452079.png" alt="Oracle,MySQL,MS SQL Server, PostgreSQL,IBM DB2近年流行趋势对比"></p>
+<p>可以看到尽管有下降趋势，<code>Oracle</code>, <code>MySQL</code>和<code>MS SQL Server</code>依然有绝对的热度，而相对的<code>PostgreSQL</code>近年趋势猛升，而<code>IBM DB2</code>作为关系型数据库的开拓者，其在近年的主要客户群体仅集中在金融行业(以银行，证券，保险，基金公司等，行业代表有花旗，渣打，汇丰，摩根斯坦利以及我司等，哈哈)，因此在大众的讨论热度比其他数据库要低。</p>
+<h3 id="Oracle">Oracle</h3>
+<p>大名鼎鼎的甲骨文公司，说他们开发的数据库管理系统是业界最著名应该也不会有太多人有异议。其目前支持将各种关系型及非关系型数据库在同一个数据库中管理。基本支持所有主流操作平台，性能好，功能强，稳定性好，安全性强但价格昂贵(免费版功能有限)。目前甲骨文开发的主要关注点在云计算方面。</p>
+<p>其主要优点包括<code>创新力强，技术支持及文档资源完备，具备存储处理海量数据的能力</code>。主要缺点就是<code>贵(标准版单价17,500美元，企业版单价47,000美元)，且匹配其高性能其也需要较高的硬件和人员支持才能稳定运行</code>。</p>
+<p>如果你有数以亿计的OLTP或数据仓库数据需要储存和处理且预算充足的话，Oracle是一个可以考虑的选择。</p>
+<h3 id="MySQL">MySQL</h3>
+<p>MySQL如今也是甲骨文公司的明星产品，是现在最知名的关系型数据库之一，与Oracle不同，MySQL是开源的。MySQL由C和C++编写而成，是网页开发组合LAMP的一大组成部分，其名字<code>LAMP</code>分别指<code>Linux(操作系统)</code>, <code>Apache(网页服务器)</code>, <code>MySQL(数据库)</code>和<code>PHP(脚本语言)</code>。可以在大部分主流平台运行。</p>
+<p>其主要优点包括<code>免费安装，使用简单，结构不复杂，易于调试且支持云服务</code>。主要缺点在于<code>其底层代码逻辑不适于大型数据库，非完全开源导致一些特定功能不能被免费实现，另外有一些SQL标准操作不被MySQL支持</code>。</p>
+<p>如果你只是想做一些小型的网页数据库，或者是数据量不大，复杂度不高的数据管理系统。</p>
+<h3 id="MS-SQL-Server">MS SQL Server</h3>
+<p>MS SQL Server是微软早期为与IBM在数据库领域竞争而开发的关系型数据库产品，它的主要特点继承了微软的发家秘诀，即可视化，易操作但只能在Windows环境中运行。操作MS SQL Server数据的语言是在SQL标准上发展的<code>Transact-SQL</code>语言。</p>
+<p>其主要优点包括<code>针对不同应用场景的涵盖不同功能的各种版本，提供各种商业所需的数据相关附加服务，丰富的文档和社区支持以及云服务</code>等。主要缺点包括<code>贵，支持平台单一，调试复杂</code>。</p>
+<p>如果你的的公司订阅了微软的其他产品服务，选择MS SQL Server可能是个不错的选择，微软对其不同产品之间的互动集成做得还是不错的，有助于增强用户体验。</p>
+<h3 id="PostgreSQL">PostgreSQL</h3>
+<p>PostgreSQL是开源的对象-关系数据库(object-relational database),其相较其他普通关系数据库的差别在于用户可以在PostgreSQL中编程实现自定义对象以实现存储更复杂的数据结构。PostgreSQL与MySQL有许多共同点并在此之上加强了扩展性与合规性，也因此它可以适用于各种不同的数据规模。可以在微软, iOS, 安卓等平台上运行。</p>
+<p>其主要优点包括<code>可扩展性高，支持JSON, XML, H-Store等用户自定义的数据格式，拥有易于使用的第三方增强工具，完全开源</code>等。主要缺点在于<code>其文档没有统一标准，且数据库缺少完整性检查工具</code>。</p>
+<p>如果你希望自己的数据库存储格式可以定制化并实现一定的数据分析功能，PostgreSQL可以是较好的选择。其在金融电信行业使用较多。</p>
+<h3 id="IBM-DB2">IBM DB2</h3>
+<p>尽管现在的热度不高，但DB2被认为是关系型数据库的开山鼻祖。其由C和C++编写，可以在UNIX，Linux，Windows服务器版本等多种环境下执行。</p>
+<p>DB2的主要优点在于他<code>经过多年大量的实用测试没有出过大的问题，是一个非常值得信赖稳定的的数据库系统，其适用大规模数据且性能也较高</code>。主要缺点可能包括<code>文档和用户界面陈旧对新手不友好，操作较为复杂</code>。</p>
+<p>目前DB2的主要用户都是金融公司，这些公司创建数据库比较早，但对技术变革不敏感，且依赖数据库的安全性和稳定性，因此留存为DB2用户。</p>
+<h2 id="DB2与Oracle-SQL语法差别（参考资料）">DB2与Oracle SQL语法差别（<a href="https://www.cnblogs.com/wuxl360/p/5563019.html" title="DB2、ORACLE SQL写法的主要区别">参考资料</a>）</h2>
+<p>由于我自己学的是Oracle的语法，但现在工作需要使用DB2的语法，因此找了一下网上大神们整理的这两者的区别汇总，发现<code>邬兴亮大神</code>的总结就是我想找的：</p>
+<h3 id="数据类型转换函数">数据类型转换函数</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>整形转字符</th>
+<th>字符转整形</th>
+<th>字符转浮点</th>
+<th>浮点转字符</th>
+<th>字符转日期</th>
+<th>字符转时间</th>
+<th>日期转字符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle</td>
+<td>to_char(1)</td>
+<td>to_number(‘1’)</td>
+<td>to_number(‘1.1’)</td>
+<td>to_char(1.1)</td>
+<td>to_date(‘2007-04-26’,‘yyyy-mm-dd’)</td>
+<td>to_date(‘2007-04-26 08:08:08’,‘yyyy-mm-dd hh25:mi:ss’)</td>
+<td>to_char(to_date(‘2007-04-29’,‘yyyy-mm-dd’),‘yyyy-mm-dd’)</td>
+</tr>
+<tr>
+<td>DB2</td>
+<td>char(1)</td>
+<td>int(‘1’)</td>
+<td>double(‘1.1’)</td>
+<td>char(1.1)</td>
+<td>date(‘2007-04-26’)</td>
+<td>to_date(‘2007-04-26 08:08:08’,‘yyyy-mm-dd hh25:mi:ss’)</td>
+<td>char(date(‘2007-04-29’))</td>
+</tr>
+<tr>
+<td>兼容写法</td>
+<td>cast(1 as char)</td>
+<td>cast(‘1’ as int)</td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+<td>相同</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Where条件弱类型判断">Where条件弱类型判断</h3>
+<p>在<code>Oracle</code>中使用<code>&quot;Where 字符型字段 in (整型)&quot;</code>是允许的，<code>DB2</code>则会报错：</p>
+<blockquote>
+<p>SELECT ‘abc’ FROM XXX WHERE ‘1’ in (1) 在Oracle下可通过，在DB2中会报错。</p>
+</blockquote>
+<p>在<code>Oracle中</code>使用<code>&quot;Where 字符型字段=整型&quot;</code>是允许的，<code>DB2</code>则会报错：</p>
+<blockquote>
+<p>SELECT ‘abc’ FROM XXX WHERE ‘1’=1 在Oracle下可通过，在DB2中会报错。</p>
+</blockquote>
+<h3 id="DATE数据类型">DATE数据类型</h3>
+<p><code>Oracle</code>中<code>DATE型</code>带有<code>时分秒</code>，但<code>DB2</code>下<code>DATE型</code>只带有<code>年月日</code>且可以作为字符串直接操作，<code>DB2</code>中要记录<code>时分秒</code>必须使用<code>时间戳型(TIMESTAMP)</code>, DB2的日期和时间戳都可以被直接用字符串指定。</p>
+<h3 id="Decode函数">Decode函数</h3>
+<p><code>Oracle</code>中使用<code>decode()</code>函数来做判断语句：</p>
+<blockquote>
+<p>decode(sex,0,‘男’,1.‘女’) 即为将sex域中的0换为男，1换为女。</p>
+</blockquote>
+<p>在<code>DB2</code>中要实现这个功能需要用<code>CASE WHEN</code>写法：</p>
+<blockquote>
+<p>CASE sex WHEN  0 THEN ‘男’ WHEN 1 THEN ‘女’ ELSE ‘其他’ END</p>
+</blockquote>
+<h3 id="NVL函数">NVL函数</h3>
+<p>在<code>Oracle</code>中<code>NVL</code>函数主要用来处理空值，即将域中空值替换为指定值：</p>
+<blockquote>
+<p>SELECT NVL(F_AREAID,‘空’) FROM MASA_USER</p>
+</blockquote>
+<p>在<code>DB2</code>中需要使用兼容性写法<code>COALESCE</code></p>
+<blockquote>
+<p>SELECT COALESCE(F_AREAID,‘空’,F_AREAID) FROM MASA_USER</p>
+</blockquote>
+<h3 id="获取系统当前日期">获取系统当前日期</h3>
+<p>在<code>Oracle</code>中使用<code>SYSDATE</code>,而在<code>DB2</code>中使用<code>CURRENT DATE</code></p>
+<h3 id="获取特定数量的数据">获取特定数量的数据</h3>
+<p>在<code>Oracle</code>中使用<code>ROWNUM</code>:</p>
+<blockquote>
+<p>SELECT * FROM TABLE WHERE ROWNUM &lt;= 10</p>
+</blockquote>
+<p>在<code>DB2</code>中使用<code>FETCH</code>：</p>
+<blockquote>
+<p>SELECT * FROM TABLE FETCH FIRST 10 ROWS ONLY</p>
+</blockquote>
+<h1>最后</h1>
+<p>这一篇写了很久，主要是确实对数据库的理解不深，需要看的资料比较多，最后主要学到的对我来说有用的东西可能还是<code>操作层面</code>的<code>SQL语法</code>，如果以后的工作中还发现新的区别再来这里补充。</p>
+]]></content>
+      <categories>
+        <category>数据分析</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Database</tag>
       </tags>
   </entry>
   <entry>
@@ -1652,6 +1652,92 @@ NI_{FIFO}=NI_{LIFO}+\Delta LIFO\ Reserve\times (1-Tax)
       </tags>
   </entry>
   <entry>
+    <title>[MS Office]Access报价出单排版打印工具开发记录</title>
+    <url>/2022/05/15/15-A_quotation_printing_tool/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>公司有个承保同事基于Excel开发过核保报价出单的打印工具，具体用处就是分发给保险代理使用的，填写保单信息如客户信息，承保险种，起止日期，雇员险雇佣地址，同一客户承保各险种所需的保额，费率等信息以及最后的保费计算和保单条款适用等。代理填写完成后按键自动根据填写内容导出格式化的报价单pdf文件。之前同事使用Excel制作这个工具时的思路是使用一张工作表收集所有信息，然后每页pdf使用一个工作表，用公式连接第一张信息表，最后做一个按键根据信息表中的信息打印需要打印的工作表。</p>
+<p>这种方法实际上确实可行，但有两个缺点：一是公式太多会使思路简单的信息排版打印甚至打开文件都变得非常慢，二是填写的信息仅仅用于打印一次，若需要保存已经填写的信息需要将整个文件复制保存。另一方面，如果使用Access开发这个工具则可以完美避免这两个缺点，实际上Access可以说就是专门为了完成这些任务而设计出来的， 它的表单(form)用于填写信息，表(table)用于存储信息，报表(Report)用于展示和打印信息。因此我协助核保同事重新以Access设计了这个报价单打印工具，这篇文章主要记录一下实现一些小功能的方法。</p>
+<h1>正文</h1>
+<h2 id="表单中计算日期">表单中计算日期</h2>
+<p>有一个小功能，因为一般险中大部分保单保期都是一年，因此想要在表单中设置选择起保日期后自动将保单失效日期填入一年后日期，例如2020年9月1日起保便自动填入2021年8月31日失效。这个功能看起来非常简单直观，可以使用VBA的<code>DateAdd()</code>函数计算1年后日期减1即可，但似乎Access的日期表单的计算功能有些小漏洞。</p>
+<p>稍微介绍一下<code>DateAdd(interval, number, date)</code>函数，其三个参数中<code>interval</code>表示想要增加的日期单位，<code>number</code>表示想要增加的日期数量，<code>date</code>则是要增加的起始日期。其中<code>interval</code>参数的可用值及代表的意思如下：</p>
+<table>
+<thead>
+<tr>
+<th>interval参数</th>
+<th>yyyy</th>
+<th>q</th>
+<th>m</th>
+<th>y</th>
+<th>d</th>
+<th>w</th>
+<th>ww</th>
+<th>h</th>
+<th>n</th>
+<th>s</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>意义</td>
+<td>年</td>
+<td>季度</td>
+<td>月份</td>
+<td>天数(以年计)</td>
+<td>天数</td>
+<td>天数(工作天)</td>
+<td>周</td>
+<td>小时</td>
+<td>分钟</td>
+<td>秒钟</td>
+</tr>
+</tbody>
+</table>
+<p>但是在表单上实现这个简单功能的难点在于Access表单中日期栏位特殊的输入方式，日期可以通过日历表的控件直接选择输入，但如果直接在起保日期的<code>On Change</code>事件中直接写入<code>[End Date] = DateAdd(&quot;yyyy&quot;,1,[Start Date])-1</code>的话，会导致起保日期刚刚输入就被强制执行该公式，其结果就是起保日期的输入不准确，我猜想可能是因为<code>On_Change</code>事件本身是栏位发生任何变化都会触发，但日期的选择输入本身可能包括多个步骤，这导致事件会在日期没有完全输入时就被触发从而引发错误。但同时如果使用<code>After_Update</code>事件会导致日期输入后不能直接触发事件，而需要选择到其他控件才能触发，这两种方式都不适合我们需要的应用。</p>
+<p>但知道了问题所在解决方案也就应运而生了，我对这个问题的解决方法是将计算分为两段执行，在起保日期被修改时将<code>Focus</code>设置到失效日期，而在起保日期失去<code>Focus</code>时再执行<code>[End Date] = DateAdd(&quot;yyyy&quot;,1,[Start Date])-1</code>。如此可以保证执行计算操作时起保日期已经被准确输入。实现代码示例如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Start_Date_Change()</span><br><span class="line">    [<span class="keyword">End</span> <span class="type">Date</span>].SetFocus</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Start_Date_LostFocus()</span><br><span class="line">    [<span class="keyword">End</span> <span class="type">Date</span>] = DateAdd(<span class="string">&quot;yyyy&quot;</span>, <span class="number">1</span>, [Start <span class="type">Date</span>]) - <span class="number">1</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<h2 id="将报表打印至PDF">将报表打印至PDF</h2>
+<p>用户将报价单所需的所有信息通过表单输入数据表中后，我们可以通过表单上的按钮按需求打印已经排版好的报表至pdf，本章我先将这个按钮中的步骤分步讲解，最后再放出完整代码。</p>
+<h3 id="打开报表的打印预览模式">打开报表的打印预览模式</h3>
+<p>在要调整需要打印的内容之前必须先将需要打印的报表打开：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line">DoCmd.OpenReport <span class="string">&quot;Full Quotation&quot;</span>, acViewPreview, , <span class="string">&quot;[Quotation ID (Access record only)] = Forms![Main-Quotation Info]![Quotation ID (Access record only)]&quot;</span></span><br></pre></td></tr></table></figure>
+<p><code>DoCmd.OpenReport</code>本身用于打开报表，其后的参数分别为<code>报表名称</code>，<code>打开方式</code>，<code>筛选名称</code>，<code>WHERE条件</code>，<code>打开窗口模式</code>和<code>OpenArgs</code>。各个参数的具体使用方法<a href="https://docs.microsoft.com/en-us/office/vba/api/access.docmd.openreport" title="DoCmd.OpenReport method (Access)">见此</a>，我这里用到的参数只有<code>报表名称</code>，<code>打开方式</code>和<code>WHERE条件</code>。这里需要说明一点是<code>WHERE条件</code>的使用方法，这里的表达相当于在报表的<code>SELECT QUERY</code>中添加<code>WHERE</code>条件语句，此处加上的<code>[Quotation ID (Access record only)] = Forms![Main-Quotation Info]![Quotation ID (Access record only)]</code>代表报表中只展示<code>ID</code>与表单中当前选择的<code>ID</code>相同的记录，如果没有这条条件打印会展示所有记录。</p>
+<h3 id="调整需要展示的页面">调整需要展示的页面</h3>
+<p>打开要打印的报表预览页面后才可以根据条件调整需要打印的页面：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforEC.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![EC Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforPL.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![PL Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforBI.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![BI Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforMAR.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![MAR Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br></pre></td></tr></table></figure>
+<p>在<code>Full Quotation</code>报表中，按ID连接并放入了不同险种信息的四个<code>子窗体(subform)</code>，当主窗体中关于各个险种的保费计算为0或空使，将相应的子窗体和分页符隐藏，从而可以达到不打印该页面的效果。需要强调的一点是隐藏操作必须在报表被打开的前提下，否则会报错。另外由于我们是在预览模式下操作隐藏对象，而不是在设计模式或布局模式打开，因此这里的隐藏操作是暂时性的，不会影响到报表本身的参数，也就是说这里的隐藏修改在关闭时不会被保存。</p>
+<h3 id="输出结果至PDF">输出结果至PDF</h3>
+<p>当我们把需要打印的报表按需求在打印预览模式下调整好之后就可以直接使用命令将结果输出至PDF文件了。</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line">fileName = Forms![Main-Quotation Info]![Quotation ID (Access record only)] &amp; <span class="string">&quot;_Quotation&quot;</span></span><br><span class="line">fldrPath = Application.CurrentProject.Path</span><br><span class="line">filePath = fldrPath &amp; <span class="string">&quot;\&quot;</span> &amp; fileName &amp; <span class="string">&quot;.pdf&quot;</span></span><br><span class="line"></span><br><span class="line">DoCmd.OutputTo objecttype:=acOutputReport, objectName:=<span class="string">&quot;Full Quotation&quot;</span>, outputformat:=acFormatPDF, outputFile:=filePath</span><br><span class="line">DoCmd.Close acReport, <span class="string">&quot;Full Quotation&quot;</span>, acSaveNo</span><br><span class="line">MsgBox prompt:=<span class="string">&quot;PDF File exported to: &quot;</span> &amp; vbNewLine &amp; filePath, buttons:=vbInformation, Title:=<span class="string">&quot;Report Exported as PDF&quot;</span></span><br><span class="line"><span class="comment">&#x27; open the output pdf</span></span><br><span class="line">CreateObject(<span class="string">&quot;Shell.Application&quot;</span>).Open (filePath)</span><br></pre></td></tr></table></figure>
+<p>这里首先将我们想要保存pdf文件的文件名和地址定义好并合成为完整文件地址，然后使用<code>DoCmd.OutputTo</code>命令将刚刚整理好的报表以PDF的格式保存至定义好的地址，然后关闭报表后打开导出的文件以供用户检视。</p>
+<p>其中<code>DoCmd.OutputTo</code>命令中的可用参数分别是<code>对象类型</code>，<code>对象名</code>，<code>输出格式</code>，<code>输出文件路径</code>，<code>自动开始</code>，<code>模板文件</code>，<code>解码方式</code>和<code>输出质量</code>。各参数的具体使用方法可见<a href="https://docs.microsoft.com/en-us/office/vba/api/access.docmd.outputto" title="DoCmd.OutputTo method (Access)">官方文档</a>。我们只需要将<code>对象类型</code>设定为<code>acOutputReport</code>，填好<code>对象名</code>，<code>输出格式</code>设为<code>acFormatPDF</code>并将<code>输出文件路径</code>设定为之前定义好的地址即可完成PDF文件的导出。后面的关闭报表，弹窗信息，打开导出文件操作都非常简单，我就不解释了。</p>
+<h3 id="完整代码">完整代码</h3>
+<p>综上，这个工具导出报表至pdf的按钮完整代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> PrintToPDF_Click()</span><br><span class="line">    <span class="comment">&#x27; Open the report of current quotation</span></span><br><span class="line">    DoCmd.OpenReport <span class="string">&quot;Full Quotation&quot;</span>, acViewPreview, , <span class="string">&quot;[Quotation ID (Access record only)] = Forms![Main-Quotation Info]![Quotation ID (Access record only)]&quot;</span></span><br><span class="line">    <span class="comment">&#x27; Hide the quotation pages with no premiums</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforEC.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![EC Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforPL.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![PL Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforBI.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![BI Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforMAR.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![MAR Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Output the report to pdf file</span></span><br><span class="line">    <span class="keyword">Dim</span> fileName <span class="keyword">As</span> <span class="type">String</span>, fldrPath <span class="keyword">As</span> <span class="type">String</span>, filePath <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> answer <span class="keyword">As</span> <span class="type">Integer</span></span><br><span class="line">    <span class="keyword">Const</span> FILE_OPENED = <span class="number">2501</span></span><br><span class="line">    </span><br><span class="line">    fileName = Forms![Main-Quotation Info]![Quotation ID (Access record only)] &amp; <span class="string">&quot;_Quotation&quot;</span></span><br><span class="line">    fldrPath = Application.CurrentProject.Path</span><br><span class="line">    filePath = fldrPath &amp; <span class="string">&quot;\&quot;</span> &amp; fileName &amp; <span class="string">&quot;.pdf&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    DoCmd.OutputTo objecttype:=acOutputReport, objectName:=<span class="string">&quot;Full Quotation&quot;</span>, outputformat:=acFormatPDF, outputFile:=filePath</span><br><span class="line">    DoCmd.Close acReport, <span class="string">&quot;Full Quotation&quot;</span>, acSaveNo</span><br><span class="line">    MsgBox prompt:=<span class="string">&quot;PDF File exported to: &quot;</span> &amp; vbNewLine &amp; filePath, buttons:=vbInformation, Title:=<span class="string">&quot;Report Exported as PDF&quot;</span></span><br><span class="line">    <span class="comment">&#x27; open the output pdf</span></span><br><span class="line">    CreateObject(<span class="string">&quot;Shell.Application&quot;</span>).Open (filePath)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> FILE_OPENED</span><br><span class="line">        MsgBox (<span class="string">&quot;The file is already opened, please close it before replace.&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>额外想讲解的一点是<code>Select Case</code>语句在这个代码中用于捕捉错误信息的应用，<code>Select Case</code>语句的详解见<a href="https://docs.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-select-case-statements" title="Using Select Case statements">官方文档</a>，其用法与<code>If...Then...Else</code>语句中<code>ElseIf</code>的用法相似，但不同的是<code>ElseIf</code>可以在每个判断中加入不同的判定条件，只需要返回结果是<code>True</code>或<code>False</code>即可，而<code>Select Case</code>语句则需要先在<code>Case</code>后给定要判断的变量，然后在不同的<code>Case</code>下判断<code>该变量</code>是否满足每个条件。</p>
+<p>在这里这个语句的应用则是先捕捉错误代码，然后根据捕捉到的不同错误代码的值弹出不同的信息。</p>
+<h2 id="将子窗体数据更新至表">将子窗体数据更新至表</h2>
+<p>在工具的主窗体上嵌有一个关于各个险种条款的子窗体，子窗体通过<code>ID</code>与主表数据连接，其中内容都是不同条款的<code>复选框(Checkboxes)</code>，选中则代表包括该条款否则不打印。</p>
+<p>通常情况下子窗体数据的修改会被同步至其对应的表中，但这里有个特殊情况，就是条款为了方便选择设置过默认选项，而有一些保单确实不需要默认选项以外的条款选择，这就导致有一些情况下用户可能根本就不修改这个子窗体中的内容就打印报表。这就导致子窗体中的数据没有被更新至对应的表中，自然也不会被报表打印出来。</p>
+<p>要解决这个问题，一个很自然的想法是使用VBA代码修改表单中的内容后强行保存，这样Access为了保存修改后的内容就会必须在表中存储相应数据，这时再将刚刚修改的内容改回默认值保存，表中就有了这个记录。将这个行为触发定义在输入某个前置控件内容后，便可以实现用户无感更新子窗体数据。</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> EC_Quotation_No__WOD_QR__AfterUpdate()</span><br><span class="line">    <span class="comment">&#x27; 先SetFocus至子窗体，这样后面的保存记录指令才可以正确对子窗体数据执行</span></span><br><span class="line">    Forms![Main-Quotation Info]!EC_Clauses.SetFocus</span><br><span class="line">    <span class="comment">&#x27;修改子窗体中数据保存再改回默认值保存，以强制创建更新数据至表</span></span><br><span class="line">    Forms![Main-Quotation Info]!EC_Clauses.Form![Extra-ordinary Weather Condition Clause_EC] = <span class="literal">False</span></span><br><span class="line">    DoCmd.RunCommand acCmdSaveRecord</span><br><span class="line">    Forms![Main-Quotation Info]!EC_Clauses.Form![Extra-ordinary Weather Condition Clause_EC] = <span class="literal">True</span></span><br><span class="line">    DoCmd.RunCommand acCmdSaveRecord</span><br><span class="line">    <span class="keyword">Me</span>![EC Quotation No (WOD/QR)].SetFocus</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<h2 id="更新组合框数据">更新组合框数据</h2>
+<p>有一个Access应用开发中常常会用到的功能，就是以表单当前选择的数据信息来筛选组合框中的内容范围，通常在组合框中<code>Row Source</code>栏中的填入筛选出想要显示的数据的<code>SQL Query</code>即可实现，但除此之外还必须对组合框控件进行<code>Requery</code>操作才会使下拉选框中的内容被相应更新。</p>
+<p>但Access VBA在这方面似乎有个小BUG，那就是如果你把<code>Requery</code>放在<code>On_click</code>事件上，虽然可以达到点出想要的下拉框的效果，但似乎是由于并行事件太多有很大机率会导致Access直接崩溃重启。经过一些测试我发现如果将<code>Requery</code>绑定在<code>On got focus</code>事件上则可以达到相同的效果但不会导致程序崩溃。</p>
+<h1>最后</h1>
+<p>本篇文章通过开发报价单打印工具进一步加强了我对Access数据库应用开发的经验，在此记录了一些可能适用范围较广可以在其他项目上借鉴的小技巧。</p>
+<p>[第15篇]</p>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>Access</tag>
+        <tag>VBA</tag>
+        <tag>工作学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[金融分析] CFA一级《公司金融》学习笔记</title>
     <url>/2022/06/02/16-CFA-level1-Corporate-Issuers/</url>
     <content><![CDATA[<h1>概览</h1>
@@ -1880,92 +1966,6 @@ DTL=\frac{Q(P-VC)}{Q(P-VC)-FC-Interest}=\frac{S-TVC}{S-TVC-FC-Interest}
         <tag>日常学习</tag>
         <tag>CFA一级</tag>
         <tag>公司金融</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[MS Office]Access报价出单排版打印工具开发记录</title>
-    <url>/2022/05/15/15-A_quotation_printing_tool/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>公司有个承保同事基于Excel开发过核保报价出单的打印工具，具体用处就是分发给保险代理使用的，填写保单信息如客户信息，承保险种，起止日期，雇员险雇佣地址，同一客户承保各险种所需的保额，费率等信息以及最后的保费计算和保单条款适用等。代理填写完成后按键自动根据填写内容导出格式化的报价单pdf文件。之前同事使用Excel制作这个工具时的思路是使用一张工作表收集所有信息，然后每页pdf使用一个工作表，用公式连接第一张信息表，最后做一个按键根据信息表中的信息打印需要打印的工作表。</p>
-<p>这种方法实际上确实可行，但有两个缺点：一是公式太多会使思路简单的信息排版打印甚至打开文件都变得非常慢，二是填写的信息仅仅用于打印一次，若需要保存已经填写的信息需要将整个文件复制保存。另一方面，如果使用Access开发这个工具则可以完美避免这两个缺点，实际上Access可以说就是专门为了完成这些任务而设计出来的， 它的表单(form)用于填写信息，表(table)用于存储信息，报表(Report)用于展示和打印信息。因此我协助核保同事重新以Access设计了这个报价单打印工具，这篇文章主要记录一下实现一些小功能的方法。</p>
-<h1>正文</h1>
-<h2 id="表单中计算日期">表单中计算日期</h2>
-<p>有一个小功能，因为一般险中大部分保单保期都是一年，因此想要在表单中设置选择起保日期后自动将保单失效日期填入一年后日期，例如2020年9月1日起保便自动填入2021年8月31日失效。这个功能看起来非常简单直观，可以使用VBA的<code>DateAdd()</code>函数计算1年后日期减1即可，但似乎Access的日期表单的计算功能有些小漏洞。</p>
-<p>稍微介绍一下<code>DateAdd(interval, number, date)</code>函数，其三个参数中<code>interval</code>表示想要增加的日期单位，<code>number</code>表示想要增加的日期数量，<code>date</code>则是要增加的起始日期。其中<code>interval</code>参数的可用值及代表的意思如下：</p>
-<table>
-<thead>
-<tr>
-<th>interval参数</th>
-<th>yyyy</th>
-<th>q</th>
-<th>m</th>
-<th>y</th>
-<th>d</th>
-<th>w</th>
-<th>ww</th>
-<th>h</th>
-<th>n</th>
-<th>s</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>意义</td>
-<td>年</td>
-<td>季度</td>
-<td>月份</td>
-<td>天数(以年计)</td>
-<td>天数</td>
-<td>天数(工作天)</td>
-<td>周</td>
-<td>小时</td>
-<td>分钟</td>
-<td>秒钟</td>
-</tr>
-</tbody>
-</table>
-<p>但是在表单上实现这个简单功能的难点在于Access表单中日期栏位特殊的输入方式，日期可以通过日历表的控件直接选择输入，但如果直接在起保日期的<code>On Change</code>事件中直接写入<code>[End Date] = DateAdd(&quot;yyyy&quot;,1,[Start Date])-1</code>的话，会导致起保日期刚刚输入就被强制执行该公式，其结果就是起保日期的输入不准确，我猜想可能是因为<code>On_Change</code>事件本身是栏位发生任何变化都会触发，但日期的选择输入本身可能包括多个步骤，这导致事件会在日期没有完全输入时就被触发从而引发错误。但同时如果使用<code>After_Update</code>事件会导致日期输入后不能直接触发事件，而需要选择到其他控件才能触发，这两种方式都不适合我们需要的应用。</p>
-<p>但知道了问题所在解决方案也就应运而生了，我对这个问题的解决方法是将计算分为两段执行，在起保日期被修改时将<code>Focus</code>设置到失效日期，而在起保日期失去<code>Focus</code>时再执行<code>[End Date] = DateAdd(&quot;yyyy&quot;,1,[Start Date])-1</code>。如此可以保证执行计算操作时起保日期已经被准确输入。实现代码示例如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Start_Date_Change()</span><br><span class="line">    [<span class="keyword">End</span> <span class="type">Date</span>].SetFocus</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Start_Date_LostFocus()</span><br><span class="line">    [<span class="keyword">End</span> <span class="type">Date</span>] = DateAdd(<span class="string">&quot;yyyy&quot;</span>, <span class="number">1</span>, [Start <span class="type">Date</span>]) - <span class="number">1</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<h2 id="将报表打印至PDF">将报表打印至PDF</h2>
-<p>用户将报价单所需的所有信息通过表单输入数据表中后，我们可以通过表单上的按钮按需求打印已经排版好的报表至pdf，本章我先将这个按钮中的步骤分步讲解，最后再放出完整代码。</p>
-<h3 id="打开报表的打印预览模式">打开报表的打印预览模式</h3>
-<p>在要调整需要打印的内容之前必须先将需要打印的报表打开：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line">DoCmd.OpenReport <span class="string">&quot;Full Quotation&quot;</span>, acViewPreview, , <span class="string">&quot;[Quotation ID (Access record only)] = Forms![Main-Quotation Info]![Quotation ID (Access record only)]&quot;</span></span><br></pre></td></tr></table></figure>
-<p><code>DoCmd.OpenReport</code>本身用于打开报表，其后的参数分别为<code>报表名称</code>，<code>打开方式</code>，<code>筛选名称</code>，<code>WHERE条件</code>，<code>打开窗口模式</code>和<code>OpenArgs</code>。各个参数的具体使用方法<a href="https://docs.microsoft.com/en-us/office/vba/api/access.docmd.openreport" title="DoCmd.OpenReport method (Access)">见此</a>，我这里用到的参数只有<code>报表名称</code>，<code>打开方式</code>和<code>WHERE条件</code>。这里需要说明一点是<code>WHERE条件</code>的使用方法，这里的表达相当于在报表的<code>SELECT QUERY</code>中添加<code>WHERE</code>条件语句，此处加上的<code>[Quotation ID (Access record only)] = Forms![Main-Quotation Info]![Quotation ID (Access record only)]</code>代表报表中只展示<code>ID</code>与表单中当前选择的<code>ID</code>相同的记录，如果没有这条条件打印会展示所有记录。</p>
-<h3 id="调整需要展示的页面">调整需要展示的页面</h3>
-<p>打开要打印的报表预览页面后才可以根据条件调整需要打印的页面：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforEC.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![EC Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforPL.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![PL Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforBI.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![BI Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"><span class="keyword">If</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforMAR.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![MAR Quotation].Visible = <span class="literal">False</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">If</span></span><br></pre></td></tr></table></figure>
-<p>在<code>Full Quotation</code>报表中，按ID连接并放入了不同险种信息的四个<code>子窗体(subform)</code>，当主窗体中关于各个险种的保费计算为0或空使，将相应的子窗体和分页符隐藏，从而可以达到不打印该页面的效果。需要强调的一点是隐藏操作必须在报表被打开的前提下，否则会报错。另外由于我们是在预览模式下操作隐藏对象，而不是在设计模式或布局模式打开，因此这里的隐藏操作是暂时性的，不会影响到报表本身的参数，也就是说这里的隐藏修改在关闭时不会被保存。</p>
-<h3 id="输出结果至PDF">输出结果至PDF</h3>
-<p>当我们把需要打印的报表按需求在打印预览模式下调整好之后就可以直接使用命令将结果输出至PDF文件了。</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line">fileName = Forms![Main-Quotation Info]![Quotation ID (Access record only)] &amp; <span class="string">&quot;_Quotation&quot;</span></span><br><span class="line">fldrPath = Application.CurrentProject.Path</span><br><span class="line">filePath = fldrPath &amp; <span class="string">&quot;\&quot;</span> &amp; fileName &amp; <span class="string">&quot;.pdf&quot;</span></span><br><span class="line"></span><br><span class="line">DoCmd.OutputTo objecttype:=acOutputReport, objectName:=<span class="string">&quot;Full Quotation&quot;</span>, outputformat:=acFormatPDF, outputFile:=filePath</span><br><span class="line">DoCmd.Close acReport, <span class="string">&quot;Full Quotation&quot;</span>, acSaveNo</span><br><span class="line">MsgBox prompt:=<span class="string">&quot;PDF File exported to: &quot;</span> &amp; vbNewLine &amp; filePath, buttons:=vbInformation, Title:=<span class="string">&quot;Report Exported as PDF&quot;</span></span><br><span class="line"><span class="comment">&#x27; open the output pdf</span></span><br><span class="line">CreateObject(<span class="string">&quot;Shell.Application&quot;</span>).Open (filePath)</span><br></pre></td></tr></table></figure>
-<p>这里首先将我们想要保存pdf文件的文件名和地址定义好并合成为完整文件地址，然后使用<code>DoCmd.OutputTo</code>命令将刚刚整理好的报表以PDF的格式保存至定义好的地址，然后关闭报表后打开导出的文件以供用户检视。</p>
-<p>其中<code>DoCmd.OutputTo</code>命令中的可用参数分别是<code>对象类型</code>，<code>对象名</code>，<code>输出格式</code>，<code>输出文件路径</code>，<code>自动开始</code>，<code>模板文件</code>，<code>解码方式</code>和<code>输出质量</code>。各参数的具体使用方法可见<a href="https://docs.microsoft.com/en-us/office/vba/api/access.docmd.outputto" title="DoCmd.OutputTo method (Access)">官方文档</a>。我们只需要将<code>对象类型</code>设定为<code>acOutputReport</code>，填好<code>对象名</code>，<code>输出格式</code>设为<code>acFormatPDF</code>并将<code>输出文件路径</code>设定为之前定义好的地址即可完成PDF文件的导出。后面的关闭报表，弹窗信息，打开导出文件操作都非常简单，我就不解释了。</p>
-<h3 id="完整代码">完整代码</h3>
-<p>综上，这个工具导出报表至pdf的按钮完整代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> PrintToPDF_Click()</span><br><span class="line">    <span class="comment">&#x27; Open the report of current quotation</span></span><br><span class="line">    DoCmd.OpenReport <span class="string">&quot;Full Quotation&quot;</span>, acViewPreview, , <span class="string">&quot;[Quotation ID (Access record only)] = Forms![Main-Quotation Info]![Quotation ID (Access record only)]&quot;</span></span><br><span class="line">    <span class="comment">&#x27; Hide the quotation pages with no premiums</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!EC_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforEC.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![EC Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!PL_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforPL.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![PL Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!BI_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforBI.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![BI Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    <span class="keyword">If</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="string">&quot;&quot;</span> <span class="built_in">Or</span> Reports![Full Quotation]!MAR_FINAL.Value = <span class="number">0</span> <span class="keyword">Then</span></span><br><span class="line">    Reports![Full Quotation]!PageBreakforMAR.Visible = <span class="literal">False</span></span><br><span class="line">    Reports![Full Quotation]![MAR Quotation].Visible = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Output the report to pdf file</span></span><br><span class="line">    <span class="keyword">Dim</span> fileName <span class="keyword">As</span> <span class="type">String</span>, fldrPath <span class="keyword">As</span> <span class="type">String</span>, filePath <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> answer <span class="keyword">As</span> <span class="type">Integer</span></span><br><span class="line">    <span class="keyword">Const</span> FILE_OPENED = <span class="number">2501</span></span><br><span class="line">    </span><br><span class="line">    fileName = Forms![Main-Quotation Info]![Quotation ID (Access record only)] &amp; <span class="string">&quot;_Quotation&quot;</span></span><br><span class="line">    fldrPath = Application.CurrentProject.Path</span><br><span class="line">    filePath = fldrPath &amp; <span class="string">&quot;\&quot;</span> &amp; fileName &amp; <span class="string">&quot;.pdf&quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    DoCmd.OutputTo objecttype:=acOutputReport, objectName:=<span class="string">&quot;Full Quotation&quot;</span>, outputformat:=acFormatPDF, outputFile:=filePath</span><br><span class="line">    DoCmd.Close acReport, <span class="string">&quot;Full Quotation&quot;</span>, acSaveNo</span><br><span class="line">    MsgBox prompt:=<span class="string">&quot;PDF File exported to: &quot;</span> &amp; vbNewLine &amp; filePath, buttons:=vbInformation, Title:=<span class="string">&quot;Report Exported as PDF&quot;</span></span><br><span class="line">    <span class="comment">&#x27; open the output pdf</span></span><br><span class="line">    CreateObject(<span class="string">&quot;Shell.Application&quot;</span>).Open (filePath)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> FILE_OPENED</span><br><span class="line">        MsgBox (<span class="string">&quot;The file is already opened, please close it before replace.&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>额外想讲解的一点是<code>Select Case</code>语句在这个代码中用于捕捉错误信息的应用，<code>Select Case</code>语句的详解见<a href="https://docs.microsoft.com/en-us/office/vba/language/concepts/getting-started/using-select-case-statements" title="Using Select Case statements">官方文档</a>，其用法与<code>If...Then...Else</code>语句中<code>ElseIf</code>的用法相似，但不同的是<code>ElseIf</code>可以在每个判断中加入不同的判定条件，只需要返回结果是<code>True</code>或<code>False</code>即可，而<code>Select Case</code>语句则需要先在<code>Case</code>后给定要判断的变量，然后在不同的<code>Case</code>下判断<code>该变量</code>是否满足每个条件。</p>
-<p>在这里这个语句的应用则是先捕捉错误代码，然后根据捕捉到的不同错误代码的值弹出不同的信息。</p>
-<h2 id="将子窗体数据更新至表">将子窗体数据更新至表</h2>
-<p>在工具的主窗体上嵌有一个关于各个险种条款的子窗体，子窗体通过<code>ID</code>与主表数据连接，其中内容都是不同条款的<code>复选框(Checkboxes)</code>，选中则代表包括该条款否则不打印。</p>
-<p>通常情况下子窗体数据的修改会被同步至其对应的表中，但这里有个特殊情况，就是条款为了方便选择设置过默认选项，而有一些保单确实不需要默认选项以外的条款选择，这就导致有一些情况下用户可能根本就不修改这个子窗体中的内容就打印报表。这就导致子窗体中的数据没有被更新至对应的表中，自然也不会被报表打印出来。</p>
-<p>要解决这个问题，一个很自然的想法是使用VBA代码修改表单中的内容后强行保存，这样Access为了保存修改后的内容就会必须在表中存储相应数据，这时再将刚刚修改的内容改回默认值保存，表中就有了这个记录。将这个行为触发定义在输入某个前置控件内容后，便可以实现用户无感更新子窗体数据。</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> EC_Quotation_No__WOD_QR__AfterUpdate()</span><br><span class="line">    <span class="comment">&#x27; 先SetFocus至子窗体，这样后面的保存记录指令才可以正确对子窗体数据执行</span></span><br><span class="line">    Forms![Main-Quotation Info]!EC_Clauses.SetFocus</span><br><span class="line">    <span class="comment">&#x27;修改子窗体中数据保存再改回默认值保存，以强制创建更新数据至表</span></span><br><span class="line">    Forms![Main-Quotation Info]!EC_Clauses.Form![Extra-ordinary Weather Condition Clause_EC] = <span class="literal">False</span></span><br><span class="line">    DoCmd.RunCommand acCmdSaveRecord</span><br><span class="line">    Forms![Main-Quotation Info]!EC_Clauses.Form![Extra-ordinary Weather Condition Clause_EC] = <span class="literal">True</span></span><br><span class="line">    DoCmd.RunCommand acCmdSaveRecord</span><br><span class="line">    <span class="keyword">Me</span>![EC Quotation No (WOD/QR)].SetFocus</span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<h2 id="更新组合框数据">更新组合框数据</h2>
-<p>有一个Access应用开发中常常会用到的功能，就是以表单当前选择的数据信息来筛选组合框中的内容范围，通常在组合框中<code>Row Source</code>栏中的填入筛选出想要显示的数据的<code>SQL Query</code>即可实现，但除此之外还必须对组合框控件进行<code>Requery</code>操作才会使下拉选框中的内容被相应更新。</p>
-<p>但Access VBA在这方面似乎有个小BUG，那就是如果你把<code>Requery</code>放在<code>On_click</code>事件上，虽然可以达到点出想要的下拉框的效果，但似乎是由于并行事件太多有很大机率会导致Access直接崩溃重启。经过一些测试我发现如果将<code>Requery</code>绑定在<code>On got focus</code>事件上则可以达到相同的效果但不会导致程序崩溃。</p>
-<h1>最后</h1>
-<p>本篇文章通过开发报价单打印工具进一步加强了我对Access数据库应用开发的经验，在此记录了一些可能适用范围较广可以在其他项目上借鉴的小技巧。</p>
-<p>[第15篇]</p>
-]]></content>
-      <categories>
-        <category>MS Office</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>Access</tag>
-        <tag>VBA</tag>
       </tags>
   </entry>
   <entry>
@@ -2657,6 +2657,85 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <li><code>Lagging EI</code>：滞后型指标拐点滞后于经济变化，例如失业率等。</li>
 </ul>
 <p>重要的先行指标有<code>S&amp;P 500指数</code>、货币供给、长期债券与短期借款间的利差、消费者指标、平均周生产时间、平均周失业保险索赔、生产商新订单数量、小厂商交货时间、新建房地产数量等。</p>
+<h1>Session 5</h1>
+<h2 id="Reading-16-货币与财政政策">Reading 16 货币与财政政策</h2>
+<p>政府<code>财政政策(Fiscal policy)</code>指政府通过调整其财政支出与税收来干预经济活动的方法。而<code>货币政策(Monetary policy)</code>则是指中央银行通过改变私人部门获得资金的成本(利率)来影响市场中的货币供给，并以此干预经济的方法。本章主要覆盖政府干预经济所采取的货币政策与财政政策的具体工具，以及其缺点。</p>
+<h3 id="货币政策">货币政策</h3>
+<h4 id="货币乘数">货币乘数</h4>
+<p>中央银行每发行一元钱货币，其可能通过贷款流入市场的部分就是除去准备金的部分，而贷款流入市场后可能继续通过储蓄回到商业银行，商业银行又可以继续将这部分存款除去准备金部分后继续贷款，以此构成以<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mtext>准备金率</mtext></mrow><annotation encoding="application/x-tex">1-准备金率</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7278em;vertical-align:-0.0833em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.6833em;"></span><span class="mord cjk_fallback">准备金率</span></span></span></span>的比率递减的等比数列，该数列和既是银行通过贷款在市场上创造的货币数量：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>M</mi><mi>o</mi><mi>n</mi><mi>e</mi><mi>y</mi><mtext> </mtext><mi>c</mi><mi>r</mi><mi>e</mi><mi>a</mi><mi>t</mi><mi>e</mi><mi>d</mi><mo>=</mo><mfrac><mrow><mi>n</mi><mi>e</mi><mi>w</mi><mtext> </mtext><mi>d</mi><mi>e</mi><mi>p</mi><mi>o</mi><mi>s</mi><mi>i</mi><mi>t</mi></mrow><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>r</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>r</mi><mi>e</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">Money\ created = \frac{new\ deposit}{reserve\ requirement}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.03588em;">ey</span><span class="mspace"> </span><span class="mord mathnormal">cre</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mord mathnormal">d</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2519em;vertical-align:-0.8804em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3714em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">reser</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mspace"> </span><span class="mord mathnormal">re</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">re</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal">n</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mspace"> </span><span class="mord mathnormal">d</span><span class="mord mathnormal">e</span><span class="mord mathnormal">p</span><span class="mord mathnormal">os</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.8804em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<p>此处<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mi>r</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>r</mi><mi>e</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">reserve requirement</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">reser</span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">ere</span><span class="mord mathnormal" style="margin-right:0.03588em;">q</span><span class="mord mathnormal">u</span><span class="mord mathnormal">i</span><span class="mord mathnormal">re</span><span class="mord mathnormal">m</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">t</span></span></span></span>是央行规定的商业银行最低准备金率，<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>e</mi><mi>r</mi><mi>v</mi><mi>e</mi><mtext> </mtext><mi>r</mi><mi>e</mi><mi>q</mi><mi>u</mi><mi>i</mi><mi>r</mi><mi>e</mi><mi>m</mi><mi>e</mi><mi>n</mi><mi>t</mi></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{1}{reserve\ requirement}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.3262em;vertical-align:-0.4811em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8451em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.02778em;">reser</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">v</span><span class="mord mathnormal mtight">e</span><span class="mspace mtight"><span class="mtight"> </span></span><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight" style="margin-right:0.03588em;">q</span><span class="mord mathnormal mtight">u</span><span class="mord mathnormal mtight">i</span><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight">m</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">n</span><span class="mord mathnormal mtight">t</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.4811em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>便是货币乘数，其假设所有贷款都没有被消费，而是回到银行，是商业银行创造货币的理论最大放大效果。</p>
+<h4 id="货币数量论-Quantity-Theory-of-Money">货币数量论(Quantity Theory of Money)</h4>
+<p>货币数量论的基本式就是货币供给数量乘货币流转速度等于物价水平乘真实产出：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>m</mi><mi>o</mi><mi>n</mi><mi>e</mi><mi>y</mi><mtext> </mtext><mi>s</mi><mi>u</mi><mi>p</mi><mi>p</mi><mi>l</mi><mi>y</mi><mo>×</mo><mi>v</mi><mi>e</mi><mi>l</mi><mi>o</mi><mi>c</mi><mi>i</mi><mi>t</mi><mi>y</mi><mo>=</mo><mi>p</mi><mi>r</mi><mi>i</mi><mi>c</mi><mi>e</mi><mo>×</mo><mi>r</mi><mi>e</mi><mi>a</mi><mi>l</mi><mtext> </mtext><mi>o</mi><mi>u</mi><mi>t</mi><mi>p</mi><mi>u</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">money\ supply\times velocity=price\times real\ output
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">m</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mord mathnormal" style="margin-right:0.03588em;">ey</span><span class="mspace"> </span><span class="mord mathnormal">s</span><span class="mord mathnormal">u</span><span class="mord mathnormal" style="margin-right:0.01968em;">ppl</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.03588em;">v</span><span class="mord mathnormal">e</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">oc</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.854em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">p</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">i</span><span class="mord mathnormal">ce</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">re</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace"> </span><span class="mord mathnormal">o</span><span class="mord mathnormal">u</span><span class="mord mathnormal">tp</span><span class="mord mathnormal">u</span><span class="mord mathnormal">t</span></span></span></span></span></p>
+<p>其中该理论假设流转速度V与真实产出Y为常数，即货币供给在长期直接影响物价水平，而不会影响总产出与失业率(该结论即被称为<code>货币中性Money neutrality</code>)。</p>
+<h4 id="费雪效应-Fisher-Effect">费雪效应(Fisher Effect)</h4>
+<p>费雪效应描述名义利率为真实利率与期望通货膨胀率的和：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><msub><mi>R</mi><mrow><mi>N</mi><mi>o</mi><mi>m</mi></mrow></msub><mo>=</mo><msub><mi>R</mi><mrow><mi>R</mi><mi>e</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>+</mo><mi>E</mi><mo stretchy="false">[</mo><mi>I</mi><mo stretchy="false">]</mo></mrow><annotation encoding="application/x-tex">R_{Nom}=R_{Real}+E[I]
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3283em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.10903em;">N</span><span class="mord mathnormal mtight">o</span><span class="mord mathnormal mtight">m</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.00773em;">R</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0077em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight" style="margin-right:0.00773em;">R</span><span class="mord mathnormal mtight">e</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.05764em;">E</span><span class="mopen">[</span><span class="mord mathnormal" style="margin-right:0.07847em;">I</span><span class="mclose">]</span></span></span></span></span></p>
+<p>费雪效应的背后原理是真实利率比较稳定，因此名义利率的变化主要由预期通货膨胀率引起。</p>
+<h4 id="中央银行货币工具">中央银行货币工具</h4>
+<ul>
+<li><code>政策利率(Policy rate)</code>：指央行盯住的市场利率，不同国家央行所看的市场利率不同， 但基本都是短期利率，其基本思想是通过短期利率影响长期利率。当利率降低时，市场获取资金的成本降低，市场倾向借贷，释放流动性，是扩张性的货币政策；反之则是紧缩性的货币政策。</li>
+<li><code>法定存款准备金率(Reserve requirements)</code>：指央行规定的商业银行最低的存款准备金，准备金率越低，则商业银行可以贷出的金额就越多，释放流动性，是扩张性的货币政策；反之是紧缩性的货币政策。</li>
+<li><code>公开市场操作(Open market operations)</code>：指央行在公开市场上买卖债券，央行购买证券则是将钱放出市场，释放流动性，是扩张性的货币政策；反之则是紧缩性的货币政策。这是美联储最常使用的货币政策工具。</li>
+</ul>
+<h4 id="中性利率-Neutral-interest-rate">中性利率(Neutral interest rate)</h4>
+<p>一个经济体的中性利率是指既不会引起经济上涨也不会引起经济下降的货币供给增长速度。即：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>N</mi><mi>e</mi><mi>u</mi><mi>t</mi><mi>r</mi><mi>a</mi><mi>l</mi><mtext> </mtext><mi>r</mi><mi>a</mi><mi>t</mi><mi>e</mi><mo>=</mo><mi mathvariant="normal">Δ</mi><mi mathvariant="normal">%</mi><mi>G</mi><mi>D</mi><mi>P</mi><mo>+</mo><mi>t</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>f</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>=</mo><msub><mi>r</mi><mrow><mi>r</mi><mi>e</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>+</mo><mi>t</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi><mi>t</mi><mtext> </mtext><mi>i</mi><mi>n</mi><mi>f</mi><mi>l</mi><mi>a</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">Neutral\ rate = \Delta \% GDP + target\ inflation=r_{real}+target\ inflation
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mord mathnormal">e</span><span class="mord mathnormal">u</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace"> </span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">e</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8333em;vertical-align:-0.0833em;"></span><span class="mord">Δ%</span><span class="mord mathnormal">G</span><span class="mord mathnormal" style="margin-right:0.02778em;">D</span><span class="mord mathnormal" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.7333em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3361em;"><span style="top:-2.55em;margin-left:-0.0278em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathnormal mtight">re</span><span class="mord mathnormal mtight">a</span><span class="mord mathnormal mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal">t</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">e</span><span class="mord mathnormal">t</span><span class="mspace"> </span><span class="mord mathnormal">in</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mord mathnormal">a</span><span class="mord mathnormal">t</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span></span></span></span></span></p>
+<p>同时<code>政策利率(Policy rate)</code>是指真实GDP与真实通货膨胀率的和，因此对比政策利率与中性利率的本质就是对比<code>真实通货膨胀率(real inflation)</code>与<code>目标通货膨胀率(target inflation)</code>的大小，政府的目标是保证政策利率向中性利率看齐。</p>
+<h4 id="货币政策的限制">货币政策的限制</h4>
+<p>货币政策影响的是短期利率，但<code>长期利率可能不会随着短期利率的变化而变化</code>：</p>
+<ul>
+<li><code>bond market vigilantes</code>：当市场认为货币紧缩政策将会降低未来通货膨胀率的时候，他们会预期未来通货膨胀率更低，这会导致长期债券的价格上升，债券价格上升意味着长期利率的上升。反之亦然。</li>
+<li><code>Liquidity trap</code>：由于市场经济处于萧条状态，银行或个人对市场信心不高，因此即使央行采取扩张的货币政策，增加了市场流动性，可能也并不能达到增加银行贷款或者刺激消费的目的。</li>
+</ul>
+<h2 id="财政政策">财政政策</h2>
+<p><code>凯恩斯学派(Keynesian economists)</code>认为财政政策对经济总需求的增长有非常强的影响，而<code>货币主义流派(Monetarists)</code>认为财政政策对经济的刺激是暂时性的而不会对长期的经济产生影响。财政政策的目标主要有三点：</p>
+<ul>
+<li>影响经济活动水平和总需求</li>
+<li>人口财富和收入的再分配</li>
+<li>资源再分配</li>
+</ul>
+<h4 id="财政政策工具">财政政策工具</h4>
+<h5 id="Spending-Tools-支付工具">Spending Tools(支付工具)</h5>
+<ul>
+<li><code>转移支付(Transfer payments)</code>例如养老金低保等，向一部分人征税并为另一部分人支付，这部分支付不计入GDP。</li>
+<li><code>经常性支出(Current spending)</code>例如公务员工资等政府的日常开支。</li>
+<li><code>资本性支出(Capital spending)</code>例如公路学校等政府在基础设施建设上的支出。</li>
+</ul>
+<p>支付增加增加总需求，是扩张性的财政政策，反之则是紧缩性的财政政策。</p>
+<h5 id="Revenue-Tools-收入工具">Revenue Tools(收入工具)</h5>
+<ul>
+<li>直接税(Direct taxes)：例如个人所得税和企业所得税等和收入有关的征税。</li>
+<li>间接税(Indirect taxes)：例如销售税和增值税等价量税，<strong>间接税对经济的影响更快</strong>。</li>
+</ul>
+<p>税收增加会减少社会可支配收入，是紧缩性的财政政策，反之则是扩张性的财政政策。</p>
+<h4 id="财政乘数">财政乘数</h4>
+<p>与货币乘数的概念相似，财政乘数既是计算每单位财政净支出的增加会促进多少单位的经济总产出：</p>
+<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block"><semantics><mrow><mi>F</mi><mi>i</mi><mi>s</mi><mi>c</mi><mi>a</mi><mi>l</mi><mtext> </mtext><mi>m</mi><mi>u</mi><mi>l</mi><mi>t</mi><mi>i</mi><mi>p</mi><mi>l</mi><mi>i</mi><mi>e</mi><mi>r</mi><mo>=</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><mi>b</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mfrac><mspace linebreak="newline"></mspace><mi>w</mi><mi>h</mi><mi>e</mi><mi>r</mi><mi>e</mi><mtext> </mtext><mi>b</mi><mo>=</mo><mi>M</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>i</mi><mi>n</mi><mi>a</mi><mi>l</mi><mtext> </mtext><mi>p</mi><mi>r</mi><mi>o</mi><mi>p</mi><mi>e</mi><mi>n</mi><mi>s</mi><mi>i</mi><mi>t</mi><mi>y</mi><mtext> </mtext><mi>o</mi><mi>f</mi><mtext> </mtext><mi>c</mi><mi>o</mi><mi>n</mi><mi>s</mi><mi>u</mi><mi>m</mi><mi>p</mi><mi>t</mi><mi>i</mi><mi>o</mi><mi>n</mi><mo>=</mo><mfrac><mi>C</mi><mrow><mi>Y</mi><mo stretchy="false">(</mo><mn>1</mn><mo>−</mo><mi>t</mi><mo stretchy="false">)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">Fiscal\ multiplier=\frac{1}{1-b(1-t)}\\
+where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
+</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">F</span><span class="mord mathnormal">i</span><span class="mord mathnormal">sc</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace"> </span><span class="mord mathnormal">m</span><span class="mord mathnormal">u</span><span class="mord mathnormal">lt</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.01968em;">pl</span><span class="mord mathnormal">i</span><span class="mord mathnormal" style="margin-right:0.02778em;">er</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2574em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3214em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">b</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span><span class="mspace newline"></span><span class="base"><span class="strut" style="height:0.6944em;"></span><span class="mord mathnormal" style="margin-right:0.02691em;">w</span><span class="mord mathnormal">h</span><span class="mord mathnormal">ere</span><span class="mspace"> </span><span class="mord mathnormal">b</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:0.8889em;vertical-align:-0.1944em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">a</span><span class="mord mathnormal" style="margin-right:0.02778em;">r</span><span class="mord mathnormal" style="margin-right:0.03588em;">g</span><span class="mord mathnormal">ina</span><span class="mord mathnormal" style="margin-right:0.01968em;">l</span><span class="mspace"> </span><span class="mord mathnormal">p</span><span class="mord mathnormal">ro</span><span class="mord mathnormal">p</span><span class="mord mathnormal">e</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">i</span><span class="mord mathnormal">t</span><span class="mord mathnormal" style="margin-right:0.03588em;">y</span><span class="mspace"> </span><span class="mord mathnormal">o</span><span class="mord mathnormal" style="margin-right:0.10764em;">f</span><span class="mspace"> </span><span class="mord mathnormal">co</span><span class="mord mathnormal">n</span><span class="mord mathnormal">s</span><span class="mord mathnormal">u</span><span class="mord mathnormal">m</span><span class="mord mathnormal">pt</span><span class="mord mathnormal">i</span><span class="mord mathnormal">o</span><span class="mord mathnormal">n</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:2.2963em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.3603em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.22222em;">Y</span><span class="mopen">(</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mord mathnormal">t</span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathnormal" style="margin-right:0.07153em;">C</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></p>
+<h4 id="财政政策的限制">财政政策的限制</h4>
+<ul>
+<li><code>Lag(滞后性)</code>：Recognition lag、Action lag、Impact lag等滞后性导致财政政策对经济的影响比较慢。</li>
+<li><code>Crowding-out effect(挤出效应)</code>：政府部门的支出提高导致私人部门消费减少。</li>
+<li><code>Ricardian Equivalence</code>：该效应认为扩张的财政政策例如减少税收不会导致总需求增加，而反而会使私人部门增加储蓄。</li>
+</ul>
+<h4 id="债务比率-Debt-Ratio">债务比率(Debt Ratio)</h4>
+<p>债务比率的计算方法是国家总债务与国家GDP的比值。</p>
+<h3 id="货币政策与财政政策的混合使用">货币政策与财政政策的混合使用</h3>
+<p>货币政策影响利率，从而影响私人部门和政府部门的支出，最后影响经济总产出。财政政策通过影响政府部门支出影响经济总产出。当货币政策与财政政策为同向时(同时扩张或同时紧缩)，其影响也是同向，但当两个政策方向相反时：</p>
+<ul>
+<li>货币政策宽松，财政政策紧缩：由于两个政策会反向影响公共支出，因此此时对总产出的影响<strong>不确定</strong>。</li>
+<li>货币政策紧缩，财政政策宽松：货币紧缩导致利率上升，从而使得私人部门的投资和消费下降，引起总产出下降。财政宽松导致政府部门消费上升，引起总产出上升，此时财政政策的影响大于货币政策，最后总产出上升。</li>
+</ul>
+<h2 id="Reading-17-国际贸易">Reading 17 国际贸易</h2>
+<h3 id="主要概念">主要概念</h3>
+<h3 id="比较优势与相对优势">比较优势与相对优势</h3>
 <p>[第18篇]</p>
 ]]></content>
       <categories>
@@ -2760,6 +2839,85 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
         <tag>Python</tag>
         <tag>BeautifulSoup</tag>
         <tag>网页爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
+    <url>/2022/02/12/2-typora_picgo_config/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
+<h1>正文</h1>
+<h2 id="创建博文">创建博文</h2>
+<p>先介绍一些在Hexo中发文的基础知识。</p>
+<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
+<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
+<ul>
+<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
+<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
+<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
+<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
+</ul>
+<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
+<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
+<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
+<p>hexo命令创建三类文件的方式分别如下：</p>
+<ul>
+<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
+<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
+<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
+</ul>
+<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
+<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
+<h3 id="Typora是什么">Typora是什么</h3>
+<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
+<h3 id="PicGo是什么">PicGo是什么</h3>
+<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
+<h3 id="具体如何配置">具体如何配置</h3>
+<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
+<h4 id="配置Typora">配置Typora</h4>
+<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
+<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
+<h4 id="配置图床">配置图床</h4>
+<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
+<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
+<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
+<h4 id="使用图床">使用图床</h4>
+<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
+<hr>
+<p>以下内容为2022年2月19日补充</p>
+<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
+<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
+<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
+<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
+<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
+<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
+<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
+<blockquote>
+<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
+</blockquote>
+<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
+<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
+<blockquote>
+<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
+</blockquote>
+<hr>
+<h1>最后</h1>
+<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
+<p>[第2篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>GitHub</tag>
+        <tag>日常学习</tag>
+        <tag>Typora</tag>
+        <tag>PicGo</tag>
       </tags>
   </entry>
   <entry>
@@ -2946,85 +3104,6 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
       </tags>
   </entry>
   <entry>
-    <title>[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</title>
-    <url>/2022/02/12/2-typora_picgo_config/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>网站已经搭好了，但是怎么样编辑并且发布文章呢？我们知道网站中的文章都是作者按照排版需求使用Markdown语法写出.md后缀文件(既Markdown文件)并以此生成相应的html文件供浏览器读取展示，而插入图片的方法却只能使用路径引用的方法非常繁琐。本文将介绍在Hexo框架下发博文的方法，以及如何使用md编辑器<a href="https://typora.io/" title="Typora Website">Typora</a>与图床管理软件<a href="https://picgo.github.io/PicGo-Core-Doc/zh/guide/config.html#picbed-tcyun" title="PicGo-Core Documentation">PicGo</a>来简单便捷地编辑图文。</p>
-<h1>正文</h1>
-<h2 id="创建博文">创建博文</h2>
-<p>先介绍一些在Hexo中发文的基础知识。</p>
-<h3 id="Hexo框架下博文的保存">Hexo框架下博文的保存</h3>
-<p>在我们安装的<a href="https://hexo.io/docs/setup" title="Setup for Hexo">Hexo</a>的根目录下与Hexo有关的分别是下面四个，他们的作用分别如下：</p>
-<ul>
-<li><strong>scaffolds:</strong> 模板文件夹，保存了草稿，页面和文章这三类md文件的模板，新建的该类文件内容将与模板一致。</li>
-<li><strong>source:</strong> 保存网站内容的文件夹，其中的<code>_post</code>子文件夹即是保存md格式博文的文件夹。<code>source文件夹</code>中的所有可渲染文件(例如markdown和html)都将被渲染并被放入<code>public文件夹</code>，其他类型文件则会被直接复制。</li>
-<li><strong>public:</strong> 保存网站原码的文件夹，这个文件夹中的内容将被推出并托管在<code>GitHub Pages</code>上形成网页。</li>
-<li><strong>theme:</strong> 保存Hexo主题文件的文件夹，Hexo会同时基于网站内容和主题文件来生成相应的静态文件。</li>
-</ul>
-<p>也就是说我们的博文其实就是保存在<code>source/_post</code>文件夹中的md文件，即创建txt文件后改后缀成md，只要在文件开头—分隔符内(即<code>front-matter</code>)写上必要的配置如标题，日期等，这个md文件便会被识别渲染为一篇博文。</p>
-<h3 id="Hexo新建页面-博文命令">Hexo新建页面/博文命令</h3>
-<p>即使只要放入md文件即可被渲染成网页，Hexo依然提供了更方便的创建新页面或博文的方法：</p>
-<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">$ hexo new [layout] &lt;title&gt; <span class="comment">#layout若不填则自动按post模板创建，title将同时被用于文件名和frontmatter中的title参数</span></span><br></pre></td></tr></table></figure>
-<p>hexo命令创建三类文件的方式分别如下：</p>
-<ul>
-<li><strong>Page(页面)</strong>: 在<code>source</code>文件夹下创建一个指定名称的路径，并在里面创建一个index.md文件，该文件中内容将显示在页面上。</li>
-<li><strong>Draft(草稿)</strong>: 在<code>source/_drafts</code>文件夹中创建一个草稿，该文件不会被展示在页面上，但可以被用<code>hexo pubilish [layout] &lt;filename&gt;</code>命令发布。</li>
-<li><strong>Post(博文)</strong>: 若<code>new</code>命令没有指定<code>layout</code>则将默认创建该类型，此类型被创建在<code>source/_post</code>文件夹中，会被直接渲染为博文。</li>
-</ul>
-<h2 id="使用Typora和PicGo编辑博文">使用Typora和PicGo编辑博文</h2>
-<p>知道了Hexo下发博的基本知识，现在终于来到正题，如何方便快捷地编辑一篇图文并茂的博文呢？我的选择是Typora与其绑定的图床管理软件PicGo Core。</p>
-<h3 id="Typora是什么">Typora是什么</h3>
-<p>Typora是一款专门用来编辑Markdown文件的编辑软件，他的最大特点便是”所见即所得“。在这个软件中你可以使用markdown语法来调整你的文章展示，而你写下的格式语法会被Typora直接转换为渲染后的效果。这样作者就可以很方便地一边编辑一边调整最终成稿。</p>
-<h3 id="PicGo是什么">PicGo是什么</h3>
-<p>简单来说，PicGo是一个用于快速上传图片至图床并获取图片URL链接地工具。一直以来在md文件中插入并管理图片都是一个非常麻烦的工作，你需要将你需要使用的图片放在本地或图床上，并在md文章中引用这些地址来实现图片地展示。但现在Typora中置入了PicGo Core的工具让你可以以可视化的方式简单方便地插入图片在你的博文中。</p>
-<h3 id="具体如何配置">具体如何配置</h3>
-<p>虽然PicGo支持的图床相当多，但大部分图床都有各种各样的限制或收费。而我个人选择的则是GitHub作为我的图床，因为在建站时创建的远程仓库刚好可以直接拿来用作图床，除了文章内使用的图片，其他包括top_img或封面等都可以很方便地上传至这些远程仓库用来引用。</p>
-<h4 id="配置Typora">配置Typora</h4>
-<p>从Typora的上方选项中依次打开<code>格式→图像→全局图像设置</code>，然后会进入下图的界面，按图片中的设置配置打勾：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214215927465.png" alt="按图中方式配置"></p>
-<p>选择插入图片时<code>上传图片</code>，下方下拉选单选择<code>PicGo-Core(command line)</code>，这时可以直接<code>下载或更新</code>。安装好<code>PicGo</code>后就需要配置图床了。</p>
-<h4 id="配置图床">配置图床</h4>
-<p>为方便我选择的是GitHub的远程仓库作为我的图床，大家可以按照PicGo的<a href="https://picgo.github.io/PicGo-Doc/zh/guide/config.html#github%E5%9B%BE%E5%BA%8A" title="PicoGo Configuration on GitHub图床">官方文档</a>生成该远程仓库的token用于使PicGo可以获得访问该仓库的权限。获得这个token之后我们就可以开始填写PicGo的配置文件，用户可以在命令行中输入<code>picgo set uploader</code>来进入交互式命令行：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220214234833095.png" alt="image-20220214234833095"></p>
-<p>用方向上下键移动，回车选中github，然后命令行会分别要求你输入需要的参数以生成配置文件，填写完成后在命令行中继续输入<code>picgo use uploader</code>并选择刚刚配置的uploader来完成配置。按要求完成好后生成的配置文件如下，当然你也可以直接按Typora中的<code>打开配置文件</code>按钮或直接去到系统用户目录下<code>.picgo/config.json</code>中手动填入配置，但鉴于出错的可能性比较大，更推荐自动生成配置文件：</p>
-<figure class="highlight json"><table><tr><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;picBed&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;current&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;uploader&quot;</span><span class="punctuation">:</span> <span class="string">&quot;github&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;transformer&quot;</span><span class="punctuation">:</span> <span class="string">&quot;path&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;github&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;repo&quot;</span><span class="punctuation">:</span> <span class="string">&quot;username/reponame&quot;</span><span class="punctuation">,</span><span class="comment">//填入你的github仓库的用户名/仓库名</span></span><br><span class="line">      <span class="attr">&quot;branch&quot;</span><span class="punctuation">:</span> <span class="string">&quot;branchname&quot;</span><span class="punctuation">,</span> <span class="comment">//填入分支名</span></span><br><span class="line">      <span class="attr">&quot;token&quot;</span><span class="punctuation">:</span> <span class="string">&quot;tokentokentoken&quot;</span><span class="punctuation">,</span><span class="comment">//填入github token</span></span><br><span class="line">      <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;post_img/&quot;</span><span class="punctuation">,</span><span class="comment">//填入需要上传到的文件夹路径</span></span><br><span class="line">      <span class="attr">&quot;customUrl&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;picgoPlugins&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span><span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
-<p>此时你就已经在Typora中配置好了图床，按一下Typora中的<code>验证图片上传选项</code>按钮，显示验证成功，这时你就可以直接截图粘贴至你正在Typora中编辑的博文，Typora会自动帮你完成上传图片至图床并返回图片链接至你粘贴图片的位置的操作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220215000247746.png" alt="image-20220215000247746"></p>
-<h4 id="使用图床">使用图床</h4>
-<p>除了使用Typora的自动上传功能以外，我们也可以直接手动利用我们的GitHub来作为我们的图床使用，在本地仓库中放入需要使用的文件或图片，然后对他们使用 <code>add commit push</code>三部曲推至远程仓库(由于本地仓库不会自动更新Typora上传至远程仓库中的图片，因此如有改动，在add前还需要先将远程仓库的改动pull至本地仓库，以免报错)，然后便可以使用<code>raw.githubusercontent.com</code>后接文件在github中的路径便可以直接访问该文件的raw (即未处理版本)文件。</p>
-<hr>
-<p>以下内容为2022年2月19日补充</p>
-<h2 id="使用Jsdelivr加速图床">使用Jsdelivr加速图床</h2>
-<p>由于一直在香港且只在自己的电脑上测试，并没有意识到GitHub作为图床使用的一个重要缺点，那就是当内地用户访问网站时使用<code>raw.githubusercontent.com</code>链接会导致图片裂开…在苦恼了几分钟以为要把所有链接换成其他内地付费的图床时我找到了<code>JSDelivr</code>这个解决办法。</p>
-<p>其实使用<code>JSDelivr</code>的链接是我刚刚开始查找图片链接方法时就注意到了的，但由于发现<code>GitHub</code>的raw链接可以实时展现图片而不需要release版本blabla，也就没有继续看稍微麻烦一些的<code>JSDelivr</code>，现在看来是福不是祸，是祸躲不过啊。</p>
-<h4 id="Jsdelivr是什么？">Jsdelivr是什么？</h4>
-<p>参考<a href="https://www.dazhuanlan.com/charmsky/topics/1636035" title="前端 使用JSDelivr加速加载Github资源">这篇文章</a>我们知道<code>JSDelivr</code>是<code>内容分发网络(Content Delivery Network, i.e. CDN)</code> 的提供商之一，简单来说既是将特定网站的资源分布至各地网络，然后该资源被请求时即从距离请求最近的服务器回应该请求，从而达到加速资源访问的目的。</p>
-<h4 id="如何在Typora中设置JSDelivr？">如何在Typora中设置JSDelivr？</h4>
-<p>首先要注意的是前文中提到<code>PicGo</code>的配置文件中有一个之前未提及的<code>customUrl</code>项，设定该项即可将上传图片后返回的链接自定义到<code>JSDelivr</code>的链接从而使用其服务。具体来说是改成：</p>
-<blockquote>
-<p>“customUrl”: “https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D">cdn.jsdelivr.net/gh/用户名/仓库名</a>”   #注意去掉网址中间的空格</p>
-</blockquote>
-<p>经过我的测试，发现在Typora中粘贴图片可以正常上传至<code>GitHub仓库</code>，但返回的链接却不能正确显示图片。这个原因我猜测是因为是我们没有将上传的图片release，因此这时JSDelivr还无法获得获取我们上传的资源，按照<a href="https://www.cnblogs.com/yu-du-chen/p/12109065.html" title="jsdelivr的使用">这篇文章</a>的方式发布后，图片就可以用<code>JSDeliver</code>的链接访问了。</p>
-<p>最后一点小备注，在release步骤中填写的Tag也就是版本号，如果在仓库名和文件夹名中间加入这个Tag名，即可访问该版本的资源，如果不加这个版本号则是默认访问最新的版本资源。</p>
-<blockquote>
-<p>https:// <a href="http://cdn.jsdelivr.net/gh/%E7%94%A8%E6%88%B7%E5%90%8D/%E4%BB%93%E5%BA%93%E5%90%8D/">cdn.jsdelivr.net/gh/用户名/仓库名/</a><mark class="hl-label default">版本号</mark> /文件路径   #注意去掉网址中间的空格</p>
-</blockquote>
-<hr>
-<h1>最后</h1>
-<p>现在作为完全小白的我终于可以快乐而没有顾忌地发文章了，一切麻烦的事情都交给Typora。</p>
-<p>[第2篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>GitHub</tag>
-        <tag>日常学习</tag>
-        <tag>Typora</tag>
-        <tag>PicGo</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
     <url>/2022/02/19/3-excel-tool-develop-1/</url>
     <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
@@ -3110,110 +3189,12 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
       </tags>
   </entry>
   <entry>
-    <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
-    <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
-<h1>正文</h1>
-<h2 id="背景介绍">背景介绍</h2>
-<p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
-<h2 id="概述">概述</h2>
-<p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
-<ul>
-<li>
-<p><strong>面向过程：</strong> 顾名思义，编程方式注重过程。在解决一个问题的时候这种编程方式需要把解决方式拆分成一个个过程，按照一定的顺序执行完这些方法(methods)，方法执行完问题就解决了。</p>
-</li>
-<li>
-<p>**面向对象：**同样名字就已经非常清晰了，注重的是程序互动的对象。解决问题的时候面向对象编程是将事物抽象成对象，那问题里可能涉及的事物都定义成一个程序对象，然后给这个对象赋上一些<code>属性(Properties)</code>和<code>方法(methods)</code>。让各个对象去执行自己的方法以此来解决问题。</p>
-</li>
-</ul>
-<h3 id="举例说明">举例说明</h3>
-<p>我引用<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>提到的我觉得对于我的理解起到重要帮助的两个例子，分别是洗衣服和做饭。</p>
-<h4 id="洗衣服">洗衣服</h4>
-<p>假设有一个问题：要用洗衣机洗干净脏衣服，如何执行？</p>
-<p><strong><code>面向过程</code>的解决方法</strong>：</p>
-<ol>
-<li>执行加洗衣粉的方法；</li>
-<li>执行加水的方法；</li>
-<li>执行洗衣服的方法；</li>
-<li>执行清洗的方法；</li>
-<li>执行烘干的方法；</li>
-</ol>
-<p>将解决过程拆分成一个个方法，不用调用对象，通过执行一个个方法来解决问题。</p>
-<p><strong><code>面向对象</code>的解决方法：</strong></p>
-<ol>
-<li>先抽象出两个对象，分别是<code>洗衣机</code>和<code>人</code></li>
-<li>针对对象<code>洗衣机</code>加入一些属性和方法：“洗衣服方法”，”清洗方法“，”烘干方法“</li>
-<li>针对对象<code>人</code>加入一些属性和方法：“加洗衣粉方法”，“加水方法”</li>
-<li>然后执行：<code>人.加洗衣粉→人.加水→洗衣机.洗衣服→洗衣机.清洗→洗衣机.烘干</code></li>
-</ol>
-<p>同一个问题，面向对象编程需要先定义对象然后靠对象执行方法的方式解决问题。</p>
-<h4 id="做饭">做饭</h4>
-<p>呜呜轩轩引用了@十四期_李光的说法，分别将<code>面向过程编程</code>和<code>面向对象编程</code>比喻成<code>蛋炒饭</code>和<code>盖浇饭</code>。以此来说明两种方法的优缺点：</p>
-<ul>
-<li><code>面向过程编程就像蛋炒饭</code>，食材和饭交融在一起，难以分开，其味道可能均匀易于入口，但一旦做好就很难再改变。</li>
-<li><code>面向对象编程就像盖浇饭</code>，食材和饭是分开的，食客在同时能享受到食材和饭的同时，如果想要换一个口味也只需要将不同的菜与之前的饭放在一起就可以了。</li>
-</ul>
-<p>回到现实，这两种方法各自的优缺点就是：</p>
-<ul>
-<li>面向过程编程性能高于面向对象编程，缺点是不易维护，难以扩展，难以复用。适合需要性能优先的场景。</li>
-<li>面向对象编程就是相反了，性能略低但易维护易扩展，结构更加灵活。适合大而复杂的软件开发。</li>
-</ul>
-<p>这两个例子一个让人了解这两种方法在表达形式上的区别，一个让人了解各自的优缺点，我觉得非常方便概念比较模糊的人理解。</p>
-<h2 id="面向对象编程">面向对象编程</h2>
-<p>我个人觉得<code>面向过程编程</code>是非常<code>straightforward</code>的，所以除了两者的对比以外，我不打算细说面向过程编程。那在这一节我就还是用我从网上学到的内容(主要还是<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>和<a href="https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html" title="__init__ in Python: An Overview">Alexey</a>)现学现卖，详细讲讲面向对象编程的三大特征和五大原则，以及其实际的实现方法等。</p>
-<h3 id="三大基本特征">三大基本特征</h3>
-<p>**封装(Encapsulation)：**把客观事物封装成抽象的<code>类(Class)</code>，而类可以把自己的<code>属性(Property)</code>和<code>方法(methods)</code>只让可信的类或者对象操作，对不可信的进行信息隐藏(public和private)。一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。</p>
-<p>**继承(Inheritance)：**让某个类型的对象获得另一个类型对象的属性的方法。继承使新类可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展，通过继承创建的新类称为<code>“子类(Subclass)”</code>或<code>“派生类(Derived class)”</code>，被继承的类称为<code>“基类(Base class)”</code>，<code>“父类(Parent class)”</code>或<code>“超类(Super class)”</code>。继承的过程就是从<code>一般(generalized)</code>到<code>特殊(specialized)</code>的过程。要实现继承，可以通过<code>“继承(Inheritance)”</code>和<code>“组合(Composition)”</code>来实现。继承概念的实现方式有两类：<code>实现继承(Implementation inheritance)</code>与<code>接口继承(Interface inheritance)</code>。前者指直接使用父类的属性和方法而无需额外编码的能力；后者则是指仅使用属性和方法的名称，但子类必须提供实现的能力。</p>
-<p>**多态(Polymorphism)：**指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着虽然针对不同对象的具体操作不同，但通过一个公共的类，它们可以通过相同的方式予以调用。</p>
-<h3 id="五大基本原则">五大基本原则</h3>
-<p>**单一职责原则SRP(Single Responsibility Principle)：**指一个类的功能要单一，不能混杂什么都有。</p>
-<p>**开放封闭原则OCP(Open－Close Principle)：**一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。比如：一个网络模块，原来只有服务端功能，在现在要加入客户端功能，那么就应该在不用修改已有功能代码的前提下就能增加客户端的实现代码，这要求在设计之初就将两个部分分开，将公共部分抽象出来。</p>
-<p>**里式替换原则LSP(the Liskov Substitution Principle LSP)：**子类应当可以替换父类并出现在父类能出现的任何地方。</p>
-<p>**依赖倒置原则DIP(the Dependency Inversion Principle DIP)：**程序要依赖于抽象接口而不能依赖于具体实现。假设B是较A低的模块，但B需要使用到A的功能，这个时候，B不应当直接使用A中的具体类，因为如果这样做的话任何一个下层模块的变动都会导致上层必须要被相应更改。正确做法应当由B定义一个抽象接口，并由A来实现这个抽象接口，B只使用这个抽象接口：这样就达到了依赖倒置的目的，B也解除了对A的依赖，反过来是A依赖于B定义的抽象接口。</p>
-<p>**接口分离原则ISP(the Interface Segregation Principle ISP)：**模块间要通过抽象接口隔离开，而不是通过具体的类强耦合起来。</p>
-<h3 id="Python中的面向对象编程">Python中的面向对象编程</h3>
-<h4 id="Python中的类-Class">Python中的类(Class)</h4>
-<p>一个<code>类(Class)</code>会定义所有以它创建的对象，你甚至可以把类想象成一个对象工厂。举例来说，假设你有一只<code>牛头梗</code>，从<code>面向对象编程</code>的角度来看，一个<code>狗</code>的类中可能包含狗的一些特征，比如他的品种，眼色等。由于牛头梗是一只狗，那么我们就可以创建一个继承<code>狗</code>这个<code>类</code>特征的对象来定义牛头梗。<code>类</code>使用<code>方法函数(methods)</code>和<code>构造函数(constructors)</code>来创建并定义<code>对象(Objects)</code>。</p>
-<h4 id="用户定义的方法-user-defined-methods-和特殊方法-special-methods">用户定义的方法(user-defined methods)和特殊方法(special methods)</h4>
-<p><code>方法(methods)</code>是类中用以执行特殊任务的函数，Python将方法分成程序员编写的<code>用户定义方法(user-defined method)</code>和语言中自带的<code>特殊方法(special method)</code>。比如一个叫<code>狗</code>的<code>类</code>中可能有一个方法叫做<code>walk()</code>来供<code>狗</code>的对象调用，程序员编写这个方法来执行特殊的动作。</p>
-<p>而<code>特殊方法</code>则被<code>双下划线(__)</code>包围的名字定义，比如说<code>__init__</code>。Python用这些特殊方法来加强类的功能性，其大多在后台工作并会在程序需要的时候被自动调用。程序员不能直接调用这些方法。举例来说，当你创建一个新的对象的时候，Python会自动调用<code>__new__</code>方法，而这又会调用<code>__init__</code>方法。</p>
-<h4 id="构造函数-constructor">构造函数(constructor)</h4>
-<p>构造函数是程序在创建对象时会调用的特殊方法，其在类中是被用来初始化对象数据的。以<code>狗</code>这个类举例，我们可以用这个类的构造函数去给每一个<code>牛头梗</code>对象特征赋值，<code>__init__</code>就是Python的构造函数。</p>
-<h4 id="用代码来解释">用代码来解释</h4>
-<p>我们首先创建一个类，并且在这个类中定义一个<code>__init__</code>方法，而这个方法则初始化两个<code>属性(attribute)</code>:</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,dogBreed,dogEyeColor</span>):</span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed       </span><br><span class="line">    self.eyeColor = dogEyeColor...</span><br></pre></td></tr></table></figure>
-<p>这时我们已经有了一个<code>类</code>了，接下来我们以这个类创建<code>对象</code>，并且将<code>类</code>中的<code>属性</code>传递给这个<code>对象</code>。这时候我们就需要<mark class="hl-label red">self</mark> 这个magic word来将对象的属性绑定在其接收到的参数上。</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...Tomita = Dog(<span class="string">&quot;Fox Terrier&quot;</span>,<span class="string">&quot;brown&quot;</span>)...</span><br></pre></td></tr></table></figure>
-<p>在上面这行代码中，我们创建了一个叫做<code>Tomita</code>的对象(这是这只狗的名字)，然后我们首先声明定义这个对象的类的名字(<code>Dog</code>)，然后将在<code>Dog类</code>的<code>__init__</code>中设定的两个属性分别设定为<code>Fox Terrier</code>和<code>brown</code>。然后<code>__init__</code>用<code>self</code>来将这两个以参数传回的值赋给对象的属性<code>self.breed</code>和<code>self.eteColor</code>。</p>
-<p>然后要访问我们创建的对象的属性，我们只需要在对象名后用<code>.</code>接上相应的属性名，就可以访问这个对象的这个属性的值，例如：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...<span class="built_in">print</span>(<span class="string">&quot;This dog is a&quot;</span>,tomita.breed,<span class="string">&quot;and its eyes are&quot;</span>,tomita.eyeColor)</span><br></pre></td></tr></table></figure>
-<p>我们运行上面这段代码会得到这样的结果：</p>
-<blockquote>
-<p>This dog is a Fox Terrier and its eyes are brown</p>
-</blockquote>
-<p>Python中的构造函数也可以不输入参数，可以使用默认参数设定。如果一个构造函数不是必须输入参数的话，这个构造函数就叫<code>默认构造函数(default constructor)</code>。比如上面的<code>Dog类</code>如果写成默认构造函数形式：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dogBreed=<span class="string">&quot;German Shepherd&quot;</span>,dogEyeColor=<span class="string">&quot;Brown&quot;</span></span>): </span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed   </span><br><span class="line">    self.eyeColor = dogEyeColor</span><br></pre></td></tr></table></figure>
-<p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
-<h1>最后</h1>
-<p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
-<p>[第5篇]</p>
-]]></content>
-      <categories>
-        <category>编程算法</category>
-      </categories>
-      <tags>
-        <tag>日常学习</tag>
-        <tag>Python</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[编程算法] 公司项目需要的自动化测试Selenium文档解读</title>
     <url>/2022/02/21/4-Selenium_documentation_learning/</url>
     <content><![CDATA[<h1>序言</h1>
 <p>基于刚进公司时接手的一个<code>自然语言处理</code>+<code>自动化测试</code>的项目，这篇文章我会主要覆盖Python的Selenium包的文档解读，由于在HKU时的毕业项目便涉及各种在线论坛的评论爬取，我对Selenium并不算陌生，但由于Selenium的内容功能是比较多的，本篇除了一些基础知识以外，我会重点关注与公司项目有关的部分。</p>
 <h1>正文</h1>
-<h2 id="背景介绍-2">背景介绍</h2>
+<h2 id="背景介绍">背景介绍</h2>
 <p>刚进公司的时候接手了一个前人的<code>自然语言处理</code>+<code>自动测试</code>项目。因为现在公司有一个由集团设定报价逻辑的报价系统，通常来说由代理或核保人员输入客户的相关资料便可以完成报价，但这个系统报价汽车险时要输入的资料非常繁琐，导致代理不愿意使用这个系统报价，影响报价率。考虑到这个系统中很多资料是没有意义的，因此前人建议代理直接填写车型排量司机年龄等必要资料，并用Python做了一个自动报价工具。</p>
 <p>这个工具由两个大部分组成，第一个部分是自然语言处理，即使用<code>Cosine Similarity</code>算法将代理输入的车型信息与公司系统中的车型信息匹配，有机会我会再写一篇文章讲讲这部分。第二部分则是自动化测试，使用匹配到的车型信息利用Selenium自动填写资料并返回报价。前人对第一个部分的完成度是比较高的，因此我只是对代码<code>规范性</code>和<code>循环逻辑</code>稍作调整便可以获得较好的<code>文本匹配和稳定性</code>。但第二个部分他的测试显然是不够的（毕竟是未完成的项目），网站中有非常多的特殊情况例如某些资料未填写时其他资料将不会显示，司机年龄和驾龄都很小时会直接弹出错误信息不予报价，有时网站弹窗提示时需要先将该弹窗关闭才能继续操作等等。</p>
 <p><strong>但由于代码本身涉及公司内部报价网站的架构，我<code>不会</code>在这里分享具体的代码或逻辑，因此本篇我会分享一些我在解决这些问题时通过<a href="https://selenium-python.readthedocs.io/index.html" title="Selenium with Python">Selenium with Python</a>学习到的知识。</strong></p>
@@ -3226,7 +3207,7 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
 <p>举例来说，当使用<code>webdriver.Chrome()</code>将<code>Chrome driver</code>设定为<code>实例(instance)</code>并将该实例赋值给<code>driver</code>时，使用<code>driver.get(“xx网址URL”)</code>，浏览器便会被打开并导航至该指定网址，需要注意的是<code>Webdriver</code>会等到网页完全加载完毕之后才将控制权返回你的脚本，也就是说在这个阶段你通常不用担心你的程序会急着在没有加载出来的网页中操作或找寻你要的东西，但如果网页使用了大量的<code>AJAX(Asynchronous JavaScript And XML</code>, 用于直接在已加载的网页中读取网络服务器数据)，那么driver可能无法判断网页是否完全加载，如果要确保网页完全加载可能需要使用selenium的<a href="#%E7%AD%89%E5%BE%85%E5%8A%A0%E8%BD%BD(Waits)">waits</a>函数。</p>
 <h3 id="定位元素">定位元素</h3>
 <p>当我们进入了想要测试的网页之后，首先要解决的问题就是如何让driver找到你想要互动的元素，Selenium提供的方式非常丰富，包括<code>id, name, Xpath, link text, partial link text, tag name, class name甚至css selector</code>。</p>
-<h4 id="举例说明-2">举例说明</h4>
+<h4 id="举例说明">举例说明</h4>
 <p>举例来说，如果我们有一个如下的网页：</p>
 <figure class="highlight html"><table><tr><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">form</span> <span class="attr">id</span>=<span class="string">&quot;loginForm&quot;</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;username&quot;</span> <span class="attr">type</span>=<span class="string">&quot;text&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span> <span class="attr">type</span>=<span class="string">&quot;password&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;continue&quot;</span> <span class="attr">type</span>=<span class="string">&quot;submit&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Login&quot;</span> /&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">name</span>=<span class="string">&quot;continue&quot;</span> <span class="attr">type</span>=<span class="string">&quot;button&quot;</span> <span class="attr">value</span>=<span class="string">&quot;Clear&quot;</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">&quot;content&quot;</span>&gt;</span> Are you sure you want to do this?<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;continue.html&quot;</span>&gt;</span>Continue<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">&quot;cancel.html&quot;</span>&gt;</span>Cancel<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>那么你可以分别通过下面这些方式定位你想要的各个元素：</p>
@@ -3321,6 +3302,104 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
         <tag>工作学习</tag>
         <tag>Python</tag>
         <tag>Selenium</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[编程算法] 到底什么是“面向对象编程(OOP)”</title>
+    <url>/2022/02/23/5-What_is_object_oriented_programming/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>本篇介绍了对“程序员”来说很可能是第一个难点ever，但又绝不能不知道的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>，由于我自己本科学的是金融数学，二硕学个计算机吧又是金融计算方向(选课偏向<code>数据分析</code>而非<code>软件开发</code>)，因此基本上在编程的时候使用的都只是简单易懂的<code>“面向过程编程”</code>的方法，因此本篇我就要好好研究一下到底什么叫<code>“面向对象编程”</code>。</p>
+<h1>正文</h1>
+<h2 id="背景介绍-2">背景介绍</h2>
+<p>在写上一篇博文的时候，我把<a href="https://selenium-python.readthedocs.io/index.html" title="SeleniumwithPython">Selenium with Python</a>的文档看了一遍，看着看着忽然觉得有些吃力，这才想起来我有一个东西一直都是半懂不懂，那就是传说中所谓的<code>面向对象编程(Object Oriented Programming)</code>和<code>面向过程编程(Procedural Oriented Programming)</code>。这导致我在看别人代码的时候总是没有那种融汇贯通心领神会的感觉，作为“<code>1/4”</code>个计算机<code>“科班出生”</code>的<code>“1/4程序员”</code>这怎么行？所以我今天就要把这个东西彻底啃透。</p>
+<h2 id="概述">概述</h2>
+<p>根据这篇<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">知乎文章</a>的解释，<code>面向过程</code>与<code>面向对象</code>这两种编程方式拥有各自的优缺点。通俗一点解释就是**：**</p>
+<ul>
+<li>
+<p><strong>面向过程：</strong> 顾名思义，编程方式注重过程。在解决一个问题的时候这种编程方式需要把解决方式拆分成一个个过程，按照一定的顺序执行完这些方法(methods)，方法执行完问题就解决了。</p>
+</li>
+<li>
+<p>**面向对象：**同样名字就已经非常清晰了，注重的是程序互动的对象。解决问题的时候面向对象编程是将事物抽象成对象，那问题里可能涉及的事物都定义成一个程序对象，然后给这个对象赋上一些<code>属性(Properties)</code>和<code>方法(methods)</code>。让各个对象去执行自己的方法以此来解决问题。</p>
+</li>
+</ul>
+<h3 id="举例说明-2">举例说明</h3>
+<p>我引用<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>提到的我觉得对于我的理解起到重要帮助的两个例子，分别是洗衣服和做饭。</p>
+<h4 id="洗衣服">洗衣服</h4>
+<p>假设有一个问题：要用洗衣机洗干净脏衣服，如何执行？</p>
+<p><strong><code>面向过程</code>的解决方法</strong>：</p>
+<ol>
+<li>执行加洗衣粉的方法；</li>
+<li>执行加水的方法；</li>
+<li>执行洗衣服的方法；</li>
+<li>执行清洗的方法；</li>
+<li>执行烘干的方法；</li>
+</ol>
+<p>将解决过程拆分成一个个方法，不用调用对象，通过执行一个个方法来解决问题。</p>
+<p><strong><code>面向对象</code>的解决方法：</strong></p>
+<ol>
+<li>先抽象出两个对象，分别是<code>洗衣机</code>和<code>人</code></li>
+<li>针对对象<code>洗衣机</code>加入一些属性和方法：“洗衣服方法”，”清洗方法“，”烘干方法“</li>
+<li>针对对象<code>人</code>加入一些属性和方法：“加洗衣粉方法”，“加水方法”</li>
+<li>然后执行：<code>人.加洗衣粉→人.加水→洗衣机.洗衣服→洗衣机.清洗→洗衣机.烘干</code></li>
+</ol>
+<p>同一个问题，面向对象编程需要先定义对象然后靠对象执行方法的方式解决问题。</p>
+<h4 id="做饭">做饭</h4>
+<p>呜呜轩轩引用了@十四期_李光的说法，分别将<code>面向过程编程</code>和<code>面向对象编程</code>比喻成<code>蛋炒饭</code>和<code>盖浇饭</code>。以此来说明两种方法的优缺点：</p>
+<ul>
+<li><code>面向过程编程就像蛋炒饭</code>，食材和饭交融在一起，难以分开，其味道可能均匀易于入口，但一旦做好就很难再改变。</li>
+<li><code>面向对象编程就像盖浇饭</code>，食材和饭是分开的，食客在同时能享受到食材和饭的同时，如果想要换一个口味也只需要将不同的菜与之前的饭放在一起就可以了。</li>
+</ul>
+<p>回到现实，这两种方法各自的优缺点就是：</p>
+<ul>
+<li>面向过程编程性能高于面向对象编程，缺点是不易维护，难以扩展，难以复用。适合需要性能优先的场景。</li>
+<li>面向对象编程就是相反了，性能略低但易维护易扩展，结构更加灵活。适合大而复杂的软件开发。</li>
+</ul>
+<p>这两个例子一个让人了解这两种方法在表达形式上的区别，一个让人了解各自的优缺点，我觉得非常方便概念比较模糊的人理解。</p>
+<h2 id="面向对象编程">面向对象编程</h2>
+<p>我个人觉得<code>面向过程编程</code>是非常<code>straightforward</code>的，所以除了两者的对比以外，我不打算细说面向过程编程。那在这一节我就还是用我从网上学到的内容(主要还是<a href="https://zhuanlan.zhihu.com/p/75265007" title="2分钟让你明白什么是面向对象编程">呜呜轩轩</a>和<a href="https://www.udacity.com/blog/2021/11/__init__-in-python-an-overview.html" title="__init__ in Python: An Overview">Alexey</a>)现学现卖，详细讲讲面向对象编程的三大特征和五大原则，以及其实际的实现方法等。</p>
+<h3 id="三大基本特征">三大基本特征</h3>
+<p>**封装(Encapsulation)：**把客观事物封装成抽象的<code>类(Class)</code>，而类可以把自己的<code>属性(Property)</code>和<code>方法(methods)</code>只让可信的类或者对象操作，对不可信的进行信息隐藏(public和private)。一个类就是一个封装了数据以及操作这些数据的代码的逻辑实体。</p>
+<p>**继承(Inheritance)：**让某个类型的对象获得另一个类型对象的属性的方法。继承使新类可以使用现有类的所有功能，并在无需重新编写原来的类的情况下对这些功能进行扩展，通过继承创建的新类称为<code>“子类(Subclass)”</code>或<code>“派生类(Derived class)”</code>，被继承的类称为<code>“基类(Base class)”</code>，<code>“父类(Parent class)”</code>或<code>“超类(Super class)”</code>。继承的过程就是从<code>一般(generalized)</code>到<code>特殊(specialized)</code>的过程。要实现继承，可以通过<code>“继承(Inheritance)”</code>和<code>“组合(Composition)”</code>来实现。继承概念的实现方式有两类：<code>实现继承(Implementation inheritance)</code>与<code>接口继承(Interface inheritance)</code>。前者指直接使用父类的属性和方法而无需额外编码的能力；后者则是指仅使用属性和方法的名称，但子类必须提供实现的能力。</p>
+<p>**多态(Polymorphism)：**指一个类实例的相同方法在不同情形有不同表现形式。多态机制使具有不同内部结构的对象可以共享相同的外部接口。这意味着虽然针对不同对象的具体操作不同，但通过一个公共的类，它们可以通过相同的方式予以调用。</p>
+<h3 id="五大基本原则">五大基本原则</h3>
+<p>**单一职责原则SRP(Single Responsibility Principle)：**指一个类的功能要单一，不能混杂什么都有。</p>
+<p>**开放封闭原则OCP(Open－Close Principle)：**一个模块在扩展性方面应该是开放的，而在更改性方面应该是封闭的。比如：一个网络模块，原来只有服务端功能，在现在要加入客户端功能，那么就应该在不用修改已有功能代码的前提下就能增加客户端的实现代码，这要求在设计之初就将两个部分分开，将公共部分抽象出来。</p>
+<p>**里式替换原则LSP(the Liskov Substitution Principle LSP)：**子类应当可以替换父类并出现在父类能出现的任何地方。</p>
+<p>**依赖倒置原则DIP(the Dependency Inversion Principle DIP)：**程序要依赖于抽象接口而不能依赖于具体实现。假设B是较A低的模块，但B需要使用到A的功能，这个时候，B不应当直接使用A中的具体类，因为如果这样做的话任何一个下层模块的变动都会导致上层必须要被相应更改。正确做法应当由B定义一个抽象接口，并由A来实现这个抽象接口，B只使用这个抽象接口：这样就达到了依赖倒置的目的，B也解除了对A的依赖，反过来是A依赖于B定义的抽象接口。</p>
+<p>**接口分离原则ISP(the Interface Segregation Principle ISP)：**模块间要通过抽象接口隔离开，而不是通过具体的类强耦合起来。</p>
+<h3 id="Python中的面向对象编程">Python中的面向对象编程</h3>
+<h4 id="Python中的类-Class">Python中的类(Class)</h4>
+<p>一个<code>类(Class)</code>会定义所有以它创建的对象，你甚至可以把类想象成一个对象工厂。举例来说，假设你有一只<code>牛头梗</code>，从<code>面向对象编程</code>的角度来看，一个<code>狗</code>的类中可能包含狗的一些特征，比如他的品种，眼色等。由于牛头梗是一只狗，那么我们就可以创建一个继承<code>狗</code>这个<code>类</code>特征的对象来定义牛头梗。<code>类</code>使用<code>方法函数(methods)</code>和<code>构造函数(constructors)</code>来创建并定义<code>对象(Objects)</code>。</p>
+<h4 id="用户定义的方法-user-defined-methods-和特殊方法-special-methods">用户定义的方法(user-defined methods)和特殊方法(special methods)</h4>
+<p><code>方法(methods)</code>是类中用以执行特殊任务的函数，Python将方法分成程序员编写的<code>用户定义方法(user-defined method)</code>和语言中自带的<code>特殊方法(special method)</code>。比如一个叫<code>狗</code>的<code>类</code>中可能有一个方法叫做<code>walk()</code>来供<code>狗</code>的对象调用，程序员编写这个方法来执行特殊的动作。</p>
+<p>而<code>特殊方法</code>则被<code>双下划线(__)</code>包围的名字定义，比如说<code>__init__</code>。Python用这些特殊方法来加强类的功能性，其大多在后台工作并会在程序需要的时候被自动调用。程序员不能直接调用这些方法。举例来说，当你创建一个新的对象的时候，Python会自动调用<code>__new__</code>方法，而这又会调用<code>__init__</code>方法。</p>
+<h4 id="构造函数-constructor">构造函数(constructor)</h4>
+<p>构造函数是程序在创建对象时会调用的特殊方法，其在类中是被用来初始化对象数据的。以<code>狗</code>这个类举例，我们可以用这个类的构造函数去给每一个<code>牛头梗</code>对象特征赋值，<code>__init__</code>就是Python的构造函数。</p>
+<h4 id="用代码来解释">用代码来解释</h4>
+<p>我们首先创建一个类，并且在这个类中定义一个<code>__init__</code>方法，而这个方法则初始化两个<code>属性(attribute)</code>:</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                   </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self,dogBreed,dogEyeColor</span>):</span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed       </span><br><span class="line">    self.eyeColor = dogEyeColor...</span><br></pre></td></tr></table></figure>
+<p>这时我们已经有了一个<code>类</code>了，接下来我们以这个类创建<code>对象</code>，并且将<code>类</code>中的<code>属性</code>传递给这个<code>对象</code>。这时候我们就需要<mark class="hl-label red">self</mark> 这个magic word来将对象的属性绑定在其接收到的参数上。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...Tomita = Dog(<span class="string">&quot;Fox Terrier&quot;</span>,<span class="string">&quot;brown&quot;</span>)...</span><br></pre></td></tr></table></figure>
+<p>在上面这行代码中，我们创建了一个叫做<code>Tomita</code>的对象(这是这只狗的名字)，然后我们首先声明定义这个对象的类的名字(<code>Dog</code>)，然后将在<code>Dog类</code>的<code>__init__</code>中设定的两个属性分别设定为<code>Fox Terrier</code>和<code>brown</code>。然后<code>__init__</code>用<code>self</code>来将这两个以参数传回的值赋给对象的属性<code>self.breed</code>和<code>self.eteColor</code>。</p>
+<p>然后要访问我们创建的对象的属性，我们只需要在对象名后用<code>.</code>接上相应的属性名，就可以访问这个对象的这个属性的值，例如：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">...<span class="built_in">print</span>(<span class="string">&quot;This dog is a&quot;</span>,tomita.breed,<span class="string">&quot;and its eyes are&quot;</span>,tomita.eyeColor)</span><br></pre></td></tr></table></figure>
+<p>我们运行上面这段代码会得到这样的结果：</p>
+<blockquote>
+<p>This dog is a Fox Terrier and its eyes are brown</p>
+</blockquote>
+<p>Python中的构造函数也可以不输入参数，可以使用默认参数设定。如果一个构造函数不是必须输入参数的话，这个构造函数就叫<code>默认构造函数(default constructor)</code>。比如上面的<code>Dog类</code>如果写成默认构造函数形式：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Dog</span>:                </span><br><span class="line"> </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, dogBreed=<span class="string">&quot;German Shepherd&quot;</span>,dogEyeColor=<span class="string">&quot;Brown&quot;</span></span>): </span><br><span class="line">  </span><br><span class="line">    self.breed = dogBreed   </span><br><span class="line">    self.eyeColor = dogEyeColor</span><br></pre></td></tr></table></figure>
+<p>可以注意到<code>__init__</code>中规定了两个参数的默认值<code>dogBreed</code>为<code>German Shepherd</code>而<code>dogEyeColor</code>为<code>Brown</code>，这时如果我们以<code>tomita = Dog()</code>这样不传递任何参数的方式创建对象，那么这个对象的属性就会被设定成默认的<code>German Shepherd</code>和<code>Brown</code>。</p>
+<h1>最后</h1>
+<p>通过这篇文章，我们首先理清楚了<code>面向过程编程</code>和<code>面向对象编程</code>二者的关系以及各自的利弊，前半部分实际适用于所有的编程语言，之后我们重点关注Python中面向对象编程的方式，并举例来说明一些比较难以理解的参数和设定(比如<code>__init__</code>和<code>slef</code>等)，搞懂了这些基础知识终于可以看懂一些大佬的代码到底在干什么了。</p>
+<p>[第5篇]</p>
+]]></content>
+      <categories>
+        <category>编程算法</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -3421,8 +3500,8 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
         <category>MS Office</category>
       </categories>
       <tags>
-        <tag>工作学习</tag>
         <tag>Access</tag>
+        <tag>工作学习</tag>
       </tags>
   </entry>
   <entry>
@@ -3662,54 +3741,6 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
       </tags>
   </entry>
   <entry>
-    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
-    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
-<h1>正文</h1>
-<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
-<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
-<blockquote>
-<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
-</blockquote>
-<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
-<h2 id="清除缓存">清除缓存</h2>
-<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
-<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
-<h2 id="引用版本号">引用版本号</h2>
-<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
-<blockquote>
-<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
-</blockquote>
-<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
-<blockquote>
-<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
-</blockquote>
-<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
-<h2 id="解决办法">解决办法</h2>
-<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
-<h2 id="一个疑惑">一个疑惑</h2>
-<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
-<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
-<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
-<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
-<h1>最后</h1>
-<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
-<p>[第9篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-        <tag>Github</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[信息安全]解码微信PC版中以dat格式存储的聊天图片</title>
     <url>/2022/03/04/8-decrypt-wechat-pics/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -3761,6 +3792,54 @@ M834 80h400000v40h-400000z'/></svg></span></span></span><span class="vlist-s">�
         <tag>日常学习</tag>
         <tag>微信</tag>
         <tag>解码</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
+    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
+<h1>正文</h1>
+<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
+<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
+<blockquote>
+<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
+</blockquote>
+<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
+<h2 id="清除缓存">清除缓存</h2>
+<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
+<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
+<h2 id="引用版本号">引用版本号</h2>
+<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
+<blockquote>
+<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
+</blockquote>
+<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
+<blockquote>
+<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
+</blockquote>
+<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
+<h2 id="解决办法">解决办法</h2>
+<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
+<h2 id="一个疑惑">一个疑惑</h2>
+<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
+<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
+<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
+<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
+<h1>最后</h1>
+<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
+<p>[第9篇]</p>
+]]></content>
+      <categories>
+        <category>博客维护</category>
+      </categories>
+      <tags>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
+        <tag>Github</tag>
       </tags>
   </entry>
 </search>
