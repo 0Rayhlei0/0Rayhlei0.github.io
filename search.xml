@@ -234,6 +234,105 @@
       </tags>
   </entry>
   <entry>
+    <title>[MS Office]使用 MS Access 开发文档管理查询工具</title>
+    <url>/2022/03/27/11-MSAccess-documentation-tool/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>初次来到这家公司就发现公司的<code>文档记录</code>不太完备，很多<code>数据概念</code>和<code>数据库定义</code>要么模棱两可要么需要询问老员工，这乍看起来是个不影响干活的小事但实际上这不仅可能造成工作效率低下的结果，甚至可能导致<code>严重的问题</code>(类似于报告口径不一，数据结果错误导致决策错误或公司声誉受损等等)，因此这其实是一个<code>风险暴露</code>。我也因此决定至少给我们自己团队做一个<code>文档数据库</code>来设立一个可以参考标准口径，避免一些不必要的风险，同时加强同事日常工作和交接的效率与质量。</p>
+<p>我虽然不是第一次接触VBA但其实这是我第一次接触<code>Access数据库</code>的应用开发，整个工具开发花了我接近七八天的时间，学到的东西也不少。在这篇文章中我会首先介绍一下工具本身的功能，然后是我学习到的Access应用开发的一些基本知识，以及介绍我在实现一些功能时用到的一些VBA代码。</p>
+<h1>正文</h1>
+<p>本文会直接介绍<code>工具的功能</code>及<code>开发中学习到的知识</code>，以及一些功能的<code>代码实现方法</code>。关于Access中各对象基本定义及功能的介绍可以去我的另一篇文章<a href="http://raylei.space/2022/02/25/6-MSAccess_database_split/">分割 MS Access 数据库为前端和后端</a>看看。</p>
+<h2 id="工具结构">工具结构</h2>
+<p>目前这个文档工具有3个主要的文档数据库：</p>
+<ol>
+<li><code>Key Measurements SQL：</code>记录了日常业务中可能涉及的主要术语与指标的定义及其SQL样例。</li>
+<li><code>Database Documentation：</code>记录了团队经常使用的数据库表及相应各个字段的详细信息。</li>
+<li><code>Marco Polo Dashboards：</code>记录了公司Tableau平台上的Dashboards的网址, 详细信息及使用方法。</li>
+</ol>
+<p>其中前两个文档只需要实现名字的查询即可，而第三个<code>Tableau Dashboard</code>我则希望可以实现信息关键词的查询，因为团队中有些同事的数据查询需求其实已经在<code>Tableau</code>上有查询模板，我希望增加这个功能可以使用户通过他们需求的关键字可以查询到能帮助他们的<code>Dashboard</code>。</p>
+<p>另外我为工具设置了<code>两个主要入口</code>，一个供<code>数据维护者</code>使用，使用<code>分割窗体(Split form)</code>，用户可以在界面中进行数据的<code>增删改查</code>，包括对工具本身的版本记录进行修改。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/1.gif" alt="维护端界面演示"></p>
+<p>另一个则是供<code>其他同事</code>使用，界面更为简洁，用户从下拉菜单中选择要查询的数据，并且可以通过不同的方式筛选出要<code>查询</code>的数据，但没有增删改已有数据的权限。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/2.gif" alt="用户端界面演示"></p>
+<h2 id="Access表单工具开发基础知识">Access表单工具开发基础知识</h2>
+<p>Access的基本概念和定义我已经在第6篇博文中介绍过，在本节中我会注重介绍一些开发表单工具可能需要知道的基础知识，有了这些基本知识，稍加摸索尝试就可以很快上道了。</p>
+<h3 id="四种视图">四种视图</h3>
+<p>要做Access的<code>表单(Form)工具</code>开发首先要搞清楚的是四种不同的<code>视图(View)</code>各自的作用及用法。在表单下通过<code>开始(Home)选项卡</code>中<code>视图(View)组</code>中的视图切换视图，四种不同的视图的用法和用处各有不同：</p>
+<ul>
+<li><code>窗体视图(Form View)：</code>该视图下表单即为用户正常使用的状态，没有开发者选项，开发者可以在该视图下测试表单是否如预期运行。</li>
+<li><code>数据表视图(Datasheet View)：</code>该视图下表单主要显示该表单的数据信息，呈现方式与表(Table)中相同，开发者可以用该视图检视表单的数据信息。</li>
+<li><code>布局视图(Layout View)：</code>该视图下表单可以呈现窗体视图外观的同时不触发控件事件，在该视图下开发者依然可以通过属性栏配置表单。通常使用这个视图调整一些与表单外观有关的功能会得到比较直观的反馈。</li>
+<li><code>设计视图(Design View)：</code>该视图下的表单会呈现出更多更详细的信息，例如表单的高度宽度尺，格线，页眉和页脚，该视图下可以调整的参数会多于布局视图但修改可能不会太直观。</li>
+</ul>
+<h3 id="属性表">属性表</h3>
+<p>Access中对表单的各方面配置都可以在<code>属性表(Property Sheet)</code>中完成，在<code>布局或设计视图</code>下右键单击表单，选择<code>属性(Property)</code>便会弹出当前控件的可调整属性，其中拥有自己属性的对象除了各种<code>控件(Control)</code>以外，还有<code>表单(Form)</code>，<code>页眉(Header)</code>，<code>页脚(Footer)</code>和<code>主体(Detail)</code>。</p>
+<p>属性表中会显示当前选择的对象的类型（<code>控件类型或窗体(Form)或节(Section)</code>）及名称，而每个对象的配置参数又分为4个<code>选项卡</code>：<br>
+<code>格式(Format)：</code>在该选项卡中可以调整对象的外观参数以及一些控件的显示。</p>
+<p><code>数据(Data)：</code>该选项卡内容涉及数据显示相关设置，如数据源，默认值，数据验证或其他数据相关的配置。</p>
+<p><code>事件(Event)：</code>该选项卡主要涉及各种触发事件，开发者可以在不同的事件中加入宏或VBA代码来实现各种功能。</p>
+<p><code>其他(Other)：</code>基本上其他类找不到的参数设置就在这里找。</p>
+<h3 id="宏和VBA代码">宏和VBA代码</h3>
+<p>Access中有<code>宏(Macro)</code>和<code>VBA代码(Code)</code>的<code>生成器(Builder)</code>，在控件的事件选项卡中点击<code>...</code>按键就可以进入生成器选择窗口，而宏和代码都可以一定程度上完成对某个事件的编程，他们的区别在于功能性和复杂度上。<code>宏</code>使用已经定义好的动作模块来设定事件动作，<code>简单快捷但自由度受限</code>，而<code>VBA代码</code>则需要开发者更高的代码能力，但能够实现更加<code>复杂的事件任务</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/macro.jpg" alt="宏界面"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/vba_code.jpg" alt="vba界面"></p>
+<p>在我们的工具中一些功能的实现结合了宏和VBA代码两种方式的使用。</p>
+<h2 id="部分功能的代码实现">部分功能的代码实现</h2>
+<p>我们的工具中每一个<code>按钮控件(Button Control)</code>都会涉及一个或多个代码块，但有些功能确实很简单我就不详细说了，这里我挑几个我觉得需要注意或者花了我一些功夫才写好的功能，那就由简及难一一介绍一下吧。</p>
+<h3 id="控制分割窗体的宽度">控制分割窗体的宽度</h3>
+<p>当我们设置表单的格式为<code>分割窗体(Split form)</code>时，我们无论在视图中如何调节它的宽度它在被打开时都会自动占满屏幕，这会减弱我们做出来的工具在不同设备上呈现的一致性，让我非常不爽。查了一下之后发现原来分割窗口的宽度可以用<code>MoveSize方式</code>调整。根据微软的官方文档，<code>MoveSize</code>的使用方法如下，其中数值的单位为<code>twip</code>：</p>
+<blockquote>
+<p><em>expression</em>.<strong>MoveSize</strong> (<em>Right</em>, <em>Down</em>, <em>Width</em>, <em>Height</em>)</p>
+</blockquote>
+<p>那么我们只需要在表单的<code>加载(On Load)</code>事件中加上这个表达就可以实现打开表单时自动调整宽度。</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Form_Load()</span><br><span class="line">	DoCmd.MoveSize , , <span class="number">7</span> * <span class="number">1600</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置打开Zoombox按钮">设置打开Zoombox按钮</h3>
+<p>我的文档工具中因为涉及较长文本的输入，而且会有比较多的主动换行，因此直接在窗口文本框输入可能不太方便编辑，一般情况下用户可以在文本框中按<code>Shift+F2</code>的快捷键组合来打开当前文本框的<code>Zoombox</code>，用户可以在这个更大的窗口中编辑文字，查询时内容展示也更加清晰明了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/3.gif" alt="Zoombox按钮演示"></p>
+<p>但显然快捷键组合对于普通用户来说有些过于繁琐了，因此我加了一个按钮，可以使用户在选择文本框后点击该按钮来打开这个文本框的<code>Zoombox</code>，只是在代码实现上稍微一些小小的注意事项，因为按钮本身是不具备<code>启动Zoombox</code>这个属性的，因此我们要将<code>focus</code>设定在点击按钮前的一个控件上，我的代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Text_zoom_Click()</span><br><span class="line">    <span class="keyword">Const</span> NOT_ZOOMABLE = <span class="number">2046</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    Screen.PreviousControl.SetFocus</span><br><span class="line">    RunCommand acCmdZoomBox</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> NOT_ZOOMABLE</span><br><span class="line">        MsgBox (<span class="string">&quot;Please select a TextBox before zoom in!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>简单来说就是点击按钮后对点击前的控件执行<code>acCmdZoomBox</code>即<code>打开Zoombox</code>的命令，而如果在按按钮前点击的控件不具备这个功能，程序会返回<code>错误代码2046</code>，如果捕捉到这个错误代码就弹出<code>“请先选择一个要放大的文本框”</code>提示。</p>
+<h3 id="查找筛选符合条件的数据">查找筛选符合条件的数据</h3>
+<p>为了方便用户<code>查改数据</code>，我需要给表单加入<code>搜索</code>的功能，比较方便的方法就是使用表单中的<code>筛选功能</code>，通过<code>关键字搭配通配符</code>在不同的<code>字段</code>筛选便可以找出符合条件的数据。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/4.gif" alt="关键字筛选演示"></p>
+<p>而对于工具的数据维护界面我使用的是<code>分割表单</code>，因此只要将需要的数据筛选出来，用户就可以在分割窗口中选择自己想要编辑的记录来操作。代码块如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> find_record_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> category_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending * or IS NULL</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        category_null = <span class="string">&quot; OR [MP Category] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">        category_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        dashboard_null = <span class="string">&quot; OR [MP Dashboard] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">        dashboard_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;([MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; category_null &amp; <span class="string">&quot;) AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;([MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; dashboard_null &amp; <span class="string">&quot;)&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的一点是，因为<code>筛选</code>需要使用表单上的<code>文本框</code>输入内容，因此在直接使用<code>TextBox.Value</code>获取内容时可能会出现<code>空值报错</code>，而同时如果仅仅只将筛选值以<code>&quot;&quot;</code>形式传给筛选条件的话，筛选会以<code>&quot;Field LIKE '**'&quot;</code>的条件筛选，这时筛选出的内容会<code>不包括内容为空的记录</code>，这在用户端可能无所谓，毕竟如果指针列的字段都为空很可能说明这条记录本身就没有完成，所以筛选出来也没有意义。但在维护端如果筛选不出字段为空的记录的话就会导致未完成的记录再也不能被筛选出来。</p>
+<p>因此我在筛选器的语句中除了加入要筛选的内容外，还多了一重判断<code>“若输入为空，则在筛选条件中加入语句OR Field IS NULL”</code>以此筛选出该字段为空的记录。筛选器设置好后再用<code>Me.FilterOn = True</code>的语句将该设置应用在表单上筛选才会生效。这样就完成了记录筛选查找功能。</p>
+<h3 id="通过关键字限制组合框内容">通过关键字限制组合框内容</h3>
+<p>在维护端要筛选出符合特定条件的记录可以直接筛选后在分割窗口中选择想要操作的数据，但在客户端我不希望使用分割窗体这么<code>&quot;复杂&quot;</code>的功能，我希望给用户更加简单易懂的操作界面。因此出现了我在这个工具开发中想出来的最有意思的一段代码和功能。那就是通过关键字搜索来限制<code>组合框(ComboBox)</code>中的显示内容，并且通过组合框的中值的选择来定位记录。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/5.gif" alt="组合框选择记录演示"></p>
+<p>最开始实现这个功能我是希望可以将在上一节的筛选后的<code>记录集(RecordSet)</code>填入组合框的<code>行来源(Row Source)</code>，结果找了半天也没有发现<code>Access VBA</code>有这个操作方法。因此我想到的办法是在<code>查找记录</code>控件的筛选记录功能之上再加入一个获取筛选出的记录的索引并<code>新建一个表</code>，然后直接将<code>行来源</code>的引用关联到这个新建的表中不就可以实现实时控制组合框内容了吗？测试了一下真的挺好用。代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_dashboard_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27;make a table that store the index for this search and fill in the combobox row source with the result</span></span><br><span class="line">    strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;WHERE [MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;AND [MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;[MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;[MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>这段代码中需要注意的点有几个：</p>
+<ol>
+<li>与维护端相比，用户端中我<code>去掉了筛选出空值记录</code>的功能，因为如果内容为空那么大概率这条记录还没有完成，不需要被用户查到。</li>
+<li>关于<code>组合框</code>的<code>行来源</code>，我在表的<code>加载(On Load)</code>事件中加入了向<code>组合框行来源</code>中添加原表中所有引索的SQL语句，然后在<code>关闭(On close)</code>事件中加入了<code>清除行来源</code>并删除临时表的代码。这样可以保证为了查找引索而创建的临时表只在表单被打开的时候存在。</li>
+<li>临时表中的<code>引索</code>和<code>记录集</code>中的记录被以同样的方式<code>排序</code>和<code>筛选</code>，以此保证筛选出来的记录与组合框中的待选记录在顺序和内容上都相同。</li>
+<li>最后要实现组合框中的数据控制显示的记录有两种方式，一种比较简单的是通过<code>控件向导</code>添加<code>组合框</code>，其中有选择是否使用<code>组合框</code>控制记录显示。而第二种则是直接写<code>宏或代码</code>，因为其实控件向导实现这个功能的方法也就是在<code>“更新后(On Update)”</code>事件中添加一个<code>以当前组合框选择的记录ID</code>来查找记录的宏。</li>
+</ol>
+<h3 id="多关键字查询筛选记录">多关键字查询筛选记录</h3>
+<p>完成了基本的查询功能之后，我还希望在<code>Tableau Dashboard</code>的文档工具中再加上一个<code>多关键字查询</code>的功能，我的设想是使用多个<code>AND条件</code>在<code>Description字段</code>中筛选用空格隔开的<code>每一个关键词</code>，这样如果用户想要找到一张可以看到<code>“CCBA YoY GWP”</code>的<code>Dashboard</code>，他只需要输入后就可以找到<code>Description</code>中同时出现了这几个关键词的记录，从而帮助用户快速定位他们需要的<code>Dashboard</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/6.gif" alt="关键词搜索演示"></p>
+<p>而代码的实现逻辑也非常简单，即使利用上节中使用的限制组合框筛选数据的原理，只不过对于提取新建引索表的SQL语句需要根据输入框中的关键词循环一下，其中第一个词前用<code>WHERE DESCRIPTION LIKE '*FIRSTWORD*'</code>的格式而后面其他词则用<code>AND</code>替代<code>WHERE</code>。具体代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_keywords_Click()</span><br><span class="line">    <span class="keyword">Dim</span> keywords_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> arrKeywords</span><br><span class="line">    <span class="keyword">Dim</span> varKeyword</span><br><span class="line">    <span class="keyword">Dim</span> strSQL <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> strFilter <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="comment">&#x27; if the key words are empty, select all records.</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(keywords_search) <span class="keyword">Then</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">            <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">        strFilter = <span class="string">&quot;Description LIKE &#x27;**&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">    <span class="comment">&#x27; looping the keywords input add &quot;AND&quot; criterias for each keyword.</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span></span><br><span class="line">        arrKeywords = Split(keywords_search.Value, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">Dim</span> loopOne <span class="keyword">As</span> <span class="type">Boolean</span></span><br><span class="line">        loopOne = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">For</span> <span class="keyword">Each</span> varKeyword <span class="keyword">In</span> arrKeywords</span><br><span class="line">            <span class="comment">&#x27; In the first loop, use WHERE and afterwards use AND to complete the SQL sentence.</span></span><br><span class="line">            <span class="keyword">If</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; WHERE Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = <span class="string">&quot;Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                loopOne = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">ElseIf</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> <span class="built_in">Not</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = strFilter &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">            <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">        <span class="keyword">Next</span></span><br><span class="line">        <span class="comment">&#x27; sort the records in ascending order</span></span><br><span class="line">        strSQL = strSQL &amp; <span class="string">&quot; ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = strFilter</span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>到这里基本上这个小工具中值得讲的东西就都讲完了。</p>
+<h2 id="工具下载">工具下载</h2>
+<p>我把一个只有测试内容的<code>副本</code>放在这里，有兴趣的可以打开看看每个部分功能具体是怎么实现的：</p>
+<p>下载链接：<a href="/attachment/BancaDB_Documentation.accdb">点击这里</a></p>
+<p>因为是第一次接触<code>Access</code>的VBA编程，我其实也发现了一些不好的编程习惯导致的不方便的情况，比如看网上大家的代码，有一个<code>约定俗成的规矩</code>是大家会在不同控件名称前加上这个控件的<code>类型简称</code>，比如<code>表A</code>命名为<code>tblA</code>,但我刚开始编的时候并没有意识到这个对读改代码有多重要，现在再改又比较麻烦了，各位先担待着，下次不会这样了。</p>
+<h1>最后</h1>
+<p>个人觉得通过这样一个小小的项目在一定程度上掌握了<code>数据库小应用的开发</code>是非常好的，以后面对某些难题又多了一个可能的解决方案，例如需要向客户定期收集资料时，可以做一个<code>Access前端</code>然后将表放在<code>SharePoint List</code>上，这样客户在前端收集到的资料就可以第一时间传送到云上的数据库中，这会比邮件沟通更大程度地增加<code>效率</code>和<code>用户体验</code>。</p>
+<p>[第11篇]</p>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Access</tag>
+        <tag>VBA</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[金融分析] CFA一级考试学习计划</title>
     <url>/2022/03/31/12-CFA-level-1-overview/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -433,105 +532,6 @@
       <tags>
         <tag>日常学习</tag>
         <tag>CFA一级</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[MS Office]使用 MS Access 开发文档管理查询工具</title>
-    <url>/2022/03/27/11-MSAccess-documentation-tool/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>初次来到这家公司就发现公司的<code>文档记录</code>不太完备，很多<code>数据概念</code>和<code>数据库定义</code>要么模棱两可要么需要询问老员工，这乍看起来是个不影响干活的小事但实际上这不仅可能造成工作效率低下的结果，甚至可能导致<code>严重的问题</code>(类似于报告口径不一，数据结果错误导致决策错误或公司声誉受损等等)，因此这其实是一个<code>风险暴露</code>。我也因此决定至少给我们自己团队做一个<code>文档数据库</code>来设立一个可以参考标准口径，避免一些不必要的风险，同时加强同事日常工作和交接的效率与质量。</p>
-<p>我虽然不是第一次接触VBA但其实这是我第一次接触<code>Access数据库</code>的应用开发，整个工具开发花了我接近七八天的时间，学到的东西也不少。在这篇文章中我会首先介绍一下工具本身的功能，然后是我学习到的Access应用开发的一些基本知识，以及介绍我在实现一些功能时用到的一些VBA代码。</p>
-<h1>正文</h1>
-<p>本文会直接介绍<code>工具的功能</code>及<code>开发中学习到的知识</code>，以及一些功能的<code>代码实现方法</code>。关于Access中各对象基本定义及功能的介绍可以去我的另一篇文章<a href="http://raylei.space/2022/02/25/6-MSAccess_database_split/">分割 MS Access 数据库为前端和后端</a>看看。</p>
-<h2 id="工具结构">工具结构</h2>
-<p>目前这个文档工具有3个主要的文档数据库：</p>
-<ol>
-<li><code>Key Measurements SQL：</code>记录了日常业务中可能涉及的主要术语与指标的定义及其SQL样例。</li>
-<li><code>Database Documentation：</code>记录了团队经常使用的数据库表及相应各个字段的详细信息。</li>
-<li><code>Marco Polo Dashboards：</code>记录了公司Tableau平台上的Dashboards的网址, 详细信息及使用方法。</li>
-</ol>
-<p>其中前两个文档只需要实现名字的查询即可，而第三个<code>Tableau Dashboard</code>我则希望可以实现信息关键词的查询，因为团队中有些同事的数据查询需求其实已经在<code>Tableau</code>上有查询模板，我希望增加这个功能可以使用户通过他们需求的关键字可以查询到能帮助他们的<code>Dashboard</code>。</p>
-<p>另外我为工具设置了<code>两个主要入口</code>，一个供<code>数据维护者</code>使用，使用<code>分割窗体(Split form)</code>，用户可以在界面中进行数据的<code>增删改查</code>，包括对工具本身的版本记录进行修改。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/1.gif" alt="维护端界面演示"></p>
-<p>另一个则是供<code>其他同事</code>使用，界面更为简洁，用户从下拉菜单中选择要查询的数据，并且可以通过不同的方式筛选出要<code>查询</code>的数据，但没有增删改已有数据的权限。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/2.gif" alt="用户端界面演示"></p>
-<h2 id="Access表单工具开发基础知识">Access表单工具开发基础知识</h2>
-<p>Access的基本概念和定义我已经在第6篇博文中介绍过，在本节中我会注重介绍一些开发表单工具可能需要知道的基础知识，有了这些基本知识，稍加摸索尝试就可以很快上道了。</p>
-<h3 id="四种视图">四种视图</h3>
-<p>要做Access的<code>表单(Form)工具</code>开发首先要搞清楚的是四种不同的<code>视图(View)</code>各自的作用及用法。在表单下通过<code>开始(Home)选项卡</code>中<code>视图(View)组</code>中的视图切换视图，四种不同的视图的用法和用处各有不同：</p>
-<ul>
-<li><code>窗体视图(Form View)：</code>该视图下表单即为用户正常使用的状态，没有开发者选项，开发者可以在该视图下测试表单是否如预期运行。</li>
-<li><code>数据表视图(Datasheet View)：</code>该视图下表单主要显示该表单的数据信息，呈现方式与表(Table)中相同，开发者可以用该视图检视表单的数据信息。</li>
-<li><code>布局视图(Layout View)：</code>该视图下表单可以呈现窗体视图外观的同时不触发控件事件，在该视图下开发者依然可以通过属性栏配置表单。通常使用这个视图调整一些与表单外观有关的功能会得到比较直观的反馈。</li>
-<li><code>设计视图(Design View)：</code>该视图下的表单会呈现出更多更详细的信息，例如表单的高度宽度尺，格线，页眉和页脚，该视图下可以调整的参数会多于布局视图但修改可能不会太直观。</li>
-</ul>
-<h3 id="属性表">属性表</h3>
-<p>Access中对表单的各方面配置都可以在<code>属性表(Property Sheet)</code>中完成，在<code>布局或设计视图</code>下右键单击表单，选择<code>属性(Property)</code>便会弹出当前控件的可调整属性，其中拥有自己属性的对象除了各种<code>控件(Control)</code>以外，还有<code>表单(Form)</code>，<code>页眉(Header)</code>，<code>页脚(Footer)</code>和<code>主体(Detail)</code>。</p>
-<p>属性表中会显示当前选择的对象的类型（<code>控件类型或窗体(Form)或节(Section)</code>）及名称，而每个对象的配置参数又分为4个<code>选项卡</code>：<br>
-<code>格式(Format)：</code>在该选项卡中可以调整对象的外观参数以及一些控件的显示。</p>
-<p><code>数据(Data)：</code>该选项卡内容涉及数据显示相关设置，如数据源，默认值，数据验证或其他数据相关的配置。</p>
-<p><code>事件(Event)：</code>该选项卡主要涉及各种触发事件，开发者可以在不同的事件中加入宏或VBA代码来实现各种功能。</p>
-<p><code>其他(Other)：</code>基本上其他类找不到的参数设置就在这里找。</p>
-<h3 id="宏和VBA代码">宏和VBA代码</h3>
-<p>Access中有<code>宏(Macro)</code>和<code>VBA代码(Code)</code>的<code>生成器(Builder)</code>，在控件的事件选项卡中点击<code>...</code>按键就可以进入生成器选择窗口，而宏和代码都可以一定程度上完成对某个事件的编程，他们的区别在于功能性和复杂度上。<code>宏</code>使用已经定义好的动作模块来设定事件动作，<code>简单快捷但自由度受限</code>，而<code>VBA代码</code>则需要开发者更高的代码能力，但能够实现更加<code>复杂的事件任务</code>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/macro.jpg" alt="宏界面"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/vba_code.jpg" alt="vba界面"></p>
-<p>在我们的工具中一些功能的实现结合了宏和VBA代码两种方式的使用。</p>
-<h2 id="部分功能的代码实现">部分功能的代码实现</h2>
-<p>我们的工具中每一个<code>按钮控件(Button Control)</code>都会涉及一个或多个代码块，但有些功能确实很简单我就不详细说了，这里我挑几个我觉得需要注意或者花了我一些功夫才写好的功能，那就由简及难一一介绍一下吧。</p>
-<h3 id="控制分割窗体的宽度">控制分割窗体的宽度</h3>
-<p>当我们设置表单的格式为<code>分割窗体(Split form)</code>时，我们无论在视图中如何调节它的宽度它在被打开时都会自动占满屏幕，这会减弱我们做出来的工具在不同设备上呈现的一致性，让我非常不爽。查了一下之后发现原来分割窗口的宽度可以用<code>MoveSize方式</code>调整。根据微软的官方文档，<code>MoveSize</code>的使用方法如下，其中数值的单位为<code>twip</code>：</p>
-<blockquote>
-<p><em>expression</em>.<strong>MoveSize</strong> (<em>Right</em>, <em>Down</em>, <em>Width</em>, <em>Height</em>)</p>
-</blockquote>
-<p>那么我们只需要在表单的<code>加载(On Load)</code>事件中加上这个表达就可以实现打开表单时自动调整宽度。</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Form_Load()</span><br><span class="line">	DoCmd.MoveSize , , <span class="number">7</span> * <span class="number">1600</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<h3 id="设置打开Zoombox按钮">设置打开Zoombox按钮</h3>
-<p>我的文档工具中因为涉及较长文本的输入，而且会有比较多的主动换行，因此直接在窗口文本框输入可能不太方便编辑，一般情况下用户可以在文本框中按<code>Shift+F2</code>的快捷键组合来打开当前文本框的<code>Zoombox</code>，用户可以在这个更大的窗口中编辑文字，查询时内容展示也更加清晰明了。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/3.gif" alt="Zoombox按钮演示"></p>
-<p>但显然快捷键组合对于普通用户来说有些过于繁琐了，因此我加了一个按钮，可以使用户在选择文本框后点击该按钮来打开这个文本框的<code>Zoombox</code>，只是在代码实现上稍微一些小小的注意事项，因为按钮本身是不具备<code>启动Zoombox</code>这个属性的，因此我们要将<code>focus</code>设定在点击按钮前的一个控件上，我的代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Text_zoom_Click()</span><br><span class="line">    <span class="keyword">Const</span> NOT_ZOOMABLE = <span class="number">2046</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    Screen.PreviousControl.SetFocus</span><br><span class="line">    RunCommand acCmdZoomBox</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> NOT_ZOOMABLE</span><br><span class="line">        MsgBox (<span class="string">&quot;Please select a TextBox before zoom in!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>简单来说就是点击按钮后对点击前的控件执行<code>acCmdZoomBox</code>即<code>打开Zoombox</code>的命令，而如果在按按钮前点击的控件不具备这个功能，程序会返回<code>错误代码2046</code>，如果捕捉到这个错误代码就弹出<code>“请先选择一个要放大的文本框”</code>提示。</p>
-<h3 id="查找筛选符合条件的数据">查找筛选符合条件的数据</h3>
-<p>为了方便用户<code>查改数据</code>，我需要给表单加入<code>搜索</code>的功能，比较方便的方法就是使用表单中的<code>筛选功能</code>，通过<code>关键字搭配通配符</code>在不同的<code>字段</code>筛选便可以找出符合条件的数据。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/4.gif" alt="关键字筛选演示"></p>
-<p>而对于工具的数据维护界面我使用的是<code>分割表单</code>，因此只要将需要的数据筛选出来，用户就可以在分割窗口中选择自己想要编辑的记录来操作。代码块如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> find_record_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> category_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending * or IS NULL</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        category_null = <span class="string">&quot; OR [MP Category] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">        category_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        dashboard_null = <span class="string">&quot; OR [MP Dashboard] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">        dashboard_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;([MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; category_null &amp; <span class="string">&quot;) AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;([MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; dashboard_null &amp; <span class="string">&quot;)&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>需要注意的一点是，因为<code>筛选</code>需要使用表单上的<code>文本框</code>输入内容，因此在直接使用<code>TextBox.Value</code>获取内容时可能会出现<code>空值报错</code>，而同时如果仅仅只将筛选值以<code>&quot;&quot;</code>形式传给筛选条件的话，筛选会以<code>&quot;Field LIKE '**'&quot;</code>的条件筛选，这时筛选出的内容会<code>不包括内容为空的记录</code>，这在用户端可能无所谓，毕竟如果指针列的字段都为空很可能说明这条记录本身就没有完成，所以筛选出来也没有意义。但在维护端如果筛选不出字段为空的记录的话就会导致未完成的记录再也不能被筛选出来。</p>
-<p>因此我在筛选器的语句中除了加入要筛选的内容外，还多了一重判断<code>“若输入为空，则在筛选条件中加入语句OR Field IS NULL”</code>以此筛选出该字段为空的记录。筛选器设置好后再用<code>Me.FilterOn = True</code>的语句将该设置应用在表单上筛选才会生效。这样就完成了记录筛选查找功能。</p>
-<h3 id="通过关键字限制组合框内容">通过关键字限制组合框内容</h3>
-<p>在维护端要筛选出符合特定条件的记录可以直接筛选后在分割窗口中选择想要操作的数据，但在客户端我不希望使用分割窗体这么<code>&quot;复杂&quot;</code>的功能，我希望给用户更加简单易懂的操作界面。因此出现了我在这个工具开发中想出来的最有意思的一段代码和功能。那就是通过关键字搜索来限制<code>组合框(ComboBox)</code>中的显示内容，并且通过组合框的中值的选择来定位记录。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/5.gif" alt="组合框选择记录演示"></p>
-<p>最开始实现这个功能我是希望可以将在上一节的筛选后的<code>记录集(RecordSet)</code>填入组合框的<code>行来源(Row Source)</code>，结果找了半天也没有发现<code>Access VBA</code>有这个操作方法。因此我想到的办法是在<code>查找记录</code>控件的筛选记录功能之上再加入一个获取筛选出的记录的索引并<code>新建一个表</code>，然后直接将<code>行来源</code>的引用关联到这个新建的表中不就可以实现实时控制组合框内容了吗？测试了一下真的挺好用。代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_dashboard_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27;make a table that store the index for this search and fill in the combobox row source with the result</span></span><br><span class="line">    strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;WHERE [MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;AND [MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;[MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;[MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>这段代码中需要注意的点有几个：</p>
-<ol>
-<li>与维护端相比，用户端中我<code>去掉了筛选出空值记录</code>的功能，因为如果内容为空那么大概率这条记录还没有完成，不需要被用户查到。</li>
-<li>关于<code>组合框</code>的<code>行来源</code>，我在表的<code>加载(On Load)</code>事件中加入了向<code>组合框行来源</code>中添加原表中所有引索的SQL语句，然后在<code>关闭(On close)</code>事件中加入了<code>清除行来源</code>并删除临时表的代码。这样可以保证为了查找引索而创建的临时表只在表单被打开的时候存在。</li>
-<li>临时表中的<code>引索</code>和<code>记录集</code>中的记录被以同样的方式<code>排序</code>和<code>筛选</code>，以此保证筛选出来的记录与组合框中的待选记录在顺序和内容上都相同。</li>
-<li>最后要实现组合框中的数据控制显示的记录有两种方式，一种比较简单的是通过<code>控件向导</code>添加<code>组合框</code>，其中有选择是否使用<code>组合框</code>控制记录显示。而第二种则是直接写<code>宏或代码</code>，因为其实控件向导实现这个功能的方法也就是在<code>“更新后(On Update)”</code>事件中添加一个<code>以当前组合框选择的记录ID</code>来查找记录的宏。</li>
-</ol>
-<h3 id="多关键字查询筛选记录">多关键字查询筛选记录</h3>
-<p>完成了基本的查询功能之后，我还希望在<code>Tableau Dashboard</code>的文档工具中再加上一个<code>多关键字查询</code>的功能，我的设想是使用多个<code>AND条件</code>在<code>Description字段</code>中筛选用空格隔开的<code>每一个关键词</code>，这样如果用户想要找到一张可以看到<code>“CCBA YoY GWP”</code>的<code>Dashboard</code>，他只需要输入后就可以找到<code>Description</code>中同时出现了这几个关键词的记录，从而帮助用户快速定位他们需要的<code>Dashboard</code>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/6.gif" alt="关键词搜索演示"></p>
-<p>而代码的实现逻辑也非常简单，即使利用上节中使用的限制组合框筛选数据的原理，只不过对于提取新建引索表的SQL语句需要根据输入框中的关键词循环一下，其中第一个词前用<code>WHERE DESCRIPTION LIKE '*FIRSTWORD*'</code>的格式而后面其他词则用<code>AND</code>替代<code>WHERE</code>。具体代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_keywords_Click()</span><br><span class="line">    <span class="keyword">Dim</span> keywords_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> arrKeywords</span><br><span class="line">    <span class="keyword">Dim</span> varKeyword</span><br><span class="line">    <span class="keyword">Dim</span> strSQL <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> strFilter <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="comment">&#x27; if the key words are empty, select all records.</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(keywords_search) <span class="keyword">Then</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">            <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">        strFilter = <span class="string">&quot;Description LIKE &#x27;**&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">    <span class="comment">&#x27; looping the keywords input add &quot;AND&quot; criterias for each keyword.</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span></span><br><span class="line">        arrKeywords = Split(keywords_search.Value, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">Dim</span> loopOne <span class="keyword">As</span> <span class="type">Boolean</span></span><br><span class="line">        loopOne = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">For</span> <span class="keyword">Each</span> varKeyword <span class="keyword">In</span> arrKeywords</span><br><span class="line">            <span class="comment">&#x27; In the first loop, use WHERE and afterwards use AND to complete the SQL sentence.</span></span><br><span class="line">            <span class="keyword">If</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; WHERE Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = <span class="string">&quot;Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                loopOne = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">ElseIf</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> <span class="built_in">Not</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = strFilter &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">            <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">        <span class="keyword">Next</span></span><br><span class="line">        <span class="comment">&#x27; sort the records in ascending order</span></span><br><span class="line">        strSQL = strSQL &amp; <span class="string">&quot; ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = strFilter</span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>到这里基本上这个小工具中值得讲的东西就都讲完了。</p>
-<h2 id="工具下载">工具下载</h2>
-<p>我把一个只有测试内容的<code>副本</code>放在这里，有兴趣的可以打开看看每个部分功能具体是怎么实现的：</p>
-<p>下载链接：<a href="/attachment/BancaDB_Documentation.accdb">点击这里</a></p>
-<p>因为是第一次接触<code>Access</code>的VBA编程，我其实也发现了一些不好的编程习惯导致的不方便的情况，比如看网上大家的代码，有一个<code>约定俗成的规矩</code>是大家会在不同控件名称前加上这个控件的<code>类型简称</code>，比如<code>表A</code>命名为<code>tblA</code>,但我刚开始编的时候并没有意识到这个对读改代码有多重要，现在再改又比较麻烦了，各位先担待着，下次不会这样了。</p>
-<h1>最后</h1>
-<p>个人觉得通过这样一个小小的项目在一定程度上掌握了<code>数据库小应用的开发</code>是非常好的，以后面对某些难题又多了一个可能的解决方案，例如需要向客户定期收集资料时，可以做一个<code>Access前端</code>然后将表放在<code>SharePoint List</code>上，这样客户在前端收集到的资料就可以第一时间传送到云上的数据库中，这会比邮件沟通更大程度地增加<code>效率</code>和<code>用户体验</code>。</p>
-<p>[第11篇]</p>
-]]></content>
-      <categories>
-        <category>MS Office</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>Access</tag>
-        <tag>VBA</tag>
       </tags>
   </entry>
   <entry>
@@ -2240,6 +2240,100 @@ cond3(no)->op1->i</textarea><textarea id="flowchart-0-options" style="display: n
       </tags>
   </entry>
   <entry>
+    <title>[编程算法] 使用urllib和BeautifulSoup制作爬虫脚本收集公司公开信息的记录</title>
+    <url>/2022/06/18/19-A-web-scraper-for-company-info/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>前段时间老板在看我司商业客户的数据统计结果时提出想要看一看我司现在商业客户的公司成立时间维度的分析，以此来推断新冠疫情是否对我司的一些统计指标造成了显著的影响。但我司数据采集时并没有向客户收集类似信息，而网上已经整理好的公司信息数据库一定是需要大笔花费才能买到的，好在我们只是需要像成立时间这样的基础信息，只要能找到可以查询到相应信息的公开网站，我们就可以使用Python写一个简单的爬虫脚本来系统性地收集这些数据。</p>
+<p>这篇文章就介绍了我利用<code>urllib</code>和<code>BeautifulSoup</code>两个著名的爬虫库，从公开网站<a href="https://hkg.databasesets.com/" title="香港數據庫集 / Hong Kong Datasets">香港数据库集</a>中扒出这些分析所需数据的小小的项目记录。</p>
+<h1>正文</h1>
+<h2 id="准备阶段">准备阶段</h2>
+<p>当我们需要从网络上收集一些特定信息的时候我们要做的首先就是找到一个有这些信息公开网站，那么我开始这个项目的第一件事就是和我们负责商业客户的业务同事聊一聊他平时需要这些信息时通常去哪里看。同事给了我很多不同的选择，但其中有一些是香港政府的公司注册网站或其他收费的公司信息数据库平台，稍微浏览一下网站就知道这些网站通常都做了很严格的防爬虫措施。</p>
+<p>最后通过一顿筛选我找到了这个号称是香港政府开放数据的数据库网站<a href="https://hkg.databasesets.com/" title="香港數據庫集 / Hong Kong Datasets">香港數據庫集</a>，在这个网站中确实有许多政府相关的数据查询功能，其中就有<a href="https://hkg.databasesets.com/zh-hant/gongsimingdan/search" title="香港數據庫集：香港最新成立/注册及已更名的公司名单">这个页面</a>可以根据公司名称查询公司信息。</p>
+<h2 id="研究网站">研究网站</h2>
+<h3 id="网站逻辑">网站逻辑</h3>
+<p>要从网站上爬数据首先就是要把网站研究清楚，看使用什么方法最方便最快捷。首先搞清楚我们手上有的东西，事实上我们拥有的信息确实是非常的少，对于在我司购买商业保险的商业客户，我们除了他们的公司名和业务编号以外，并没有收集任何其他可以用于识别他们的信息。而这个网站可供用于引索的方法有四种：</p>
+<ul>
+<li>通过公司名搜索，利用网站内建的搜索引擎链接公司名和公司独立信息页面。</li>
+<li>通过公司注册编号，直接去往公司信息页面。</li>
+<li>通过注册时间，每天都有一个单独的页面整理了所有这天成立的公司的清单，连接到公司信息页面。</li>
+<li>通过注册地点，香港的每一个地区都有一个单独的页面整理注册在这个地区的公司清单，同样清单中包含每个公司信息页面的链接。</li>
+</ul>
+<p>这其中后两种方法是非常绕的，对我们的目标也没有任何帮助(但不排除有其他需求时可以使用)。而前两种方法则分别有各自的利弊：</p>
+<ul>
+<li>若通过公司名搜索有两个问题，一是可能无法搜到我想要的公司数据，而在爬虫运行的过程中我又很难判断哪些搜索成功，哪些没有；二就是这个搜索的方法会比较费时间，因为我需要将我的每一个公司名都单独搜索一遍，时间复杂度是O(n^2)。</li>
+<li>通过注册编号搜索速度会快很多，因为公司的信息页索引编号其实就是公司注册编号，因此我们其实可以直接循环公司注册编号把整个数据库一锅端。但事实上现在这个编号数量已经到了三百多万，而我们要查的公司名总共也不过三万条。</li>
+</ul>
+<p>最后很明显，只有<code>通过公司名搜索</code>这个方案可能可以较大程度上地满足我们的需求。</p>
+<h3 id="网站界面">网站界面</h3>
+<p>确定可行的方法后，就开始实际研究如何获得想要的信息，正常以公司名查询公司信息的话，应该在公司名称搜索的页面中输入公司的详细名称，然后在返回的结果中默认第一条是网站数据库中与关键词最相似的结果。点击这个搜索结果的链接就可以进到公司的实际信息页面。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619105617437.png" alt="搜索公司名会返回一个有排序结果的页面，其中包含相应公司的信息页链接"></p>
+<p>在公司的信息页面中，则可以看到我们需要的成立日期等信息。我们之后要做的就是研究如何解析这一部分的html代码从而自动完成这两步操作并获取这些信息。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619105916222.png" alt="进入公司信息页后便可以看到我们要的信息"></p>
+<h2 id="编写脚本">编写脚本</h2>
+<p>经过上一步对网站的研究后，我们的思路就很清晰了，现在只需要按刚刚的步骤逐步将人手操作的部分写成脚本。</p>
+<h3 id="搜索公司名">搜索公司名</h3>
+<p>首先要明确我们的输入，就是公司商业客户数据库中的客户名，直接把这些名字拿出来做成一个csv列表，然后遍历即可。那么第一步我们先完成获取每一个公司的信息页面的函数。因此我们想要构建一个输入是公司全称，输出是网站查询到的第一条公司信息的网页链接的函数。</p>
+<p>另外，虽然我们人手查询时需要在输入框中输入查询字段并点击查询，但实质上通过地址栏我们可以看到这一步操作其实就是向网站服务器发送一条带有查询字段的搜索请求，因此我们的脚本实际并不需要做这些互动操作。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619111505511.png" alt="查询公司名的本质就是向网站发送一条带有查询字段的搜索请求"></p>
+<p>通过研究网站的html结构，我写出来的代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 搜索页面的endpoint就是search?keywords=后加上搜索词的URL编码</span></span><br><span class="line">endpoint = <span class="string">&#x27;https://hkg.databasesets.com/zh-hant/gongsimingdan/search?keywords=&#x27;</span></span><br><span class="line">endpoint_main = <span class="string">&#x27;https://hkg.databasesets.com&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_company_link</span>(<span class="params">companyname</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 这个网站需要在请求中加入User-Agent的文件头，否则会拒绝请求。</span></span><br><span class="line">        <span class="comment"># 同时注意要将查询的公司名用quote()函数转换为URL格式</span></span><br><span class="line">        index_page = urllib.request.Request(endpoint+quote(companyname), headers=&#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0&#x27;</span>&#125;)</span><br><span class="line">        <span class="comment"># 如果网站不在10秒内返回请求则当做这条信息查询不到，直接函数返回0。</span></span><br><span class="line">        html_index = urllib.request.urlopen(index_page, timeout=<span class="number">10</span>).read()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    bs_index = BeautifulSoup(html_index, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="comment"># 在网站返回的html中找到所有class是&#x27;field-content&#x27;的元素</span></span><br><span class="line">    comp_list = bs_index.find_all(class_=<span class="string">&#x27;field-content&#x27;</span>)</span><br><span class="line">    <span class="comment"># 如果返回的清单是空，则代表搜索不到，函数返回0。</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> comp_list:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果清单不为空，则返回第一条记录的a元素中的链接。</span></span><br><span class="line">        <span class="keyword">return</span> endpoint_main+comp_list[<span class="number">0</span>].a.get(<span class="string">&#x27;href&#x27;</span>)</span><br></pre></td></tr></table></figure>
+<p>需要补充的一点是，搜索到的链接使用的是相对引用，因此我们直接拿到<code>href</code>信息后还要把它和网站的根URL连在一起才是可以直接访问的页面链接。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619113226433.png" alt="这段html长这样"></p>
+<h3 id="处理搜索名称">处理搜索名称</h3>
+<p>在实际测试脚本的时候我发现我们公司的数据中，客户公司名称有时候可能因为一些缩写导致不能搜索到正确结果，其中最主要的原因就是将<code>Company</code>缩写为<code>Co</code>，<code>Limited</code>缩写为<code>LTD</code>。如果直接使用这些名称搜索的话就搜索不到相应的公司。所以我想的办法就是去掉所有这些缩写的<code>CO</code>或者<code>LTD</code>字段，直接只搜索前面有意义的名字。</p>
+<p>代码上实现如下，输入是公司名的字符串，输出是截掉特定字的结果：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">trun_name</span>(<span class="params">companyname</span>):</span><br><span class="line">    <span class="comment"># 通过观察发现大部分的缩写都是下面这些</span></span><br><span class="line">    trun_words = [<span class="string">&#x27;CO&#x27;</span>, <span class="string">&#x27;LTD&#x27;</span>, <span class="string">&#x27;CO.&#x27;</span>,<span class="string">&#x27;LTD.&#x27;</span>]</span><br><span class="line">    <span class="comment"># 将输入字符串通过空格分开成清单，然后去除清单中满足条件的字符串，最后重新用空格组成字符串</span></span><br><span class="line">    name_split = companyname.split()</span><br><span class="line">    new_name_split = [x <span class="keyword">for</span> x <span class="keyword">in</span> name_split <span class="keyword">if</span> x <span class="keyword">not</span> <span class="keyword">in</span> trun_words]</span><br><span class="line">    new_name = <span class="string">&#x27; &#x27;</span>.join(new_name_split)</span><br><span class="line">    <span class="keyword">return</span> new_name</span><br></pre></td></tr></table></figure>
+<p>这里需要注意的是因为这些缩写在单词中也不少见，所以不能直接<code>replace()</code>，否则会把单词中的这些组合也都一并删除了。</p>
+<h3 id="获取公司信息">获取公司信息</h3>
+<p>现在我们假设通过前两步的环节，我们已经可以通过公司名称获得他的信息页链接了。接下来我们就要从这个返回的信息页中解析并提取我们需要的信息并整理。从下面代码的结构可以看到我们需要的信息被存在一个个的<code>li标签</code>元素中，而我们需要的信息都在这个元素的子元素中，一个自然想到的方法是使用<code>BeautifulSoup</code>的<code>contents</code>属性来获得每个<code>li</code>元素的子元素内容，然后根据表头信息把其中的内容分类装进字典中保存。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619134323181.png" alt="每一条信息都是个li元素，每个li都有一个表头一个冒号和对应的内容"></p>
+<p>代码如下：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_comp_info</span>(<span class="params">comp_link</span>):</span><br><span class="line">    <span class="comment"># 与搜索公司链接的方法一样， 尝试请求公司信息页面，如果超过10秒钟则默认无法获取信息，返回空字典</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        resp = urllib.request.Request(comp_link, headers=&#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0&#x27;</span>&#125;)</span><br><span class="line">        html = urllib.request.urlopen(resp, timeout=<span class="number">10</span>).read()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">    bs = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 用一个转置字典来规定每个标签名和其对应的保存名，以此达到case...when...的效果</span></span><br><span class="line">    switcher_dict = &#123;</span><br><span class="line">        <span class="string">&#x27;注冊編號/Register Number&#x27;</span>:<span class="string">&#x27;RegisterNo&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;中文名稱/Chinese Name&#x27;</span>:<span class="string">&#x27;ChineseName&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;英文名稱/English Name&#x27;</span>:<span class="string">&#x27;EnglishName&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;成立日期/Date of Establishment&#x27;</span>:<span class="string">&#x27;EstablishDate&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;行業分類/Category&#x27;</span>:<span class="string">&#x27;Industry&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;公司現狀/Active Status&#x27;</span>:<span class="string">&#x27;Status&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    temp_info = &#123;&#125;</span><br><span class="line">    x = bs.find_all(<span class="string">&#x27;li&#x27;</span>)</span><br><span class="line">    <span class="comment"># 把页面中所有所有li元素遍历一次</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> x:</span><br><span class="line">        temp=item.contents</span><br><span class="line">        <span class="comment">#判断每个li中的第一个子元素文字是否是转置字典中的字段，如果是则将第三个子元素的内容存入相应的字典值中</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            temp_info[switcher_dict[temp[<span class="number">0</span>].text]]= temp[<span class="number">2</span>].text</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line">	<span class="comment"># 最后以字典的形式返回所有收集到的信息</span></span><br><span class="line">    <span class="keyword">return</span>(temp_info)</span><br></pre></td></tr></table></figure>
+<p>这段代码里值得说的一点可能就是转置字典的使用，其实就是为了让代码看起来干净一点，用这个方法代替了一溜if判断：</p>
+<blockquote>
+<p>temp_info[switcher_dict[temp[0].text]]= temp[2].text</p>
+</blockquote>
+<p>这一句话的意思就是将转置字典<code>switcher_dict</code>中对应键的值写入<code>temp_info</code>字典中，但如果字典中没有相应的键则会报错，这时使用<code>try...except...</code>就可以跳过那些不需要的信息。</p>
+<h3 id="读取和写入数据">读取和写入数据</h3>
+<p>有了上面这些函数，我们就已经可以从输入任意公司名字到返回包含所需的该公司信息的字典了。接下来就只需要把我们的公司名称列表循环起来就可以了：</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 读取公司名字列表</span></span><br><span class="line">companyfile = pd.read_excel(<span class="string">&#x27;Company_names.xlsx&#x27;</span>,converters=&#123;<span class="string">&#x27;ClientNo&#x27;</span>:<span class="built_in">str</span>&#125;)</span><br><span class="line"><span class="comment"># 以追加模式打开/创建一个存储结果的csv文件</span></span><br><span class="line">csv_file = <span class="built_in">open</span>(<span class="string">&#x27;Company_results.csv&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>,newline=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">fileheader = [<span class="string">&#x27;ClientNo&#x27;</span>,<span class="string">&#x27;OurCompanyName&#x27;</span>, <span class="string">&#x27;RegisterNo&#x27;</span>,<span class="string">&#x27;ChineseName&#x27;</span>,<span class="string">&#x27;EnglishName&#x27;</span>,<span class="string">&#x27;EstablishDate&#x27;</span>,<span class="string">&#x27;Industry&#x27;</span>,<span class="string">&#x27;Status&#x27;</span>]</span><br><span class="line">dict_writer = csv.DictWriter(csv_file, fileheader)</span><br><span class="line">dict_writer.writeheader()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公司名字列表中的所有行遍历一遍</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(companyfile)),desc=<span class="string">&quot;Number of Companies searched&quot;</span>):</span><br><span class="line">    <span class="comment"># 如果公司名字已经被搜索过就跳过这次循环</span></span><br><span class="line">    <span class="keyword">if</span> companyfile[<span class="string">&#x27;Searched&#x27;</span>][i] == <span class="string">&#x27;Yes&#x27;</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果没有被搜索过则把这条记录的公司名和客户号放入结果字典</span></span><br><span class="line">        comp_info = &#123;&#125;</span><br><span class="line">        comp_info[<span class="string">&#x27;ClientNo&#x27;</span>] = companyfile[<span class="string">&#x27;ClientNo&#x27;</span>][i]</span><br><span class="line">        comp_info[<span class="string">&#x27;OurCompanyName&#x27;</span>] = companyfile[<span class="string">&#x27;OurCompanyName&#x27;</span>][i]</span><br><span class="line">        <span class="comment"># 先把要搜索的公司名用之前定义的trun_name函数裁剪一次</span></span><br><span class="line">        Search_name = trun_name(companyfile[<span class="string">&#x27;OurCompanyName&#x27;</span>][i])</span><br><span class="line">        <span class="comment"># 然后把裁剪后的名字输入get_company_link函数获取公司信息页链接</span></span><br><span class="line">        Comp_link = get_company_link(Search_name)</span><br><span class="line">        <span class="comment"># 如果拿不到网页链接，则只把公司名和客户号推进结果字典</span></span><br><span class="line">        <span class="keyword">if</span> Comp_link == <span class="number">0</span>:</span><br><span class="line">            dict_writer.writerow(comp_info)</span><br><span class="line">        <span class="comment"># 否则使用get_comp_info函数获取该公司的信息并和公司名客户号合并成一个字典</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            comp_info.update(get_comp_info(Comp_link))</span><br><span class="line">            dict_writer.writerow(comp_info)</span><br><span class="line">        <span class="comment"># 每完成一条记录，就把当条记录标记为已搜索    </span></span><br><span class="line">        companyfile[<span class="string">&#x27;Searched&#x27;</span>][i] = <span class="string">&#x27;Yes&#x27;</span></span><br><span class="line">        <span class="comment"># 每一百次循环就把搜索标记存储一次</span></span><br><span class="line">        <span class="keyword">if</span> i%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            companyfile.to_excel(<span class="string">&#x27;Company_names.xlsx&#x27;</span>, engine=<span class="string">&#x27;xlsxwriter&#x27;</span>,index=<span class="literal">False</span>)</span><br><span class="line">        sleep(<span class="number">1.1</span>)   </span><br><span class="line">csv_file.close()</span><br></pre></td></tr></table></figure>
+<p>读取和写入数据这一步我用了分开的方式，不直接在原本的公司名单文件中写入公司信息，而是只读取名字然后每次读取搜索后标记一下。这样就不至于如果中途程序中断不知道从哪里再开始。标记的信息每100次循环才存储一次，这样如果中断，需要重复的次数也不会超过一百次，得到的结果只需要对客户号去重就可以的到完整的结果。</p>
+<p>到这里我们只需要运行这个脚本就已经可以开始慢慢收集数据了，我最后跑完整个三万三千条数据一共花了60个小时，平均每条记录需要运行5-10秒，而结果中大概有一万两千条是实际有数据的，足够我们数据分析的用途使用了。</p>
+<blockquote>
+<p>Number of Companies searched: 58:  88%|████████████████████████████████▌    | 29366/33412 [55:30:09&lt;5:20:53,  4.76s/it]</p>
+</blockquote>
+<h2 id="其他可能改进">其他可能改进</h2>
+<p>虽然我们已经完成了手上数据的收集工作，但作为一个爬虫脚本，他还有一些可以改进的地方，就包括使用Proxy发送请求，以防止网站屏蔽IP，从而达到加速脚本的作用；其次还可以利用Windows scheduler的定时任务，固定时间定时获取新的公司信息情况。</p>
+<h3 id="使用Proxy发送请求">使用Proxy发送请求</h3>
+<p>想要不被目标网站屏蔽IP的一个简单而有效的方法就是使用Proxy，这样对目标网站来说我们的发送的请求就是从不同来源发来，也就不会被发现我们在爬取数据。这个方法也可以使我们可以多开并行爬取，把爬虫速度提升很多。使用方法也很简单，可以利用<code>PythonBroker</code>实时获取有效的Proxy地址并添加在请求的头文件参数中即可。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://github.com/constverum/ProxyBroker" title="ProxyBroker">PythonBroker</a></li>
+<li><a href="https://www.scrapingbee.com/blog/python-requests-proxy/" title="How to Use a Proxy with Python Requests?">如何使用Proxy with Python Requests? </a></li>
+<li><a href="https://blog.csdn.net/kdl_csdn/article/details/103989024" title="python爬虫——urllib使用代理">python爬虫——urllib使用代理</a></li>
+</ul>
+<h3 id="增加实时更新的功能">增加实时更新的功能</h3>
+<p>之后因为我们可能需要按时更新我们的公司数据清单，但因为公司的成立日期不会有变化，因此为了减少我们每次的工作量，可以使用Python首先对比每次清单名称中新增的公司名，然后只查询这些新增的公司的信息，然后推入已有的数据库中。</p>
+<p>至于定时脚本的方法，可以使用Windows系统自带的<code>Windows scheduler</code>完成定时运行脚本的步骤。</p>
+<p>参考资料：</p>
+<ul>
+<li><a href="https://datatofish.com/python-script-windows-scheduler/" title="How to Schedule Python Script using Windows Scheduler">How to Schedule Python Script using Windows Scheduler</a></li>
+</ul>
+<h1>最后</h1>
+<p>在本篇中我介绍了我利用Python脚本收集一些公司没有的数据的项目的全过程，最后部分还有一些我在研究项目过程中有看到，且我认为可能对以后的类似项目有帮助的内容或方法，也记录在这里备用。</p>
+<p>[第19篇]</p>
+]]></content>
+      <categories>
+        <category>编程算法</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Python</tag>
+        <tag>BeautifulSoup</tag>
+        <tag>网页爬虫</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[金融分析] CFA一级《经济学》学习笔记</title>
     <url>/2022/06/18/18-CFA-level1-Economics/</url>
     <content><![CDATA[<h1>概览</h1>
@@ -2903,100 +2997,6 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
       </tags>
   </entry>
   <entry>
-    <title>[编程算法] 使用urllib和BeautifulSoup制作爬虫脚本收集公司公开信息的记录</title>
-    <url>/2022/06/18/19-A-web-scraper-for-company-info/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>前段时间老板在看我司商业客户的数据统计结果时提出想要看一看我司现在商业客户的公司成立时间维度的分析，以此来推断新冠疫情是否对我司的一些统计指标造成了显著的影响。但我司数据采集时并没有向客户收集类似信息，而网上已经整理好的公司信息数据库一定是需要大笔花费才能买到的，好在我们只是需要像成立时间这样的基础信息，只要能找到可以查询到相应信息的公开网站，我们就可以使用Python写一个简单的爬虫脚本来系统性地收集这些数据。</p>
-<p>这篇文章就介绍了我利用<code>urllib</code>和<code>BeautifulSoup</code>两个著名的爬虫库，从公开网站<a href="https://hkg.databasesets.com/" title="香港數據庫集 / Hong Kong Datasets">香港数据库集</a>中扒出这些分析所需数据的小小的项目记录。</p>
-<h1>正文</h1>
-<h2 id="准备阶段">准备阶段</h2>
-<p>当我们需要从网络上收集一些特定信息的时候我们要做的首先就是找到一个有这些信息公开网站，那么我开始这个项目的第一件事就是和我们负责商业客户的业务同事聊一聊他平时需要这些信息时通常去哪里看。同事给了我很多不同的选择，但其中有一些是香港政府的公司注册网站或其他收费的公司信息数据库平台，稍微浏览一下网站就知道这些网站通常都做了很严格的防爬虫措施。</p>
-<p>最后通过一顿筛选我找到了这个号称是香港政府开放数据的数据库网站<a href="https://hkg.databasesets.com/" title="香港數據庫集 / Hong Kong Datasets">香港數據庫集</a>，在这个网站中确实有许多政府相关的数据查询功能，其中就有<a href="https://hkg.databasesets.com/zh-hant/gongsimingdan/search" title="香港數據庫集：香港最新成立/注册及已更名的公司名单">这个页面</a>可以根据公司名称查询公司信息。</p>
-<h2 id="研究网站">研究网站</h2>
-<h3 id="网站逻辑">网站逻辑</h3>
-<p>要从网站上爬数据首先就是要把网站研究清楚，看使用什么方法最方便最快捷。首先搞清楚我们手上有的东西，事实上我们拥有的信息确实是非常的少，对于在我司购买商业保险的商业客户，我们除了他们的公司名和业务编号以外，并没有收集任何其他可以用于识别他们的信息。而这个网站可供用于引索的方法有四种：</p>
-<ul>
-<li>通过公司名搜索，利用网站内建的搜索引擎链接公司名和公司独立信息页面。</li>
-<li>通过公司注册编号，直接去往公司信息页面。</li>
-<li>通过注册时间，每天都有一个单独的页面整理了所有这天成立的公司的清单，连接到公司信息页面。</li>
-<li>通过注册地点，香港的每一个地区都有一个单独的页面整理注册在这个地区的公司清单，同样清单中包含每个公司信息页面的链接。</li>
-</ul>
-<p>这其中后两种方法是非常绕的，对我们的目标也没有任何帮助(但不排除有其他需求时可以使用)。而前两种方法则分别有各自的利弊：</p>
-<ul>
-<li>若通过公司名搜索有两个问题，一是可能无法搜到我想要的公司数据，而在爬虫运行的过程中我又很难判断哪些搜索成功，哪些没有；二就是这个搜索的方法会比较费时间，因为我需要将我的每一个公司名都单独搜索一遍，时间复杂度是O(n^2)。</li>
-<li>通过注册编号搜索速度会快很多，因为公司的信息页索引编号其实就是公司注册编号，因此我们其实可以直接循环公司注册编号把整个数据库一锅端。但事实上现在这个编号数量已经到了三百多万，而我们要查的公司名总共也不过三万条。</li>
-</ul>
-<p>最后很明显，只有<code>通过公司名搜索</code>这个方案可能可以较大程度上地满足我们的需求。</p>
-<h3 id="网站界面">网站界面</h3>
-<p>确定可行的方法后，就开始实际研究如何获得想要的信息，正常以公司名查询公司信息的话，应该在公司名称搜索的页面中输入公司的详细名称，然后在返回的结果中默认第一条是网站数据库中与关键词最相似的结果。点击这个搜索结果的链接就可以进到公司的实际信息页面。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619105617437.png" alt="搜索公司名会返回一个有排序结果的页面，其中包含相应公司的信息页链接"></p>
-<p>在公司的信息页面中，则可以看到我们需要的成立日期等信息。我们之后要做的就是研究如何解析这一部分的html代码从而自动完成这两步操作并获取这些信息。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619105916222.png" alt="进入公司信息页后便可以看到我们要的信息"></p>
-<h2 id="编写脚本">编写脚本</h2>
-<p>经过上一步对网站的研究后，我们的思路就很清晰了，现在只需要按刚刚的步骤逐步将人手操作的部分写成脚本。</p>
-<h3 id="搜索公司名">搜索公司名</h3>
-<p>首先要明确我们的输入，就是公司商业客户数据库中的客户名，直接把这些名字拿出来做成一个csv列表，然后遍历即可。那么第一步我们先完成获取每一个公司的信息页面的函数。因此我们想要构建一个输入是公司全称，输出是网站查询到的第一条公司信息的网页链接的函数。</p>
-<p>另外，虽然我们人手查询时需要在输入框中输入查询字段并点击查询，但实质上通过地址栏我们可以看到这一步操作其实就是向网站服务器发送一条带有查询字段的搜索请求，因此我们的脚本实际并不需要做这些互动操作。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619111505511.png" alt="查询公司名的本质就是向网站发送一条带有查询字段的搜索请求"></p>
-<p>通过研究网站的html结构，我写出来的代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 搜索页面的endpoint就是search?keywords=后加上搜索词的URL编码</span></span><br><span class="line">endpoint = <span class="string">&#x27;https://hkg.databasesets.com/zh-hant/gongsimingdan/search?keywords=&#x27;</span></span><br><span class="line">endpoint_main = <span class="string">&#x27;https://hkg.databasesets.com&#x27;</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_company_link</span>(<span class="params">companyname</span>):</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        <span class="comment"># 这个网站需要在请求中加入User-Agent的文件头，否则会拒绝请求。</span></span><br><span class="line">        <span class="comment"># 同时注意要将查询的公司名用quote()函数转换为URL格式</span></span><br><span class="line">        index_page = urllib.request.Request(endpoint+quote(companyname), headers=&#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0&#x27;</span>&#125;)</span><br><span class="line">        <span class="comment"># 如果网站不在10秒内返回请求则当做这条信息查询不到，直接函数返回0。</span></span><br><span class="line">        html_index = urllib.request.urlopen(index_page, timeout=<span class="number">10</span>).read()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    bs_index = BeautifulSoup(html_index, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line">    <span class="comment"># 在网站返回的html中找到所有class是&#x27;field-content&#x27;的元素</span></span><br><span class="line">    comp_list = bs_index.find_all(class_=<span class="string">&#x27;field-content&#x27;</span>)</span><br><span class="line">    <span class="comment"># 如果返回的清单是空，则代表搜索不到，函数返回0。</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> comp_list:</span><br><span class="line">        <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果清单不为空，则返回第一条记录的a元素中的链接。</span></span><br><span class="line">        <span class="keyword">return</span> endpoint_main+comp_list[<span class="number">0</span>].a.get(<span class="string">&#x27;href&#x27;</span>)</span><br></pre></td></tr></table></figure>
-<p>需要补充的一点是，搜索到的链接使用的是相对引用，因此我们直接拿到<code>href</code>信息后还要把它和网站的根URL连在一起才是可以直接访问的页面链接。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619113226433.png" alt="这段html长这样"></p>
-<h3 id="处理搜索名称">处理搜索名称</h3>
-<p>在实际测试脚本的时候我发现我们公司的数据中，客户公司名称有时候可能因为一些缩写导致不能搜索到正确结果，其中最主要的原因就是将<code>Company</code>缩写为<code>Co</code>，<code>Limited</code>缩写为<code>LTD</code>。如果直接使用这些名称搜索的话就搜索不到相应的公司。所以我想的办法就是去掉所有这些缩写的<code>CO</code>或者<code>LTD</code>字段，直接只搜索前面有意义的名字。</p>
-<p>代码上实现如下，输入是公司名的字符串，输出是截掉特定字的结果：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">trun_name</span>(<span class="params">companyname</span>):</span><br><span class="line">    <span class="comment"># 通过观察发现大部分的缩写都是下面这些</span></span><br><span class="line">    trun_words = [<span class="string">&#x27;CO&#x27;</span>, <span class="string">&#x27;LTD&#x27;</span>, <span class="string">&#x27;CO.&#x27;</span>,<span class="string">&#x27;LTD.&#x27;</span>]</span><br><span class="line">    <span class="comment"># 将输入字符串通过空格分开成清单，然后去除清单中满足条件的字符串，最后重新用空格组成字符串</span></span><br><span class="line">    name_split = companyname.split()</span><br><span class="line">    new_name_split = [x <span class="keyword">for</span> x <span class="keyword">in</span> name_split <span class="keyword">if</span> x <span class="keyword">not</span> <span class="keyword">in</span> trun_words]</span><br><span class="line">    new_name = <span class="string">&#x27; &#x27;</span>.join(new_name_split)</span><br><span class="line">    <span class="keyword">return</span> new_name</span><br></pre></td></tr></table></figure>
-<p>这里需要注意的是因为这些缩写在单词中也不少见，所以不能直接<code>replace()</code>，否则会把单词中的这些组合也都一并删除了。</p>
-<h3 id="获取公司信息">获取公司信息</h3>
-<p>现在我们假设通过前两步的环节，我们已经可以通过公司名称获得他的信息页链接了。接下来我们就要从这个返回的信息页中解析并提取我们需要的信息并整理。从下面代码的结构可以看到我们需要的信息被存在一个个的<code>li标签</code>元素中，而我们需要的信息都在这个元素的子元素中，一个自然想到的方法是使用<code>BeautifulSoup</code>的<code>contents</code>属性来获得每个<code>li</code>元素的子元素内容，然后根据表头信息把其中的内容分类装进字典中保存。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220619134323181.png" alt="每一条信息都是个li元素，每个li都有一个表头一个冒号和对应的内容"></p>
-<p>代码如下：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">get_comp_info</span>(<span class="params">comp_link</span>):</span><br><span class="line">    <span class="comment"># 与搜索公司链接的方法一样， 尝试请求公司信息页面，如果超过10秒钟则默认无法获取信息，返回空字典</span></span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        resp = urllib.request.Request(comp_link, headers=&#123;<span class="string">&#x27;User-Agent&#x27;</span>: <span class="string">&#x27;Mozilla/5.0&#x27;</span>&#125;)</span><br><span class="line">        html = urllib.request.urlopen(resp, timeout=<span class="number">10</span>).read()</span><br><span class="line">    <span class="keyword">except</span>:</span><br><span class="line">        <span class="keyword">return</span> &#123;&#125;</span><br><span class="line">    bs = BeautifulSoup(html, <span class="string">&quot;html.parser&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 用一个转置字典来规定每个标签名和其对应的保存名，以此达到case...when...的效果</span></span><br><span class="line">    switcher_dict = &#123;</span><br><span class="line">        <span class="string">&#x27;注冊編號/Register Number&#x27;</span>:<span class="string">&#x27;RegisterNo&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;中文名稱/Chinese Name&#x27;</span>:<span class="string">&#x27;ChineseName&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;英文名稱/English Name&#x27;</span>:<span class="string">&#x27;EnglishName&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;成立日期/Date of Establishment&#x27;</span>:<span class="string">&#x27;EstablishDate&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;行業分類/Category&#x27;</span>:<span class="string">&#x27;Industry&#x27;</span>,</span><br><span class="line">        <span class="string">&#x27;公司現狀/Active Status&#x27;</span>:<span class="string">&#x27;Status&#x27;</span></span><br><span class="line">    &#125;</span><br><span class="line">    temp_info = &#123;&#125;</span><br><span class="line">    x = bs.find_all(<span class="string">&#x27;li&#x27;</span>)</span><br><span class="line">    <span class="comment"># 把页面中所有所有li元素遍历一次</span></span><br><span class="line">    <span class="keyword">for</span> item <span class="keyword">in</span> x:</span><br><span class="line">        temp=item.contents</span><br><span class="line">        <span class="comment">#判断每个li中的第一个子元素文字是否是转置字典中的字段，如果是则将第三个子元素的内容存入相应的字典值中</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            temp_info[switcher_dict[temp[<span class="number">0</span>].text]]= temp[<span class="number">2</span>].text</span><br><span class="line">        <span class="keyword">except</span>: <span class="keyword">pass</span></span><br><span class="line">	<span class="comment"># 最后以字典的形式返回所有收集到的信息</span></span><br><span class="line">    <span class="keyword">return</span>(temp_info)</span><br></pre></td></tr></table></figure>
-<p>这段代码里值得说的一点可能就是转置字典的使用，其实就是为了让代码看起来干净一点，用这个方法代替了一溜if判断：</p>
-<blockquote>
-<p>temp_info[switcher_dict[temp[0].text]]= temp[2].text</p>
-</blockquote>
-<p>这一句话的意思就是将转置字典<code>switcher_dict</code>中对应键的值写入<code>temp_info</code>字典中，但如果字典中没有相应的键则会报错，这时使用<code>try...except...</code>就可以跳过那些不需要的信息。</p>
-<h3 id="读取和写入数据">读取和写入数据</h3>
-<p>有了上面这些函数，我们就已经可以从输入任意公司名字到返回包含所需的该公司信息的字典了。接下来就只需要把我们的公司名称列表循环起来就可以了：</p>
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 读取公司名字列表</span></span><br><span class="line">companyfile = pd.read_excel(<span class="string">&#x27;Company_names.xlsx&#x27;</span>,converters=&#123;<span class="string">&#x27;ClientNo&#x27;</span>:<span class="built_in">str</span>&#125;)</span><br><span class="line"><span class="comment"># 以追加模式打开/创建一个存储结果的csv文件</span></span><br><span class="line">csv_file = <span class="built_in">open</span>(<span class="string">&#x27;Company_results.csv&#x27;</span>, <span class="string">&#x27;a&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>,newline=<span class="string">&#x27;&#x27;</span>)</span><br><span class="line">fileheader = [<span class="string">&#x27;ClientNo&#x27;</span>,<span class="string">&#x27;OurCompanyName&#x27;</span>, <span class="string">&#x27;RegisterNo&#x27;</span>,<span class="string">&#x27;ChineseName&#x27;</span>,<span class="string">&#x27;EnglishName&#x27;</span>,<span class="string">&#x27;EstablishDate&#x27;</span>,<span class="string">&#x27;Industry&#x27;</span>,<span class="string">&#x27;Status&#x27;</span>]</span><br><span class="line">dict_writer = csv.DictWriter(csv_file, fileheader)</span><br><span class="line">dict_writer.writeheader()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 将公司名字列表中的所有行遍历一遍</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> tqdm(<span class="built_in">range</span>(<span class="built_in">len</span>(companyfile)),desc=<span class="string">&quot;Number of Companies searched&quot;</span>):</span><br><span class="line">    <span class="comment"># 如果公司名字已经被搜索过就跳过这次循环</span></span><br><span class="line">    <span class="keyword">if</span> companyfile[<span class="string">&#x27;Searched&#x27;</span>][i] == <span class="string">&#x27;Yes&#x27;</span>:</span><br><span class="line">        <span class="keyword">pass</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="comment"># 如果没有被搜索过则把这条记录的公司名和客户号放入结果字典</span></span><br><span class="line">        comp_info = &#123;&#125;</span><br><span class="line">        comp_info[<span class="string">&#x27;ClientNo&#x27;</span>] = companyfile[<span class="string">&#x27;ClientNo&#x27;</span>][i]</span><br><span class="line">        comp_info[<span class="string">&#x27;OurCompanyName&#x27;</span>] = companyfile[<span class="string">&#x27;OurCompanyName&#x27;</span>][i]</span><br><span class="line">        <span class="comment"># 先把要搜索的公司名用之前定义的trun_name函数裁剪一次</span></span><br><span class="line">        Search_name = trun_name(companyfile[<span class="string">&#x27;OurCompanyName&#x27;</span>][i])</span><br><span class="line">        <span class="comment"># 然后把裁剪后的名字输入get_company_link函数获取公司信息页链接</span></span><br><span class="line">        Comp_link = get_company_link(Search_name)</span><br><span class="line">        <span class="comment"># 如果拿不到网页链接，则只把公司名和客户号推进结果字典</span></span><br><span class="line">        <span class="keyword">if</span> Comp_link == <span class="number">0</span>:</span><br><span class="line">            dict_writer.writerow(comp_info)</span><br><span class="line">        <span class="comment"># 否则使用get_comp_info函数获取该公司的信息并和公司名客户号合并成一个字典</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            comp_info.update(get_comp_info(Comp_link))</span><br><span class="line">            dict_writer.writerow(comp_info)</span><br><span class="line">        <span class="comment"># 每完成一条记录，就把当条记录标记为已搜索    </span></span><br><span class="line">        companyfile[<span class="string">&#x27;Searched&#x27;</span>][i] = <span class="string">&#x27;Yes&#x27;</span></span><br><span class="line">        <span class="comment"># 每一百次循环就把搜索标记存储一次</span></span><br><span class="line">        <span class="keyword">if</span> i%<span class="number">100</span> == <span class="number">0</span>:</span><br><span class="line">            companyfile.to_excel(<span class="string">&#x27;Company_names.xlsx&#x27;</span>, engine=<span class="string">&#x27;xlsxwriter&#x27;</span>,index=<span class="literal">False</span>)</span><br><span class="line">        sleep(<span class="number">1.1</span>)   </span><br><span class="line">csv_file.close()</span><br></pre></td></tr></table></figure>
-<p>读取和写入数据这一步我用了分开的方式，不直接在原本的公司名单文件中写入公司信息，而是只读取名字然后每次读取搜索后标记一下。这样就不至于如果中途程序中断不知道从哪里再开始。标记的信息每100次循环才存储一次，这样如果中断，需要重复的次数也不会超过一百次，得到的结果只需要对客户号去重就可以的到完整的结果。</p>
-<p>到这里我们只需要运行这个脚本就已经可以开始慢慢收集数据了，我最后跑完整个三万三千条数据一共花了60个小时，平均每条记录需要运行5-10秒，而结果中大概有一万两千条是实际有数据的，足够我们数据分析的用途使用了。</p>
-<blockquote>
-<p>Number of Companies searched: 58:  88%|████████████████████████████████▌    | 29366/33412 [55:30:09&lt;5:20:53,  4.76s/it]</p>
-</blockquote>
-<h2 id="其他可能改进">其他可能改进</h2>
-<p>虽然我们已经完成了手上数据的收集工作，但作为一个爬虫脚本，他还有一些可以改进的地方，就包括使用Proxy发送请求，以防止网站屏蔽IP，从而达到加速脚本的作用；其次还可以利用Windows scheduler的定时任务，固定时间定时获取新的公司信息情况。</p>
-<h3 id="使用Proxy发送请求">使用Proxy发送请求</h3>
-<p>想要不被目标网站屏蔽IP的一个简单而有效的方法就是使用Proxy，这样对目标网站来说我们的发送的请求就是从不同来源发来，也就不会被发现我们在爬取数据。这个方法也可以使我们可以多开并行爬取，把爬虫速度提升很多。使用方法也很简单，可以利用<code>PythonBroker</code>实时获取有效的Proxy地址并添加在请求的头文件参数中即可。</p>
-<p>参考资料：</p>
-<ul>
-<li><a href="https://github.com/constverum/ProxyBroker" title="ProxyBroker">PythonBroker</a></li>
-<li><a href="https://www.scrapingbee.com/blog/python-requests-proxy/" title="How to Use a Proxy with Python Requests?">如何使用Proxy with Python Requests? </a></li>
-<li><a href="https://blog.csdn.net/kdl_csdn/article/details/103989024" title="python爬虫——urllib使用代理">python爬虫——urllib使用代理</a></li>
-</ul>
-<h3 id="增加实时更新的功能">增加实时更新的功能</h3>
-<p>之后因为我们可能需要按时更新我们的公司数据清单，但因为公司的成立日期不会有变化，因此为了减少我们每次的工作量，可以使用Python首先对比每次清单名称中新增的公司名，然后只查询这些新增的公司的信息，然后推入已有的数据库中。</p>
-<p>至于定时脚本的方法，可以使用Windows系统自带的<code>Windows scheduler</code>完成定时运行脚本的步骤。</p>
-<p>参考资料：</p>
-<ul>
-<li><a href="https://datatofish.com/python-script-windows-scheduler/" title="How to Schedule Python Script using Windows Scheduler">How to Schedule Python Script using Windows Scheduler</a></li>
-</ul>
-<h1>最后</h1>
-<p>在本篇中我介绍了我利用Python脚本收集一些公司没有的数据的项目的全过程，最后部分还有一些我在研究项目过程中有看到，且我认为可能对以后的类似项目有帮助的内容或方法，也记录在这里备用。</p>
-<p>[第19篇]</p>
-]]></content>
-      <categories>
-        <category>编程算法</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>Python</tag>
-        <tag>BeautifulSoup</tag>
-        <tag>网页爬虫</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[编程算法]基于Selenium的自动网页报价机器人功能实现记录</title>
     <url>/2022/08/01/21-Automated_Website_Logging_Robot/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -3249,6 +3249,96 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
       <tags>
         <tag>工作学习</tag>
         <tag>数据挖掘</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[金融分析] CFA一级《经济学》学习笔记</title>
+    <url>/2022/08/29/23-CFA-level1-equity-investment/</url>
+    <content><![CDATA[<h1>概览</h1>
+<p>经济学一共包括2个Session的6个Reading，主要包括的内容是各个Reading的内容如下表：</p>
+<table>
+    <tr>
+        <th>Sessions</th>
+        <th>Readings</th>
+        <th>Contents</th>
+    </tr>
+    <tr>
+        <td rowspan="3">SS12</td>
+        <td>R36</td>
+        <td>Market Organization and Structure</td>
+    </tr>
+    <tr>
+        <td>R37</td>
+        <td>Security Market Indexes</td>
+    </tr>
+    <tr>
+        <td>R38</td>
+        <td>Market Efficiency</td>
+    </tr>
+    <tr>
+        <td rowspan="3">SS13</td>
+        <td>R39</td>
+        <td>Overview of Equity Securities</td>
+    </tr>
+    <tr>
+        <td>R40</td>
+        <td>Introduction to Industry and Company Analysis</td>
+    </tr>
+    <tr>
+        <td>R41</td>
+        <td>Equity Valuation: Concepts and Basic Tools</td>
+    </tr>
+</table>
+<h1>Session 12</h1>
+<h2 id="Reading-36-金融市场组织和结构">Reading 36 金融市场组织和结构</h2>
+<h3 id="金融市场的主要功能">金融市场的主要功能</h3>
+<ul>
+<li>满足不同投资者的不同需求：存储、借贷、股权发行、风险管理、交换资产、信息兑现。</li>
+<li>决定市场利率：金融市场的市场利率由贷款和借款的数量决定。</li>
+<li>资金最有效配置：市场中的资产被最有效地分配到需要他们的人手上，每个人都获得更高收益。</li>
+</ul>
+<h3 id="正常运行的金融市场">正常运行的金融市场</h3>
+<p>正常运行的金融市场应该具有以下特性：</p>
+<ul>
+<li>完整市场(Complete market)：可以满足不同投资者的不同金融需求。</li>
+<li>经营效率(Operational efficiency)：交易成本低。</li>
+<li>信息有效性(Informational efficiency)：新信息在价格上的反映迅速。</li>
+<li>资源配置有效性(Allocational efficiency)：资金被分配到可以最高效运动它的人手中。</li>
+</ul>
+<p>金融监管机构的主要职责包含：</p>
+<ul>
+<li>最小化代理人冲突</li>
+<li>保证金融市场公平公正运行</li>
+<li>防止内幕交易</li>
+<li>防止违约和金融欺诈</li>
+<li>保证负债应该被资产覆盖</li>
+</ul>
+<h3 id="金融市场参与者-Intermediaries-of-Financial-Market">金融市场参与者(Intermediaries of Financial Market)</h3>
+<p>金融市场的主要参与者包括Brokers, Dealers and Exchange/ Securitizers/ Depositor Institutions/ Insurance Companies/ Arbitrageurs/ Clearinghouses and Custodians。其中Broker和Insurance Company是这一部分的主要考点。</p>
+<ul>
+<li>经纪人(Brokers)：经纪人的主要功能是撮合希望交易的双方并从中获取佣金。</li>
+<li>Dealers：与经纪人不同，Dealers会实际作为交易对手方，参与买卖并赚取<code>买卖价差(bid-ask spread)</code>。</li>
+<li>Block Brokers：主要是负责<code>大宗商品交易</code>的经纪人。</li>
+<li>Broker-dealers：指市场上一些既做经纪人又做Dealer的交易方。</li>
+<li>交易所(Exchanges)：为交易提供场所，主要发挥监管职能。</li>
+<li>保险公司：保险公司面临的风险主要有三个，道德风险(Moral hazard)指被保险人可能因为被保险而使风险上升；逆向选择(Adverse selection)指购买保险的人群往往比普通大众更加处在被保风险之中；诈骗(fraud)指虚构索赔等骗保行为。</li>
+</ul>
+<h3 id="资产分类">资产分类</h3>
+<h4 id="集合融资产品-Pooled-investment-Vehicles">集合融资产品(Pooled investment Vehicles)</h4>
+<p>集合融资产品的本质就是<code>基金(Funds)</code>，基金中包括购买上市公司股票的<code>公募基金(Mutual Funds)</code>；购买非上市公司股票的<code>私募基金(Private Equity)</code>；购买房地产的<code>房地产金融投资(REITS)</code>；购买金融衍生品的<code>对冲基金(Hedge Funds)</code>。所有的这些基金种类统称为集合融资产品。</p>
+<h4 id="公募基金-Mutual-Funds">公募基金(Mutual Funds)</h4>
+<p>公募基金主要分为<code>开放基金(open-ended)</code>和<code>封闭基金(close-ended)</code>。其中开放基金的申购和赎回都可以随时向基金公司申请，以<code>基金净值交易(Net Asset Value, NVA)</code>，但由于需要应对赎回情况，开放基金通常需要配置部分高流动性资产，而被<code>影响收益率(Cash drag)</code>；封闭基金则是在认购期外不能直接与基金公司交易的基金，但可以在二级市场以市场价格交易，市场价格通常对比基金净值有折扣(因为提供了额外流动性)。</p>
+<h4 id="交易性开放式指数基金-Exchange-traded-fund">交易性开放式指数基金(Exchange traded fund)</h4>
+<p>ETF往往挂钩指数，融合了开放基金和封闭基金各自的优势，因为其既可以在二级市场以市场价格交易，又可以与基金公司以基金净值交易。</p>
+<p>[第23篇]</p>
+]]></content>
+      <categories>
+        <category>金融分析</category>
+      </categories>
+      <tags>
+        <tag>日常学习</tag>
+        <tag>CFA一级</tag>
+        <tag>股权投资</tag>
       </tags>
   </entry>
   <entry>
