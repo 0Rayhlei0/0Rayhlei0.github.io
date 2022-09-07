@@ -63,6 +63,105 @@
       </tags>
   </entry>
   <entry>
+    <title>[MS Office]使用 MS Access 开发文档管理查询工具</title>
+    <url>/2022/03/27/11-MSAccess-documentation-tool/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>初次来到这家公司就发现公司的<code>文档记录</code>不太完备，很多<code>数据概念</code>和<code>数据库定义</code>要么模棱两可要么需要询问老员工，这乍看起来是个不影响干活的小事但实际上这不仅可能造成工作效率低下的结果，甚至可能导致<code>严重的问题</code>(类似于报告口径不一，数据结果错误导致决策错误或公司声誉受损等等)，因此这其实是一个<code>风险暴露</code>。我也因此决定至少给我们自己团队做一个<code>文档数据库</code>来设立一个可以参考标准口径，避免一些不必要的风险，同时加强同事日常工作和交接的效率与质量。</p>
+<p>我虽然不是第一次接触VBA但其实这是我第一次接触<code>Access数据库</code>的应用开发，整个工具开发花了我接近七八天的时间，学到的东西也不少。在这篇文章中我会首先介绍一下工具本身的功能，然后是我学习到的Access应用开发的一些基本知识，以及介绍我在实现一些功能时用到的一些VBA代码。</p>
+<h1>正文</h1>
+<p>本文会直接介绍<code>工具的功能</code>及<code>开发中学习到的知识</code>，以及一些功能的<code>代码实现方法</code>。关于Access中各对象基本定义及功能的介绍可以去我的另一篇文章<a href="http://raylei.space/2022/02/25/6-MSAccess_database_split/">分割 MS Access 数据库为前端和后端</a>看看。</p>
+<h2 id="工具结构">工具结构</h2>
+<p>目前这个文档工具有3个主要的文档数据库：</p>
+<ol>
+<li><code>Key Measurements SQL：</code>记录了日常业务中可能涉及的主要术语与指标的定义及其SQL样例。</li>
+<li><code>Database Documentation：</code>记录了团队经常使用的数据库表及相应各个字段的详细信息。</li>
+<li><code>Marco Polo Dashboards：</code>记录了公司Tableau平台上的Dashboards的网址, 详细信息及使用方法。</li>
+</ol>
+<p>其中前两个文档只需要实现名字的查询即可，而第三个<code>Tableau Dashboard</code>我则希望可以实现信息关键词的查询，因为团队中有些同事的数据查询需求其实已经在<code>Tableau</code>上有查询模板，我希望增加这个功能可以使用户通过他们需求的关键字可以查询到能帮助他们的<code>Dashboard</code>。</p>
+<p>另外我为工具设置了<code>两个主要入口</code>，一个供<code>数据维护者</code>使用，使用<code>分割窗体(Split form)</code>，用户可以在界面中进行数据的<code>增删改查</code>，包括对工具本身的版本记录进行修改。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/1.gif" alt="维护端界面演示"></p>
+<p>另一个则是供<code>其他同事</code>使用，界面更为简洁，用户从下拉菜单中选择要查询的数据，并且可以通过不同的方式筛选出要<code>查询</code>的数据，但没有增删改已有数据的权限。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/2.gif" alt="用户端界面演示"></p>
+<h2 id="Access表单工具开发基础知识">Access表单工具开发基础知识</h2>
+<p>Access的基本概念和定义我已经在第6篇博文中介绍过，在本节中我会注重介绍一些开发表单工具可能需要知道的基础知识，有了这些基本知识，稍加摸索尝试就可以很快上道了。</p>
+<h3 id="四种视图">四种视图</h3>
+<p>要做Access的<code>表单(Form)工具</code>开发首先要搞清楚的是四种不同的<code>视图(View)</code>各自的作用及用法。在表单下通过<code>开始(Home)选项卡</code>中<code>视图(View)组</code>中的视图切换视图，四种不同的视图的用法和用处各有不同：</p>
+<ul>
+<li><code>窗体视图(Form View)：</code>该视图下表单即为用户正常使用的状态，没有开发者选项，开发者可以在该视图下测试表单是否如预期运行。</li>
+<li><code>数据表视图(Datasheet View)：</code>该视图下表单主要显示该表单的数据信息，呈现方式与表(Table)中相同，开发者可以用该视图检视表单的数据信息。</li>
+<li><code>布局视图(Layout View)：</code>该视图下表单可以呈现窗体视图外观的同时不触发控件事件，在该视图下开发者依然可以通过属性栏配置表单。通常使用这个视图调整一些与表单外观有关的功能会得到比较直观的反馈。</li>
+<li><code>设计视图(Design View)：</code>该视图下的表单会呈现出更多更详细的信息，例如表单的高度宽度尺，格线，页眉和页脚，该视图下可以调整的参数会多于布局视图但修改可能不会太直观。</li>
+</ul>
+<h3 id="属性表">属性表</h3>
+<p>Access中对表单的各方面配置都可以在<code>属性表(Property Sheet)</code>中完成，在<code>布局或设计视图</code>下右键单击表单，选择<code>属性(Property)</code>便会弹出当前控件的可调整属性，其中拥有自己属性的对象除了各种<code>控件(Control)</code>以外，还有<code>表单(Form)</code>，<code>页眉(Header)</code>，<code>页脚(Footer)</code>和<code>主体(Detail)</code>。</p>
+<p>属性表中会显示当前选择的对象的类型（<code>控件类型或窗体(Form)或节(Section)</code>）及名称，而每个对象的配置参数又分为4个<code>选项卡</code>：<br>
+<code>格式(Format)：</code>在该选项卡中可以调整对象的外观参数以及一些控件的显示。</p>
+<p><code>数据(Data)：</code>该选项卡内容涉及数据显示相关设置，如数据源，默认值，数据验证或其他数据相关的配置。</p>
+<p><code>事件(Event)：</code>该选项卡主要涉及各种触发事件，开发者可以在不同的事件中加入宏或VBA代码来实现各种功能。</p>
+<p><code>其他(Other)：</code>基本上其他类找不到的参数设置就在这里找。</p>
+<h3 id="宏和VBA代码">宏和VBA代码</h3>
+<p>Access中有<code>宏(Macro)</code>和<code>VBA代码(Code)</code>的<code>生成器(Builder)</code>，在控件的事件选项卡中点击<code>...</code>按键就可以进入生成器选择窗口，而宏和代码都可以一定程度上完成对某个事件的编程，他们的区别在于功能性和复杂度上。<code>宏</code>使用已经定义好的动作模块来设定事件动作，<code>简单快捷但自由度受限</code>，而<code>VBA代码</code>则需要开发者更高的代码能力，但能够实现更加<code>复杂的事件任务</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/macro.jpg" alt="宏界面"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/vba_code.jpg" alt="vba界面"></p>
+<p>在我们的工具中一些功能的实现结合了宏和VBA代码两种方式的使用。</p>
+<h2 id="部分功能的代码实现">部分功能的代码实现</h2>
+<p>我们的工具中每一个<code>按钮控件(Button Control)</code>都会涉及一个或多个代码块，但有些功能确实很简单我就不详细说了，这里我挑几个我觉得需要注意或者花了我一些功夫才写好的功能，那就由简及难一一介绍一下吧。</p>
+<h3 id="控制分割窗体的宽度">控制分割窗体的宽度</h3>
+<p>当我们设置表单的格式为<code>分割窗体(Split form)</code>时，我们无论在视图中如何调节它的宽度它在被打开时都会自动占满屏幕，这会减弱我们做出来的工具在不同设备上呈现的一致性，让我非常不爽。查了一下之后发现原来分割窗口的宽度可以用<code>MoveSize方式</code>调整。根据微软的官方文档，<code>MoveSize</code>的使用方法如下，其中数值的单位为<code>twip</code>：</p>
+<blockquote>
+<p><em>expression</em>.<strong>MoveSize</strong> (<em>Right</em>, <em>Down</em>, <em>Width</em>, <em>Height</em>)</p>
+</blockquote>
+<p>那么我们只需要在表单的<code>加载(On Load)</code>事件中加上这个表达就可以实现打开表单时自动调整宽度。</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Form_Load()</span><br><span class="line">	DoCmd.MoveSize , , <span class="number">7</span> * <span class="number">1600</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<h3 id="设置打开Zoombox按钮">设置打开Zoombox按钮</h3>
+<p>我的文档工具中因为涉及较长文本的输入，而且会有比较多的主动换行，因此直接在窗口文本框输入可能不太方便编辑，一般情况下用户可以在文本框中按<code>Shift+F2</code>的快捷键组合来打开当前文本框的<code>Zoombox</code>，用户可以在这个更大的窗口中编辑文字，查询时内容展示也更加清晰明了。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/3.gif" alt="Zoombox按钮演示"></p>
+<p>但显然快捷键组合对于普通用户来说有些过于繁琐了，因此我加了一个按钮，可以使用户在选择文本框后点击该按钮来打开这个文本框的<code>Zoombox</code>，只是在代码实现上稍微一些小小的注意事项，因为按钮本身是不具备<code>启动Zoombox</code>这个属性的，因此我们要将<code>focus</code>设定在点击按钮前的一个控件上，我的代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Text_zoom_Click()</span><br><span class="line">    <span class="keyword">Const</span> NOT_ZOOMABLE = <span class="number">2046</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    Screen.PreviousControl.SetFocus</span><br><span class="line">    RunCommand acCmdZoomBox</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> NOT_ZOOMABLE</span><br><span class="line">        MsgBox (<span class="string">&quot;Please select a TextBox before zoom in!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>简单来说就是点击按钮后对点击前的控件执行<code>acCmdZoomBox</code>即<code>打开Zoombox</code>的命令，而如果在按按钮前点击的控件不具备这个功能，程序会返回<code>错误代码2046</code>，如果捕捉到这个错误代码就弹出<code>“请先选择一个要放大的文本框”</code>提示。</p>
+<h3 id="查找筛选符合条件的数据">查找筛选符合条件的数据</h3>
+<p>为了方便用户<code>查改数据</code>，我需要给表单加入<code>搜索</code>的功能，比较方便的方法就是使用表单中的<code>筛选功能</code>，通过<code>关键字搭配通配符</code>在不同的<code>字段</code>筛选便可以找出符合条件的数据。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/4.gif" alt="关键字筛选演示"></p>
+<p>而对于工具的数据维护界面我使用的是<code>分割表单</code>，因此只要将需要的数据筛选出来，用户就可以在分割窗口中选择自己想要编辑的记录来操作。代码块如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> find_record_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> category_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending * or IS NULL</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        category_null = <span class="string">&quot; OR [MP Category] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">        category_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        dashboard_null = <span class="string">&quot; OR [MP Dashboard] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">        dashboard_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;([MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; category_null &amp; <span class="string">&quot;) AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;([MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; dashboard_null &amp; <span class="string">&quot;)&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>需要注意的一点是，因为<code>筛选</code>需要使用表单上的<code>文本框</code>输入内容，因此在直接使用<code>TextBox.Value</code>获取内容时可能会出现<code>空值报错</code>，而同时如果仅仅只将筛选值以<code>&quot;&quot;</code>形式传给筛选条件的话，筛选会以<code>&quot;Field LIKE '**'&quot;</code>的条件筛选，这时筛选出的内容会<code>不包括内容为空的记录</code>，这在用户端可能无所谓，毕竟如果指针列的字段都为空很可能说明这条记录本身就没有完成，所以筛选出来也没有意义。但在维护端如果筛选不出字段为空的记录的话就会导致未完成的记录再也不能被筛选出来。</p>
+<p>因此我在筛选器的语句中除了加入要筛选的内容外，还多了一重判断<code>“若输入为空，则在筛选条件中加入语句OR Field IS NULL”</code>以此筛选出该字段为空的记录。筛选器设置好后再用<code>Me.FilterOn = True</code>的语句将该设置应用在表单上筛选才会生效。这样就完成了记录筛选查找功能。</p>
+<h3 id="通过关键字限制组合框内容">通过关键字限制组合框内容</h3>
+<p>在维护端要筛选出符合特定条件的记录可以直接筛选后在分割窗口中选择想要操作的数据，但在客户端我不希望使用分割窗体这么<code>&quot;复杂&quot;</code>的功能，我希望给用户更加简单易懂的操作界面。因此出现了我在这个工具开发中想出来的最有意思的一段代码和功能。那就是通过关键字搜索来限制<code>组合框(ComboBox)</code>中的显示内容，并且通过组合框的中值的选择来定位记录。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/5.gif" alt="组合框选择记录演示"></p>
+<p>最开始实现这个功能我是希望可以将在上一节的筛选后的<code>记录集(RecordSet)</code>填入组合框的<code>行来源(Row Source)</code>，结果找了半天也没有发现<code>Access VBA</code>有这个操作方法。因此我想到的办法是在<code>查找记录</code>控件的筛选记录功能之上再加入一个获取筛选出的记录的索引并<code>新建一个表</code>，然后直接将<code>行来源</code>的引用关联到这个新建的表中不就可以实现实时控制组合框内容了吗？测试了一下真的挺好用。代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_dashboard_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27;make a table that store the index for this search and fill in the combobox row source with the result</span></span><br><span class="line">    strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;WHERE [MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;AND [MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;[MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;[MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>这段代码中需要注意的点有几个：</p>
+<ol>
+<li>与维护端相比，用户端中我<code>去掉了筛选出空值记录</code>的功能，因为如果内容为空那么大概率这条记录还没有完成，不需要被用户查到。</li>
+<li>关于<code>组合框</code>的<code>行来源</code>，我在表的<code>加载(On Load)</code>事件中加入了向<code>组合框行来源</code>中添加原表中所有引索的SQL语句，然后在<code>关闭(On close)</code>事件中加入了<code>清除行来源</code>并删除临时表的代码。这样可以保证为了查找引索而创建的临时表只在表单被打开的时候存在。</li>
+<li>临时表中的<code>引索</code>和<code>记录集</code>中的记录被以同样的方式<code>排序</code>和<code>筛选</code>，以此保证筛选出来的记录与组合框中的待选记录在顺序和内容上都相同。</li>
+<li>最后要实现组合框中的数据控制显示的记录有两种方式，一种比较简单的是通过<code>控件向导</code>添加<code>组合框</code>，其中有选择是否使用<code>组合框</code>控制记录显示。而第二种则是直接写<code>宏或代码</code>，因为其实控件向导实现这个功能的方法也就是在<code>“更新后(On Update)”</code>事件中添加一个<code>以当前组合框选择的记录ID</code>来查找记录的宏。</li>
+</ol>
+<h3 id="多关键字查询筛选记录">多关键字查询筛选记录</h3>
+<p>完成了基本的查询功能之后，我还希望在<code>Tableau Dashboard</code>的文档工具中再加上一个<code>多关键字查询</code>的功能，我的设想是使用多个<code>AND条件</code>在<code>Description字段</code>中筛选用空格隔开的<code>每一个关键词</code>，这样如果用户想要找到一张可以看到<code>“CCBA YoY GWP”</code>的<code>Dashboard</code>，他只需要输入后就可以找到<code>Description</code>中同时出现了这几个关键词的记录，从而帮助用户快速定位他们需要的<code>Dashboard</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/6.gif" alt="关键词搜索演示"></p>
+<p>而代码的实现逻辑也非常简单，即使利用上节中使用的限制组合框筛选数据的原理，只不过对于提取新建引索表的SQL语句需要根据输入框中的关键词循环一下，其中第一个词前用<code>WHERE DESCRIPTION LIKE '*FIRSTWORD*'</code>的格式而后面其他词则用<code>AND</code>替代<code>WHERE</code>。具体代码如下：</p>
+<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_keywords_Click()</span><br><span class="line">    <span class="keyword">Dim</span> keywords_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> arrKeywords</span><br><span class="line">    <span class="keyword">Dim</span> varKeyword</span><br><span class="line">    <span class="keyword">Dim</span> strSQL <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> strFilter <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="comment">&#x27; if the key words are empty, select all records.</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(keywords_search) <span class="keyword">Then</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">            <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">        strFilter = <span class="string">&quot;Description LIKE &#x27;**&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">    <span class="comment">&#x27; looping the keywords input add &quot;AND&quot; criterias for each keyword.</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span></span><br><span class="line">        arrKeywords = Split(keywords_search.Value, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">Dim</span> loopOne <span class="keyword">As</span> <span class="type">Boolean</span></span><br><span class="line">        loopOne = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">For</span> <span class="keyword">Each</span> varKeyword <span class="keyword">In</span> arrKeywords</span><br><span class="line">            <span class="comment">&#x27; In the first loop, use WHERE and afterwards use AND to complete the SQL sentence.</span></span><br><span class="line">            <span class="keyword">If</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; WHERE Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = <span class="string">&quot;Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                loopOne = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">ElseIf</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> <span class="built_in">Not</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = strFilter &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">            <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">        <span class="keyword">Next</span></span><br><span class="line">        <span class="comment">&#x27; sort the records in ascending order</span></span><br><span class="line">        strSQL = strSQL &amp; <span class="string">&quot; ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = strFilter</span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
+<p>到这里基本上这个小工具中值得讲的东西就都讲完了。</p>
+<h2 id="工具下载">工具下载</h2>
+<p>我把一个只有测试内容的<code>副本</code>放在这里，有兴趣的可以打开看看每个部分功能具体是怎么实现的：</p>
+<p>下载链接：<a href="/attachment/BancaDB_Documentation.accdb">点击这里</a></p>
+<p>因为是第一次接触<code>Access</code>的VBA编程，我其实也发现了一些不好的编程习惯导致的不方便的情况，比如看网上大家的代码，有一个<code>约定俗成的规矩</code>是大家会在不同控件名称前加上这个控件的<code>类型简称</code>，比如<code>表A</code>命名为<code>tblA</code>,但我刚开始编的时候并没有意识到这个对读改代码有多重要，现在再改又比较麻烦了，各位先担待着，下次不会这样了。</p>
+<h1>最后</h1>
+<p>个人觉得通过这样一个小小的项目在一定程度上掌握了<code>数据库小应用的开发</code>是非常好的，以后面对某些难题又多了一个可能的解决方案，例如需要向客户定期收集资料时，可以做一个<code>Access前端</code>然后将表放在<code>SharePoint List</code>上，这样客户在前端收集到的资料就可以第一时间传送到云上的数据库中，这会比邮件沟通更大程度地增加<code>效率</code>和<code>用户体验</code>。</p>
+<p>[第11篇]</p>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>Access</tag>
+        <tag>VBA</tag>
+        <tag>工作学习</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>[数据分析]常用数据库类型对比介绍</title>
     <url>/2022/03/09/10-introduction-to-different-db/</url>
     <content><![CDATA[<h1>序言</h1>
@@ -229,107 +328,8 @@
         <category>数据分析</category>
       </categories>
       <tags>
+        <tag>工作学习</tag>
         <tag>Database</tag>
-        <tag>工作学习</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[MS Office]使用 MS Access 开发文档管理查询工具</title>
-    <url>/2022/03/27/11-MSAccess-documentation-tool/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>初次来到这家公司就发现公司的<code>文档记录</code>不太完备，很多<code>数据概念</code>和<code>数据库定义</code>要么模棱两可要么需要询问老员工，这乍看起来是个不影响干活的小事但实际上这不仅可能造成工作效率低下的结果，甚至可能导致<code>严重的问题</code>(类似于报告口径不一，数据结果错误导致决策错误或公司声誉受损等等)，因此这其实是一个<code>风险暴露</code>。我也因此决定至少给我们自己团队做一个<code>文档数据库</code>来设立一个可以参考标准口径，避免一些不必要的风险，同时加强同事日常工作和交接的效率与质量。</p>
-<p>我虽然不是第一次接触VBA但其实这是我第一次接触<code>Access数据库</code>的应用开发，整个工具开发花了我接近七八天的时间，学到的东西也不少。在这篇文章中我会首先介绍一下工具本身的功能，然后是我学习到的Access应用开发的一些基本知识，以及介绍我在实现一些功能时用到的一些VBA代码。</p>
-<h1>正文</h1>
-<p>本文会直接介绍<code>工具的功能</code>及<code>开发中学习到的知识</code>，以及一些功能的<code>代码实现方法</code>。关于Access中各对象基本定义及功能的介绍可以去我的另一篇文章<a href="http://raylei.space/2022/02/25/6-MSAccess_database_split/">分割 MS Access 数据库为前端和后端</a>看看。</p>
-<h2 id="工具结构">工具结构</h2>
-<p>目前这个文档工具有3个主要的文档数据库：</p>
-<ol>
-<li><code>Key Measurements SQL：</code>记录了日常业务中可能涉及的主要术语与指标的定义及其SQL样例。</li>
-<li><code>Database Documentation：</code>记录了团队经常使用的数据库表及相应各个字段的详细信息。</li>
-<li><code>Marco Polo Dashboards：</code>记录了公司Tableau平台上的Dashboards的网址, 详细信息及使用方法。</li>
-</ol>
-<p>其中前两个文档只需要实现名字的查询即可，而第三个<code>Tableau Dashboard</code>我则希望可以实现信息关键词的查询，因为团队中有些同事的数据查询需求其实已经在<code>Tableau</code>上有查询模板，我希望增加这个功能可以使用户通过他们需求的关键字可以查询到能帮助他们的<code>Dashboard</code>。</p>
-<p>另外我为工具设置了<code>两个主要入口</code>，一个供<code>数据维护者</code>使用，使用<code>分割窗体(Split form)</code>，用户可以在界面中进行数据的<code>增删改查</code>，包括对工具本身的版本记录进行修改。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/1.gif" alt="维护端界面演示"></p>
-<p>另一个则是供<code>其他同事</code>使用，界面更为简洁，用户从下拉菜单中选择要查询的数据，并且可以通过不同的方式筛选出要<code>查询</code>的数据，但没有增删改已有数据的权限。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/2.gif" alt="用户端界面演示"></p>
-<h2 id="Access表单工具开发基础知识">Access表单工具开发基础知识</h2>
-<p>Access的基本概念和定义我已经在第6篇博文中介绍过，在本节中我会注重介绍一些开发表单工具可能需要知道的基础知识，有了这些基本知识，稍加摸索尝试就可以很快上道了。</p>
-<h3 id="四种视图">四种视图</h3>
-<p>要做Access的<code>表单(Form)工具</code>开发首先要搞清楚的是四种不同的<code>视图(View)</code>各自的作用及用法。在表单下通过<code>开始(Home)选项卡</code>中<code>视图(View)组</code>中的视图切换视图，四种不同的视图的用法和用处各有不同：</p>
-<ul>
-<li><code>窗体视图(Form View)：</code>该视图下表单即为用户正常使用的状态，没有开发者选项，开发者可以在该视图下测试表单是否如预期运行。</li>
-<li><code>数据表视图(Datasheet View)：</code>该视图下表单主要显示该表单的数据信息，呈现方式与表(Table)中相同，开发者可以用该视图检视表单的数据信息。</li>
-<li><code>布局视图(Layout View)：</code>该视图下表单可以呈现窗体视图外观的同时不触发控件事件，在该视图下开发者依然可以通过属性栏配置表单。通常使用这个视图调整一些与表单外观有关的功能会得到比较直观的反馈。</li>
-<li><code>设计视图(Design View)：</code>该视图下的表单会呈现出更多更详细的信息，例如表单的高度宽度尺，格线，页眉和页脚，该视图下可以调整的参数会多于布局视图但修改可能不会太直观。</li>
-</ul>
-<h3 id="属性表">属性表</h3>
-<p>Access中对表单的各方面配置都可以在<code>属性表(Property Sheet)</code>中完成，在<code>布局或设计视图</code>下右键单击表单，选择<code>属性(Property)</code>便会弹出当前控件的可调整属性，其中拥有自己属性的对象除了各种<code>控件(Control)</code>以外，还有<code>表单(Form)</code>，<code>页眉(Header)</code>，<code>页脚(Footer)</code>和<code>主体(Detail)</code>。</p>
-<p>属性表中会显示当前选择的对象的类型（<code>控件类型或窗体(Form)或节(Section)</code>）及名称，而每个对象的配置参数又分为4个<code>选项卡</code>：<br>
-<code>格式(Format)：</code>在该选项卡中可以调整对象的外观参数以及一些控件的显示。</p>
-<p><code>数据(Data)：</code>该选项卡内容涉及数据显示相关设置，如数据源，默认值，数据验证或其他数据相关的配置。</p>
-<p><code>事件(Event)：</code>该选项卡主要涉及各种触发事件，开发者可以在不同的事件中加入宏或VBA代码来实现各种功能。</p>
-<p><code>其他(Other)：</code>基本上其他类找不到的参数设置就在这里找。</p>
-<h3 id="宏和VBA代码">宏和VBA代码</h3>
-<p>Access中有<code>宏(Macro)</code>和<code>VBA代码(Code)</code>的<code>生成器(Builder)</code>，在控件的事件选项卡中点击<code>...</code>按键就可以进入生成器选择窗口，而宏和代码都可以一定程度上完成对某个事件的编程，他们的区别在于功能性和复杂度上。<code>宏</code>使用已经定义好的动作模块来设定事件动作，<code>简单快捷但自由度受限</code>，而<code>VBA代码</code>则需要开发者更高的代码能力，但能够实现更加<code>复杂的事件任务</code>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/macro.jpg" alt="宏界面"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/vba_code.jpg" alt="vba界面"></p>
-<p>在我们的工具中一些功能的实现结合了宏和VBA代码两种方式的使用。</p>
-<h2 id="部分功能的代码实现">部分功能的代码实现</h2>
-<p>我们的工具中每一个<code>按钮控件(Button Control)</code>都会涉及一个或多个代码块，但有些功能确实很简单我就不详细说了，这里我挑几个我觉得需要注意或者花了我一些功夫才写好的功能，那就由简及难一一介绍一下吧。</p>
-<h3 id="控制分割窗体的宽度">控制分割窗体的宽度</h3>
-<p>当我们设置表单的格式为<code>分割窗体(Split form)</code>时，我们无论在视图中如何调节它的宽度它在被打开时都会自动占满屏幕，这会减弱我们做出来的工具在不同设备上呈现的一致性，让我非常不爽。查了一下之后发现原来分割窗口的宽度可以用<code>MoveSize方式</code>调整。根据微软的官方文档，<code>MoveSize</code>的使用方法如下，其中数值的单位为<code>twip</code>：</p>
-<blockquote>
-<p><em>expression</em>.<strong>MoveSize</strong> (<em>Right</em>, <em>Down</em>, <em>Width</em>, <em>Height</em>)</p>
-</blockquote>
-<p>那么我们只需要在表单的<code>加载(On Load)</code>事件中加上这个表达就可以实现打开表单时自动调整宽度。</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Form_Load()</span><br><span class="line">	DoCmd.MoveSize , , <span class="number">7</span> * <span class="number">1600</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<h3 id="设置打开Zoombox按钮">设置打开Zoombox按钮</h3>
-<p>我的文档工具中因为涉及较长文本的输入，而且会有比较多的主动换行，因此直接在窗口文本框输入可能不太方便编辑，一般情况下用户可以在文本框中按<code>Shift+F2</code>的快捷键组合来打开当前文本框的<code>Zoombox</code>，用户可以在这个更大的窗口中编辑文字，查询时内容展示也更加清晰明了。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/3.gif" alt="Zoombox按钮演示"></p>
-<p>但显然快捷键组合对于普通用户来说有些过于繁琐了，因此我加了一个按钮，可以使用户在选择文本框后点击该按钮来打开这个文本框的<code>Zoombox</code>，只是在代码实现上稍微一些小小的注意事项，因为按钮本身是不具备<code>启动Zoombox</code>这个属性的，因此我们要将<code>focus</code>设定在点击按钮前的一个控件上，我的代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> Text_zoom_Click()</span><br><span class="line">    <span class="keyword">Const</span> NOT_ZOOMABLE = <span class="number">2046</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    Screen.PreviousControl.SetFocus</span><br><span class="line">    RunCommand acCmdZoomBox</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> NOT_ZOOMABLE</span><br><span class="line">        MsgBox (<span class="string">&quot;Please select a TextBox before zoom in!&quot;</span>)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>简单来说就是点击按钮后对点击前的控件执行<code>acCmdZoomBox</code>即<code>打开Zoombox</code>的命令，而如果在按按钮前点击的控件不具备这个功能，程序会返回<code>错误代码2046</code>，如果捕捉到这个错误代码就弹出<code>“请先选择一个要放大的文本框”</code>提示。</p>
-<h3 id="查找筛选符合条件的数据">查找筛选符合条件的数据</h3>
-<p>为了方便用户<code>查改数据</code>，我需要给表单加入<code>搜索</code>的功能，比较方便的方法就是使用表单中的<code>筛选功能</code>，通过<code>关键字搭配通配符</code>在不同的<code>字段</code>筛选便可以找出符合条件的数据。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/4.gif" alt="关键字筛选演示"></p>
-<p>而对于工具的数据维护界面我使用的是<code>分割表单</code>，因此只要将需要的数据筛选出来，用户就可以在分割窗口中选择自己想要编辑的记录来操作。代码块如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> find_record_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> category_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_null <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending * or IS NULL</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        category_null = <span class="string">&quot; OR [MP Category] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">        category_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">        dashboard_null = <span class="string">&quot; OR [MP Dashboard] IS NULL&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">        dashboard_null = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;([MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; category_null &amp; <span class="string">&quot;) AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;([MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; dashboard_null &amp; <span class="string">&quot;)&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>需要注意的一点是，因为<code>筛选</code>需要使用表单上的<code>文本框</code>输入内容，因此在直接使用<code>TextBox.Value</code>获取内容时可能会出现<code>空值报错</code>，而同时如果仅仅只将筛选值以<code>&quot;&quot;</code>形式传给筛选条件的话，筛选会以<code>&quot;Field LIKE '**'&quot;</code>的条件筛选，这时筛选出的内容会<code>不包括内容为空的记录</code>，这在用户端可能无所谓，毕竟如果指针列的字段都为空很可能说明这条记录本身就没有完成，所以筛选出来也没有意义。但在维护端如果筛选不出字段为空的记录的话就会导致未完成的记录再也不能被筛选出来。</p>
-<p>因此我在筛选器的语句中除了加入要筛选的内容外，还多了一重判断<code>“若输入为空，则在筛选条件中加入语句OR Field IS NULL”</code>以此筛选出该字段为空的记录。筛选器设置好后再用<code>Me.FilterOn = True</code>的语句将该设置应用在表单上筛选才会生效。这样就完成了记录筛选查找功能。</p>
-<h3 id="通过关键字限制组合框内容">通过关键字限制组合框内容</h3>
-<p>在维护端要筛选出符合特定条件的记录可以直接筛选后在分割窗口中选择想要操作的数据，但在客户端我不希望使用分割窗体这么<code>&quot;复杂&quot;</code>的功能，我希望给用户更加简单易懂的操作界面。因此出现了我在这个工具开发中想出来的最有意思的一段代码和功能。那就是通过关键字搜索来限制<code>组合框(ComboBox)</code>中的显示内容，并且通过组合框的中值的选择来定位记录。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/5.gif" alt="组合框选择记录演示"></p>
-<p>最开始实现这个功能我是希望可以将在上一节的筛选后的<code>记录集(RecordSet)</code>填入组合框的<code>行来源(Row Source)</code>，结果找了半天也没有发现<code>Access VBA</code>有这个操作方法。因此我想到的办法是在<code>查找记录</code>控件的筛选记录功能之上再加入一个获取筛选出的记录的索引并<code>新建一个表</code>，然后直接将<code>行来源</code>的引用关联到这个新建的表中不就可以实现实时控制组合框内容了吗？测试了一下真的挺好用。代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_dashboard_Click()</span><br><span class="line">    <span class="keyword">Dim</span> category_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> dashboard_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(category_search) <span class="keyword">Then</span></span><br><span class="line">        category_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        category_search_term = category_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">If</span> IsNull(dashboard_search) <span class="keyword">Then</span></span><br><span class="line">        dashboard_search_term = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">        dashboard_search_term = dashboard_search.Value</span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27;make a table that store the index for this search and fill in the combobox row source with the result</span></span><br><span class="line">    strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;WHERE [MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;AND [MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27; &quot;</span> &amp; _</span><br><span class="line">    <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = <span class="string">&quot;[MP Category] LIKE &#x27;*&quot;</span> &amp; category_search_term &amp; <span class="string">&quot;*&#x27; AND &quot;</span> _</span><br><span class="line">    &amp; <span class="string">&quot;[MP Dashboard] LIKE &#x27;*&quot;</span> &amp; dashboard_search_term &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>这段代码中需要注意的点有几个：</p>
-<ol>
-<li>与维护端相比，用户端中我<code>去掉了筛选出空值记录</code>的功能，因为如果内容为空那么大概率这条记录还没有完成，不需要被用户查到。</li>
-<li>关于<code>组合框</code>的<code>行来源</code>，我在表的<code>加载(On Load)</code>事件中加入了向<code>组合框行来源</code>中添加原表中所有引索的SQL语句，然后在<code>关闭(On close)</code>事件中加入了<code>清除行来源</code>并删除临时表的代码。这样可以保证为了查找引索而创建的临时表只在表单被打开的时候存在。</li>
-<li>临时表中的<code>引索</code>和<code>记录集</code>中的记录被以同样的方式<code>排序</code>和<code>筛选</code>，以此保证筛选出来的记录与组合框中的待选记录在顺序和内容上都相同。</li>
-<li>最后要实现组合框中的数据控制显示的记录有两种方式，一种比较简单的是通过<code>控件向导</code>添加<code>组合框</code>，其中有选择是否使用<code>组合框</code>控制记录显示。而第二种则是直接写<code>宏或代码</code>，因为其实控件向导实现这个功能的方法也就是在<code>“更新后(On Update)”</code>事件中添加一个<code>以当前组合框选择的记录ID</code>来查找记录的宏。</li>
-</ol>
-<h3 id="多关键字查询筛选记录">多关键字查询筛选记录</h3>
-<p>完成了基本的查询功能之后，我还希望在<code>Tableau Dashboard</code>的文档工具中再加上一个<code>多关键字查询</code>的功能，我的设想是使用多个<code>AND条件</code>在<code>Description字段</code>中筛选用空格隔开的<code>每一个关键词</code>，这样如果用户想要找到一张可以看到<code>“CCBA YoY GWP”</code>的<code>Dashboard</code>，他只需要输入后就可以找到<code>Description</code>中同时出现了这几个关键词的记录，从而帮助用户快速定位他们需要的<code>Dashboard</code>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/6.gif" alt="关键词搜索演示"></p>
-<p>而代码的实现逻辑也非常简单，即使利用上节中使用的限制组合框筛选数据的原理，只不过对于提取新建引索表的SQL语句需要根据输入框中的关键词循环一下，其中第一个词前用<code>WHERE DESCRIPTION LIKE '*FIRSTWORD*'</code>的格式而后面其他词则用<code>AND</code>替代<code>WHERE</code>。具体代码如下：</p>
-<figure class="highlight vb"><table><tr><td class="code"><pre><span class="line"><span class="keyword">Private</span> <span class="keyword">Sub</span> search_keywords_Click()</span><br><span class="line">    <span class="keyword">Dim</span> keywords_search_term <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> arrKeywords</span><br><span class="line">    <span class="keyword">Dim</span> varKeyword</span><br><span class="line">    <span class="keyword">Dim</span> strSQL <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    <span class="keyword">Dim</span> strFilter <span class="keyword">As</span> <span class="type">String</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; for each null input, filter for every entry by sending *</span></span><br><span class="line">    <span class="keyword">On</span> <span class="keyword">Error</span> <span class="keyword">Resume</span> <span class="keyword">Next</span></span><br><span class="line">    <span class="comment">&#x27; if the key words are empty, select all records.</span></span><br><span class="line">    <span class="keyword">If</span> IsNull(keywords_search) <span class="keyword">Then</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span> &amp; _</span><br><span class="line">            <span class="string">&quot;ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">        strFilter = <span class="string">&quot;Description LIKE &#x27;**&#x27;&quot;</span></span><br><span class="line">    <span class="keyword">Else</span></span><br><span class="line">    <span class="comment">&#x27; looping the keywords input add &quot;AND&quot; criterias for each keyword.</span></span><br><span class="line">        strSQL = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] INTO combo_dashboard FROM Marco_Polo_Dashboards &quot;</span></span><br><span class="line">        arrKeywords = Split(keywords_search.Value, <span class="string">&quot; &quot;</span>)</span><br><span class="line">        <span class="keyword">Dim</span> loopOne <span class="keyword">As</span> <span class="type">Boolean</span></span><br><span class="line">        loopOne = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">For</span> <span class="keyword">Each</span> varKeyword <span class="keyword">In</span> arrKeywords</span><br><span class="line">            <span class="comment">&#x27; In the first loop, use WHERE and afterwards use AND to complete the SQL sentence.</span></span><br><span class="line">            <span class="keyword">If</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; WHERE Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = <span class="string">&quot;Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                loopOne = <span class="literal">False</span></span><br><span class="line">            <span class="keyword">ElseIf</span> <span class="built_in">Not</span> varKeyword = <span class="string">&quot;&quot;</span> <span class="built_in">And</span> <span class="built_in">Not</span> loopOne <span class="keyword">Then</span></span><br><span class="line">                strSQL = strSQL &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">                strFilter = strFilter &amp; <span class="string">&quot; AND Description LIKE &#x27;*&quot;</span> &amp; varKeyword &amp; <span class="string">&quot;*&#x27;&quot;</span></span><br><span class="line">            <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">        <span class="keyword">Next</span></span><br><span class="line">        <span class="comment">&#x27; sort the records in ascending order</span></span><br><span class="line">        strSQL = strSQL &amp; <span class="string">&quot; ORDER BY [MP Category], [MP Dashboard];&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; Disconnect the combobox with the list table before deleting it.</span></span><br><span class="line">    <span class="keyword">If</span> <span class="built_in">Not</span> Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span> <span class="keyword">Then</span></span><br><span class="line">        Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">&#x27; Delete the combobox list table if it exists</span></span><br><span class="line">    <span class="keyword">If</span> TableExists(<span class="string">&quot;combo_dashboard&quot;</span>) <span class="keyword">Then</span></span><br><span class="line">        DoCmd.DeleteObject acTable, <span class="string">&quot;combo_dashboard&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">If</span></span><br><span class="line">    CurrentDb.Execute strSQL</span><br><span class="line">    Combo_Dashboard_Lookup.RowSource = <span class="string">&quot;SELECT ID,[MP Category], [MP Dashboard] FROM combo_dashboard ORDER BY [MP Category], [MP Dashboard]; &quot;</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">&#x27; filter the records based on search terms too</span></span><br><span class="line">    <span class="keyword">Me</span>.Filter = strFilter</span><br><span class="line">    <span class="keyword">Me</span>.FilterOn = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">Select</span> <span class="keyword">Case</span> Err.Number</span><br><span class="line">        <span class="keyword">Case</span> <span class="number">0</span></span><br><span class="line">        <span class="comment">&#x27; no error</span></span><br><span class="line">        <span class="keyword">Case</span> <span class="keyword">Else</span></span><br><span class="line">        <span class="comment">&#x27;unanticipated error - inform user</span></span><br><span class="line">        MsgBox Err.Description, vbExclamation, <span class="string">&quot;Error&quot;</span></span><br><span class="line">    <span class="keyword">End</span> <span class="keyword">Select</span></span><br><span class="line"><span class="keyword">End</span> <span class="keyword">Sub</span></span><br></pre></td></tr></table></figure>
-<p>到这里基本上这个小工具中值得讲的东西就都讲完了。</p>
-<h2 id="工具下载">工具下载</h2>
-<p>我把一个只有测试内容的<code>副本</code>放在这里，有兴趣的可以打开看看每个部分功能具体是怎么实现的：</p>
-<p>下载链接：<a href="/attachment/BancaDB_Documentation.accdb">点击这里</a></p>
-<p>因为是第一次接触<code>Access</code>的VBA编程，我其实也发现了一些不好的编程习惯导致的不方便的情况，比如看网上大家的代码，有一个<code>约定俗成的规矩</code>是大家会在不同控件名称前加上这个控件的<code>类型简称</code>，比如<code>表A</code>命名为<code>tblA</code>,但我刚开始编的时候并没有意识到这个对读改代码有多重要，现在再改又比较麻烦了，各位先担待着，下次不会这样了。</p>
-<h1>最后</h1>
-<p>个人觉得通过这样一个小小的项目在一定程度上掌握了<code>数据库小应用的开发</code>是非常好的，以后面对某些难题又多了一个可能的解决方案，例如需要向客户定期收集资料时，可以做一个<code>Access前端</code>然后将表放在<code>SharePoint List</code>上，这样客户在前端收集到的资料就可以第一时间传送到云上的数据库中，这会比邮件沟通更大程度地增加<code>效率</code>和<code>用户体验</code>。</p>
-<p>[第11篇]</p>
-]]></content>
-      <categories>
-        <category>MS Office</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>Access</tag>
-        <tag>VBA</tag>
       </tags>
   </entry>
   <entry>
@@ -1617,9 +1617,9 @@ NI_{FIFO}=NI_{LIFO}+\Delta LIFO\ Reserve\times (1-Tax)
         <category>MS Office</category>
       </categories>
       <tags>
-        <tag>工作学习</tag>
         <tag>Access</tag>
         <tag>VBA</tag>
+        <tag>工作学习</tag>
       </tags>
   </entry>
   <entry>
@@ -3314,91 +3314,6 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
       </tags>
   </entry>
   <entry>
-    <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
-    <url>/2022/02/19/3-excel-tool-develop-1/</url>
-    <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
-<mark class="hl-label default">本文中的出现的数据均经过随机扭曲处理，仅工具排版，逻辑与公式可供参考。</mark> 
-<hr>
-<h1>序言</h1>
-<p>上周为公司的月度保费报告做了一些升级调整，主要是涉及产品保费量展示部分由以前的<code>静态展示固定产品保费</code>改为<code>按保费量动态展示产品排行</code>。其中涉及的Excel公式技巧包括但不限于<code>OFFSET应用</code>，<code>动态排名展示</code>，<code>合并单元格文字</code>等。</p>
-<p>原工具中有三张表格，其中有互相参考验证数据正确性的<code>Tracking cells</code>，这里面我只讲稍微复杂一些的最后一张，且数据经过随机数扭曲，所以本文中展示的表格中的<code>Tracking cells</code>不会正常显示。</p>
-<h1>正文</h1>
-<p>该工具的最终目的是使用系统中生成的原始数据利用excel的公式功能自动整理计算数据并以要求形式展示。工具的目的是为了减少人力成本，因此一个原则是尽最大可能减少工具使用人在工具定板后使用时投入的成本，在此原则之上再尽力减少制作工具本身需要的时间和精力成本。本篇中我会分别介绍这个工具的版面设计以及从已有数据结构到需求的展示样式的逐步实现方法以及其中设计的一些可以广泛应用的小技巧。</p>
-<h2 id="工具版面设计">工具版面设计</h2>
-<p>我设计Excel工具时一个习惯的guideline是将数据分为至少三个部分：</p>
-<ol>
-<li>不改变原数据的结构，以所得即所用的原则组成一个<code>数据输入区</code>，用这样的数据做成的工具可以减少该工具在后续使用中对使用人<code>“调整原数据”</code>的需求，从而降低使用成本。</li>
-<li>将数据以标准形式整理并计算的<code>数据处理区</code>，这个部分通常会包含标准化的数据分类，这样做的目的是将原数据在该区域内透明地以标准化方式整理计算，以方便后续数据展示，并使各部分公式易于阅读和后续维护修改。</li>
-<li>最后是数据的输出形式，即<code>数据展示区</code>，这个部分通常是按<code>数据使用人</code>的需求调整，也即在工具制作期间制作人通常不能控制的部分，我们最后的目的就是将处理好的数据按使用人需求展示。</li>
-</ol>
-<p>本工具的版面既是根据上述习惯排版：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/img_20220220131551.png" alt="工具版面分为“数据输入区”，“数据处理区”和“数据展示区”三个部分"></p>
-<h2 id="工具设计思路">工具设计思路</h2>
-<p>在开始设计工具之前需要理清最重要的两点，第一是到手的原数据结构，第二就是最终需要展示的信息。在这个案例中，我们提取出来的原数据为月度数据，包含信息有4列，分别是<code>险种</code>，<code>新/续业务</code>，<code>本/上年信息</code>以及<code>保费</code>本身。其中每个险种分别会有本/上年的新/续业务保费，这样<code>2x2=4</code>种的组合。因此可以知道标准格式中只需要包含<code>所有可能险种数x4</code>行既可以展示所有可能的输入组合。</p>
-<p>此时开始分析需要展示的信息，所需展示的信息可以分为3部分：首先是将险种按当前年度总保费的大小排名并展示前8个险种，将此之外的保费信息加总归入<code>Other</code>类。其次将各月保费按需求的时间维度分组加总展示(如月度，季度，半年度，当前合计等)。最后只需要动态地将未展示出来的险种名合并展示作为备注即可。</p>
-<p>为满足该需求，我的设计是将保费性质信息作为标准化维度放在数据处理区的最左边并以月份为列名排列所有数据输入区的数据，排列后在处理区将各险种按当年保费(新续业务加总)排出大小并标识，最后在展示区以<code>OFFSET</code>为引用处理区不同月度数据的方法，以降低制作工具本身所需的时间，提高公式的<code>可读性</code>和<code>修改弹性</code>。</p>
-<h2 id="实现方法">实现方法</h2>
-<p>此章中我不会事无巨细介绍所有出现的技巧，如果想要详细了解建议在最后链接中下载该工具样本自己研究，我的公式应该都是trackable的，这里我只会分别介绍几个可以广泛应用到其他需求中的方法和公式。</p>
-<h3 id="如何跳行-列引用数据">如何跳行/列引用数据</h3>
-<p>这是制作该工具时我使用的第一个小技巧，答案非常简单，既是<code>OFFSET</code>。在工具中可以看到，原数据中每月数据有4列信息，而数据处理区中我们只希望每1列展示一个月信息，这样导致的问题是如果不使用OFFSET而将处理区中的<code>SUMIFS</code>公式直接向右复制，则会使每个引用信息仅向右移动1列，从而导致<code>引用区域错位</code>。因此我们需要左边处理区每向右移动1列，公式中的引用区同步向右移动4列，才能将所有引用信息移动至原数据中的<code>下月中相应区域</code>。</p>
-<p>以处理区中最左上角的公式为例：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220151308158.png" alt="=SUMIFS(OFFSET($VV$177,,EUU$177,,ED30,OFFSET($TT$177,,EC30,OFFSET($SS$177,,EB30)/1000000"></p>
-<blockquote>
-<p>=SUMIFS(OFFSET($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>O</mi><mi>F</mi><mi>F</mi><mi>S</mi><mi>E</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">28,,),OFFSET(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">OFFSET</span><span class="mopen">(</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>D30,OFFSET($T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>C30,OFFSET($S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
-</blockquote>
-<p>该公式除去OFFSET便是非常简单的SUMIF公式如下，即将原数据中的信息按标准模板加总排列：</p>
-<blockquote>
-<p>=SUMIFS($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>D30,$T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>C30,$S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
-</blockquote>
-<p>那么OFFSET是怎么用的呢？OFFSET函数本身的作用就是以公式参数的方法来移动改变引用区域，他的参数如下：</p>
-<blockquote>
-<p>=OFFSET(Reference, rows, cols, [height],[width])</p>
-</blockquote>
-<p>其中<code>Reference</code>为引用的区域，后面的四个参数分别代表在<code>Reference</code>的基础上要移动的<code>行数</code>，<code>列数</code>，<code>高度</code>，<code>宽度</code>，<code>正数代表向右/向下，负数反之</code>。</p>
-<p>以我们的公式为例，<code>OFFSET($V$30:$V$177,,E$28,,)</code>即代表将<code>$V$30:$V$177</code>移动<code>E$28</code>标注的列数(此处为0，即不移动)，其他参数未设置则用<code>,</code>隔开。到这里我只需要将每个月的列上以等差数列向右排列引用所需移动的列数，即可以一个公式为每个月需要引用的原数据找到正确的引用位置。同样的方法在<code>数据展示区</code>也大量的使用，因此可以用一个公式以改变最少参数的方法来填入表格中。</p>
-<p>OFFSET这样的公式非常明显，是为了减轻工具制作和维护的成本而存在的，因为用到不同的公式越少，后期维护时就越简单，毕竟这里你也可以选择人手将不同月份的引用区域拖动到他们合适的位置，不过制作和维护的成本将大大增加。</p>
-<h3 id="仅对当前第一次出现的元素计算">仅对当前第一次出现的元素计算</h3>
-<p>我们想要将产品按当前合计保费量排名，也即将当年的新/续保费加总并排名，但我们却不能直接使用SUMIF加总，因为按照我的版面设计，如果直接全部加总排行时每个产品会有两个相同的保费，从而影响排行名次。因此我们要想办法使每个产品名后仅出现一个加总保费。好在我们的数据处理区是标准化设计，上半部分全部是当年数据且每个险种按NB-RN的顺序规律排列。因此我们可以是用公式从上至下仅仅对该元素第一次出现时进行计算。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220152214570.png" alt="=IF(COUNTIF($BB30,$B30)=1,SUM(OFFSET(E30:P30,,,2,)),0)"></p>
-<blockquote>
-<p>=IF(COUNTIF($B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B30,$B30)=1,SUM(OFFSET(E30:P30,2,)),0)</p>
-</blockquote>
-<p>这个公式分为两个部分，其中<code>IF</code>部分为重点，即判断语句<code>COUNTIF($B$30:$B30,$B30)=1</code>。需要注意其中<code>$B$30:$B30</code>中<code>:</code>后的<code>B30</code>仅仅固定了列数，因此该公式在下拉时该引用区域也会相应拉长。这就使得这个<code>COUNTIF</code>公式可以实现计算<code>从上到下到目前为止B列该元素出现过的次数</code>。而此时将判断语句写为<code>该COUNTIF为1</code>则表示从上到下第一次出现这个元素时，则计算后面的<code>SUM(OFFSET(E30:P30,,,2,))</code>，否则返回0。</p>
-<p>这个<code>SUM</code>函数中的<code>OFFSET</code> 的<code>height</code>参数被设置为<code>2</code>，因此加总包括该引用处在内的向下共<code>2</code>个单元格。以此实现每个出现的产品进行一次NB和RN的数值加总。</p>
-<h3 id="将出现过的数字按大小排名">将出现过的数字按大小排名</h3>
-<p>上一步中我们已经得到了每一个产品的当年总保费，那么使用<code>RANK.EQ</code>函数既可以对保费量进行排名从而使每个险种得到一个相应的排名。本来此时在展示区左边我只需要手动输入1,2,3便可以自动展示排名为1,2,3的产品名，但此处有一个特殊需求，那就是由于下架，要将PAM这个产品的除出排名，直接并入Other分类。但由于PAM还是有续保保费，因此它每个月的保费量也并不是固定的，虽然我可以使用<code>IF</code>函数将<code>PAM</code>的排名直接设定为<code>999</code>，但我们依然需要一个可以动态将已有数字从小到大排列的方法，否则会出现的问题是假设<code>PAM</code>实际排名是<code>6</code>，但它被公式设定为排名<code>999</code>，这会导致手动输入的<code>6</code>后面将没有可以引用的数据，我们需要自动将上方排列设置为4,5,7来跳过排名为<code>6</code>的<code>PAM</code>。</p>
-<p>我想到的办法是SMALL公式：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220153736776.png" alt="=SMALL($AA$103,ROW(A2)/2)"></p>
-<blockquote>
-<p>=SMALL($A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A$103,ROW(A2)/2)</p>
-</blockquote>
-<p>该公式可用参数为<code>SMALL(array,k)</code>，其作用既是返回该数据中第<code>K</code>个最小值，同理的还有<code>LARGE</code>函数。</p>
-<p>在这里的使用方法既是展示<code>在数据处理区中出现的排行数中排行第ROW(A2)/2的最小值</code>，使用<code>ROW(A2)</code>就可以使该<code>K</code>值随着公式的下拉而增加，<code>ROW(A2)</code>返回的是<code>A2</code>单元格的行数，也即<code>2</code>。该数值<code>/2</code>则可以使每个数值出现两次，以此匹配每个险种名显示两次以匹配NB和RN这两行数据，因为<code>A2</code>和<code>A3</code>两行的计算结果分别是<code>1</code>和<code>1.5</code>，都会被公式向下取整认定为<code>1</code>，同理如果希望数值重复<code>N</code>次，则<code>/N</code>即可实现，注意不要让商小于<code>1</code>。</p>
-<h3 id="IF公式的数组应用">IF公式的数组应用</h3>
-<p>最后的一个展示要求是将Other分类中，也即保费排名未在前八位但本年有保费收入的产品名备注出来:</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220170737896.png" alt="=CONCAT(&quot;*The Other Products contains &quot;,IF(($QQAAAABB$103,3)&amp;&quot;, &quot;,&quot;&quot;))"></p>
-<blockquote>
-<p>=CONCAT(“*The Other Products contains “,IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;”, “,””))</p>
-</blockquote>
-<p>这个公式中的主要知识点便是<strong>IF公式的数组应用</strong></p>
-<blockquote>
-<p>IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;“, “,””)</p>
-</blockquote>
-<p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;MAX($A$6:$A$21))</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有同时满足这两个条件的行(两个1相乘才返回1)，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
-<h1>最后</h1>
-<p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
-<p>该工具的一个副本放在这里,有兴趣可以看看：<a href="/attachment/Product_ranking.xlsx">下载链接</a></p>
-<p>[第3篇]</p>
-]]></content>
-      <categories>
-        <category>MS Office</category>
-      </categories>
-      <tags>
-        <tag>工作学习</tag>
-        <tag>Excel</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>[金融分析] CFA一级《股权投资》学习笔记</title>
     <url>/2022/08/29/23-CFA-level1-equity-investment/</url>
     <content><![CDATA[<h1>概览</h1>
@@ -3596,6 +3511,41 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
 </ol>
 <h4 id="大宗商品指数-Commodity-indexes">大宗商品指数(Commodity indexes)</h4>
 <p>大宗商品指数通常由大宗商品的<code>期货(Future)</code>价格影响，因为大宗商品的报价季节性较高。</p>
+<h2 id="Reading-38-市场有效性">Reading 38 市场有效性</h2>
+<p>一个<code>信息有效的资本市场</code>是指股票的当前市场价格已经全面、迅速、且理性地反映了市场上所有的已有信息。有效的资本市场上的证券价格会根据新信息快速调整，已被完全预测的信息出现不会影响股票价格。<code>市场价值(Market value)</code>是资产当前的价格，<code>内在价值(Intrinsic value)</code>是一个掌握所有信息的理性投资者愿意为购买该资本付出的价格。在完全有效市场中我们认为资产的市场价值是趋向于其内在价值的，市场有效性越高，信息反映在价格上的速度越快。</p>
+<h3 id="影响市场有效性的因素">影响市场有效性的因素</h3>
+<ul>
+<li>市场参与者的人数：市场参与人数越多，市场的有效性越高。</li>
+<li>信息可得性：市场上信息可得性越高，市场的有效性越高。</li>
+<li>交易限制：市场对交易的限制越少，市场的有效性越高。</li>
+<li>交易与信息成本：信息、分析、以及交易的成本越低，市场的有效性越高。</li>
+</ul>
+<h3 id="三大有效市场">三大有效市场</h3>
+<p>由于现实情况中很难出现完全有效市场，我们将市场按有效分为三类：</p>
+<p><code>弱有效市场(Weak-Form Efficiency)</code>：如果市场的资产价格反映所有<code>市场信息(Market information)</code>如价格、成交量等，该市场满足弱式有效，此时技术分析(价量分析)不能获得超额收益。</p>
+<p><code>半强有效市场(Semi-Strong Efficiency)</code>：如果市场的资产价格反映所有<code>公开信息(Public Information)</code>，即同时反映价量信息与基本面信息，该市场满足半强有效性，此时基本面分析和技术分析都不能获得超额收益。</p>
+<p><code>弱有效市场(Strong-Form Efficiency)</code>：如果市场的资产价格反映所有公开和<code>内幕信息(Private information)</code>，该市场则是强式有效，此时内幕信息都不能获得超额收益，此时投资策略是被动(Passive)投资，以获得市场收益。</p>
+<h3 id="市场异常-Market-Anomalies">市场异常(Market Anomalies)</h3>
+<p>CFA协会对市场异常理论的态度是不支持，认为其以偶然做必然。常见的市场异常有五个：</p>
+<ol>
+<li><code>日历效应(Calendar anomalies)</code>：又称一月效应，即有研究者发现美国股市每年十二月份会出现股票大幅下跌，同时一月份会出现股票大幅上升，可能的解释有<code>避税(Tax-loss selling)</code>，基金经理在年底将浮亏股票通过卖出将其变为实际亏损以避税，而在来年一月重新买回股票，造成一月效益；<code>窗口效应(Window dressing)</code>则是由于基金经理希望在年终财报中避免报出高风险小盘股，因此会在十二月卖出然后再在第二年一月买入。</li>
+<li><code>过度反应(Overreaction effect)</code>：指由于市场投资者对某些利空信息过度反应，导致其股票价格下跌到低于其内在价值，这时可能反而是入场时机。</li>
+<li><code>动量效应(Momentum anomalies)</code>：如果某只股票涨势较好，那么很大可能他在之后的一段时间内也会继续上涨。</li>
+<li><code>小市值效应(Size effect)</code>：小盘股的回报率通常高于市场回报率。</li>
+<li><code>价值效应(Value effect)</code>：价值型公司回报率通常高于成长型公司。</li>
+</ol>
+<h3 id="行为金融学-Behavior-Finance">行为金融学(Behavior Finance)</h3>
+<p>传统金融认为所有投资者都是完全理性，而行为金融学则认为投资者认知都有限制。一些著名的偏差包括：</p>
+<ol>
+<li><code>代表性偏差(Representativeness)</code>：投资者倾向于认为好的公司或市场就是好的投资。</li>
+<li><code>心理账户(Mental accounting)</code>：投资者对不同的投资有不同的心理账户，例如对待同样的十万元钱，辛苦赚来的钱与彩票中奖的钱花法完全不同。</li>
+<li><code>框架依赖(Narrow framing)</code>：同一件事的不同表达方式给人的感觉可能完全不同。</li>
+<li><code>保守性(Conservatism)</code>：投资者对改变的反应较慢，倾向于维持原有观点。</li>
+<li><code>损失憎恶(Risk aversion)</code>：相对于收获来说，人们更讨厌损失，同等数额的收获与损失给人感觉上的比重不同。</li>
+<li><code>过度自信(Overconfidence)</code>：人们倾向于高估自己的能力。</li>
+<li><code>羊群效应(Herding effect)</code>：聚群交易不一定是由于信息导致的，可能是羊群效应。</li>
+<li><code>信息衰退(Information Cascades)</code>：第一个选择影响后面的所有选择。</li>
+</ol>
 <p>[第23篇]</p>
 ]]></content>
       <categories>
@@ -3605,6 +3555,91 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
         <tag>日常学习</tag>
         <tag>CFA一级</tag>
         <tag>股权投资</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[MS Office] 设计Excel报告模板动态展示前n项产品</title>
+    <url>/2022/02/19/3-excel-tool-develop-1/</url>
+    <content><![CDATA[<p><font size=4><mark class="hl-label default">特别声明</mark> </font></p>
+<mark class="hl-label default">本文中的出现的数据均经过随机扭曲处理，仅工具排版，逻辑与公式可供参考。</mark> 
+<hr>
+<h1>序言</h1>
+<p>上周为公司的月度保费报告做了一些升级调整，主要是涉及产品保费量展示部分由以前的<code>静态展示固定产品保费</code>改为<code>按保费量动态展示产品排行</code>。其中涉及的Excel公式技巧包括但不限于<code>OFFSET应用</code>，<code>动态排名展示</code>，<code>合并单元格文字</code>等。</p>
+<p>原工具中有三张表格，其中有互相参考验证数据正确性的<code>Tracking cells</code>，这里面我只讲稍微复杂一些的最后一张，且数据经过随机数扭曲，所以本文中展示的表格中的<code>Tracking cells</code>不会正常显示。</p>
+<h1>正文</h1>
+<p>该工具的最终目的是使用系统中生成的原始数据利用excel的公式功能自动整理计算数据并以要求形式展示。工具的目的是为了减少人力成本，因此一个原则是尽最大可能减少工具使用人在工具定板后使用时投入的成本，在此原则之上再尽力减少制作工具本身需要的时间和精力成本。本篇中我会分别介绍这个工具的版面设计以及从已有数据结构到需求的展示样式的逐步实现方法以及其中设计的一些可以广泛应用的小技巧。</p>
+<h2 id="工具版面设计">工具版面设计</h2>
+<p>我设计Excel工具时一个习惯的guideline是将数据分为至少三个部分：</p>
+<ol>
+<li>不改变原数据的结构，以所得即所用的原则组成一个<code>数据输入区</code>，用这样的数据做成的工具可以减少该工具在后续使用中对使用人<code>“调整原数据”</code>的需求，从而降低使用成本。</li>
+<li>将数据以标准形式整理并计算的<code>数据处理区</code>，这个部分通常会包含标准化的数据分类，这样做的目的是将原数据在该区域内透明地以标准化方式整理计算，以方便后续数据展示，并使各部分公式易于阅读和后续维护修改。</li>
+<li>最后是数据的输出形式，即<code>数据展示区</code>，这个部分通常是按<code>数据使用人</code>的需求调整，也即在工具制作期间制作人通常不能控制的部分，我们最后的目的就是将处理好的数据按使用人需求展示。</li>
+</ol>
+<p>本工具的版面既是根据上述习惯排版：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/img_20220220131551.png" alt="工具版面分为“数据输入区”，“数据处理区”和“数据展示区”三个部分"></p>
+<h2 id="工具设计思路">工具设计思路</h2>
+<p>在开始设计工具之前需要理清最重要的两点，第一是到手的原数据结构，第二就是最终需要展示的信息。在这个案例中，我们提取出来的原数据为月度数据，包含信息有4列，分别是<code>险种</code>，<code>新/续业务</code>，<code>本/上年信息</code>以及<code>保费</code>本身。其中每个险种分别会有本/上年的新/续业务保费，这样<code>2x2=4</code>种的组合。因此可以知道标准格式中只需要包含<code>所有可能险种数x4</code>行既可以展示所有可能的输入组合。</p>
+<p>此时开始分析需要展示的信息，所需展示的信息可以分为3部分：首先是将险种按当前年度总保费的大小排名并展示前8个险种，将此之外的保费信息加总归入<code>Other</code>类。其次将各月保费按需求的时间维度分组加总展示(如月度，季度，半年度，当前合计等)。最后只需要动态地将未展示出来的险种名合并展示作为备注即可。</p>
+<p>为满足该需求，我的设计是将保费性质信息作为标准化维度放在数据处理区的最左边并以月份为列名排列所有数据输入区的数据，排列后在处理区将各险种按当年保费(新续业务加总)排出大小并标识，最后在展示区以<code>OFFSET</code>为引用处理区不同月度数据的方法，以降低制作工具本身所需的时间，提高公式的<code>可读性</code>和<code>修改弹性</code>。</p>
+<h2 id="实现方法">实现方法</h2>
+<p>此章中我不会事无巨细介绍所有出现的技巧，如果想要详细了解建议在最后链接中下载该工具样本自己研究，我的公式应该都是trackable的，这里我只会分别介绍几个可以广泛应用到其他需求中的方法和公式。</p>
+<h3 id="如何跳行-列引用数据">如何跳行/列引用数据</h3>
+<p>这是制作该工具时我使用的第一个小技巧，答案非常简单，既是<code>OFFSET</code>。在工具中可以看到，原数据中每月数据有4列信息，而数据处理区中我们只希望每1列展示一个月信息，这样导致的问题是如果不使用OFFSET而将处理区中的<code>SUMIFS</code>公式直接向右复制，则会使每个引用信息仅向右移动1列，从而导致<code>引用区域错位</code>。因此我们需要左边处理区每向右移动1列，公式中的引用区同步向右移动4列，才能将所有引用信息移动至原数据中的<code>下月中相应区域</code>。</p>
+<p>以处理区中最左上角的公式为例：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220151308158.png" alt="=SUMIFS(OFFSET($VV$177,,EUU$177,,ED30,OFFSET($TT$177,,EC30,OFFSET($SS$177,,EB30)/1000000"></p>
+<blockquote>
+<p>=SUMIFS(OFFSET($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>O</mi><mi>F</mi><mi>F</mi><mi>S</mi><mi>E</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">28,,),OFFSET(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal" style="margin-right:0.13889em;">OFFSET</span><span class="mopen">(</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>D30,OFFSET($T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>C30,OFFSET($S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S$177,E<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>28</mn><mo separator="true">,</mo><mo separator="true">,</mo><mo stretchy="false">)</mo><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">28,,),</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">28</span><span class="mpunct">,,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mclose">)</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
+</blockquote>
+<p>该公式除去OFFSET便是非常简单的SUMIF公式如下，即将原数据中的信息按标准模板加总排列：</p>
+<blockquote>
+<p>=SUMIFS($V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>V<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>U<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>D30,$T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>T<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>C30,$S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>S<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>177</mn><mo separator="true">,</mo></mrow><annotation encoding="application/x-tex">177,</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8389em;vertical-align:-0.1944em;"></span><span class="mord">177</span><span class="mpunct">,</span></span></span></span>B30)/1000000</p>
+</blockquote>
+<p>那么OFFSET是怎么用的呢？OFFSET函数本身的作用就是以公式参数的方法来移动改变引用区域，他的参数如下：</p>
+<blockquote>
+<p>=OFFSET(Reference, rows, cols, [height],[width])</p>
+</blockquote>
+<p>其中<code>Reference</code>为引用的区域，后面的四个参数分别代表在<code>Reference</code>的基础上要移动的<code>行数</code>，<code>列数</code>，<code>高度</code>，<code>宽度</code>，<code>正数代表向右/向下，负数反之</code>。</p>
+<p>以我们的公式为例，<code>OFFSET($V$30:$V$177,,E$28,,)</code>即代表将<code>$V$30:$V$177</code>移动<code>E$28</code>标注的列数(此处为0，即不移动)，其他参数未设置则用<code>,</code>隔开。到这里我只需要将每个月的列上以等差数列向右排列引用所需移动的列数，即可以一个公式为每个月需要引用的原数据找到正确的引用位置。同样的方法在<code>数据展示区</code>也大量的使用，因此可以用一个公式以改变最少参数的方法来填入表格中。</p>
+<p>OFFSET这样的公式非常明显，是为了减轻工具制作和维护的成本而存在的，因为用到不同的公式越少，后期维护时就越简单，毕竟这里你也可以选择人手将不同月份的引用区域拖动到他们合适的位置，不过制作和维护的成本将大大增加。</p>
+<h3 id="仅对当前第一次出现的元素计算">仅对当前第一次出现的元素计算</h3>
+<p>我们想要将产品按当前合计保费量排名，也即将当年的新/续保费加总并排名，但我们却不能直接使用SUMIF加总，因为按照我的版面设计，如果直接全部加总排行时每个产品会有两个相同的保费，从而影响排行名次。因此我们要想办法使每个产品名后仅出现一个加总保费。好在我们的数据处理区是标准化设计，上半部分全部是当年数据且每个险种按NB-RN的顺序规律排列。因此我们可以是用公式从上至下仅仅对该元素第一次出现时进行计算。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220152214570.png" alt="=IF(COUNTIF($BB30,$B30)=1,SUM(OFFSET(E30:P30,,,2,)),0)"></p>
+<blockquote>
+<p>=IF(COUNTIF($B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B30,$B30)=1,SUM(OFFSET(E30:P30,2,)),0)</p>
+</blockquote>
+<p>这个公式分为两个部分，其中<code>IF</code>部分为重点，即判断语句<code>COUNTIF($B$30:$B30,$B30)=1</code>。需要注意其中<code>$B$30:$B30</code>中<code>:</code>后的<code>B30</code>仅仅固定了列数，因此该公式在下拉时该引用区域也会相应拉长。这就使得这个<code>COUNTIF</code>公式可以实现计算<code>从上到下到目前为止B列该元素出现过的次数</code>。而此时将判断语句写为<code>该COUNTIF为1</code>则表示从上到下第一次出现这个元素时，则计算后面的<code>SUM(OFFSET(E30:P30,,,2,))</code>，否则返回0。</p>
+<p>这个<code>SUM</code>函数中的<code>OFFSET</code> 的<code>height</code>参数被设置为<code>2</code>，因此加总包括该引用处在内的向下共<code>2</code>个单元格。以此实现每个出现的产品进行一次NB和RN的数值加总。</p>
+<h3 id="将出现过的数字按大小排名">将出现过的数字按大小排名</h3>
+<p>上一步中我们已经得到了每一个产品的当年总保费，那么使用<code>RANK.EQ</code>函数既可以对保费量进行排名从而使每个险种得到一个相应的排名。本来此时在展示区左边我只需要手动输入1,2,3便可以自动展示排名为1,2,3的产品名，但此处有一个特殊需求，那就是由于下架，要将PAM这个产品的除出排名，直接并入Other分类。但由于PAM还是有续保保费，因此它每个月的保费量也并不是固定的，虽然我可以使用<code>IF</code>函数将<code>PAM</code>的排名直接设定为<code>999</code>，但我们依然需要一个可以动态将已有数字从小到大排列的方法，否则会出现的问题是假设<code>PAM</code>实际排名是<code>6</code>，但它被公式设定为排名<code>999</code>，这会导致手动输入的<code>6</code>后面将没有可以引用的数据，我们需要自动将上方排列设置为4,5,7来跳过排名为<code>6</code>的<code>PAM</code>。</p>
+<p>我想到的办法是SMALL公式：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220153736776.png" alt="=SMALL($AA$103,ROW(A2)/2)"></p>
+<blockquote>
+<p>=SMALL($A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A$103,ROW(A2)/2)</p>
+</blockquote>
+<p>该公式可用参数为<code>SMALL(array,k)</code>，其作用既是返回该数据中第<code>K</code>个最小值，同理的还有<code>LARGE</code>函数。</p>
+<p>在这里的使用方法既是展示<code>在数据处理区中出现的排行数中排行第ROW(A2)/2的最小值</code>，使用<code>ROW(A2)</code>就可以使该<code>K</code>值随着公式的下拉而增加，<code>ROW(A2)</code>返回的是<code>A2</code>单元格的行数，也即<code>2</code>。该数值<code>/2</code>则可以使每个数值出现两次，以此匹配每个险种名显示两次以匹配NB和RN这两行数据，因为<code>A2</code>和<code>A3</code>两行的计算结果分别是<code>1</code>和<code>1.5</code>，都会被公式向下取整认定为<code>1</code>，同理如果希望数值重复<code>N</code>次，则<code>/N</code>即可实现，注意不要让商小于<code>1</code>。</p>
+<h3 id="IF公式的数组应用">IF公式的数组应用</h3>
+<p>最后的一个展示要求是将Other分类中，也即保费排名未在前八位但本年有保费收入的产品名备注出来:</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220220170737896.png" alt="=CONCAT(&quot;*The Other Products contains &quot;,IF(($QQAAAABB$103,3)&amp;&quot;, &quot;,&quot;&quot;))"></p>
+<blockquote>
+<p>=CONCAT(“*The Other Products contains “,IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;”, “,””))</p>
+</blockquote>
+<p>这个公式中的主要知识点便是<strong>IF公式的数组应用</strong></p>
+<blockquote>
+<p>IF(($Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>Q<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&lt;</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false">)</mo><mo>∗</mo><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&lt;&gt;0)*(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&lt;&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">0</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>103</mn><mo>&gt;</mo><mi>M</mi><mi>A</mi><mi>X</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">103&gt;MAX(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6835em;vertical-align:-0.0391em;"></span><span class="mord">103</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">&gt;</span><span class="mspace" style="margin-right:0.2778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.10903em;">M</span><span class="mord mathnormal">A</span><span class="mord mathnormal" style="margin-right:0.07847em;">X</span><span class="mopen">(</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>6</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">6:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">6</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>A<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>21</mn><mo stretchy="false">)</mo><mo stretchy="false">)</mo><mo separator="true">,</mo><mi>L</mi><mi>E</mi><mi>F</mi><mi>T</mi><mo stretchy="false">(</mo></mrow><annotation encoding="application/x-tex">21)),LEFT(</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">21</span><span class="mclose">))</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.1667em;"></span><span class="mord mathnormal">L</span><span class="mord mathnormal" style="margin-right:0.13889em;">EFT</span><span class="mopen">(</span></span></span></span>B<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>30</mn><mo>:</mo></mrow><annotation encoding="application/x-tex">30:</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.6444em;"></span><span class="mord">30</span><span class="mspace" style="margin-right:0.2778em;"></span><span class="mrel">:</span></span></span></span>B$103,3)&amp;“, “,””)</p>
+</blockquote>
+<p>该公式的<code>重点</code>，也是<mark class="hl-label red">难点</mark> ，便是条件语句部分的<code>($Q$30:$Q$103&lt;&gt;0)*($A$30:$A$103&gt;MAX($A$6:$A$21))</code>,此处的乘法操作是为了筛选出该范围中同时满足两个条件的行数，因为Excel中所有<code>1等价于TRUE，0等价于FALSE</code>，因此此时两个判断语句的结果每行相乘，只有两个判断均为<code>TRUE</code>时，产生的结果才是<code>TRUE</code>。（0乘0或0乘1都是0这个很好理解吧）这时<code>IF</code>函数返回的数组既是所有同时满足这两个条件的行(两个1相乘才返回1)，即当年总保费不为0且排名大于展示区所有排名的产品代码。最后用<code>CONCAT</code>函数便可以将数组返回的数据组合在一个单元格中。</p>
+<h1>最后</h1>
+<p>这个看似简单的数据工具却花了我将近一天的时间设计调整，其中的公式都是我自己根据自己的知识储备自己琢磨出来的，因此很难说参考了哪些资料，如果一定要说的话大概就是<code>Michael Alexander</code>的<code>Excel 2019 Bible</code>吧，当年入坑Excel的参考书就这一本，但也非常足够了。</p>
+<p>该工具的一个副本放在这里,有兴趣可以看看：<a href="/attachment/Product_ranking.xlsx">下载链接</a></p>
+<p>[第3篇]</p>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>工作学习</tag>
+        <tag>Excel</tag>
       </tags>
   </entry>
   <entry>
@@ -3819,6 +3854,108 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
       <tags>
         <tag>日常学习</tag>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>[MS Office] 分割MS Access数据库为前端和后端</title>
+    <url>/2022/02/25/6-MSAccess_database_split/</url>
+    <content><![CDATA[<h1>序言</h1>
+<p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
+<h1>正文</h1>
+<h2 id="背景介绍-3">背景介绍</h2>
+<p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
+<p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
+<h2 id="Access基本知识">Access基本知识</h2>
+<p>开始分割数据库前先复习一下MS Access的一些<a href="https://support.microsoft.com/en-us/office/database-basics-a849ac16-07c7-4a31-9948-3c8c94a7c204" title="Microsoft Access database Intro">基本知识</a>：</p>
+<p>数据库是用来收集和管理信息的工具。本来信息也都可以储存在一般的列表或者电子表格中，但随着数据规模不断变大，用列表或表格管理的数据可能会出现各种各样的混乱且不利于提取需要的信息。如果数据达到了这种规模，普通的方式就已经不适用于这些数据的管理，这也是像Access这样的<code>数据管理系统(DBMS)</code>出现的原因。</p>
+<p>一个数据库文件中可能有多种<code>对象(obJects)</code>，除了存储数据的<code>表(Table)</code>还有实现其他功能的<code>表单(Forms)</code>，<code>报表(Reports)</code>，<code>宏(Macros)</code>和<code>模块(Modules)</code>。这些对象在一个数据库文件中可能都不只有一个。创建格式在<code>Access 2007</code>之后的文件后缀为<code>.accdb</code>，在此之前的格式后缀都为<code>.mdb</code>，Access版本在2007之后的也可以用来创建<code>.mdb</code>格式的文件。</p>
+<p>通过Access你可以实现这些功能：</p>
+<ul>
+<li>向数据库中添加新的数据</li>
+<li>在数据库中编辑已有的数据</li>
+<li>删除数据库中的数据</li>
+<li>以不同的方式管理和查看数据</li>
+<li>通过报表，邮件，内联网，互联网等方式将数据与他人共享</li>
+</ul>
+<h3 id="数据库物件">数据库物件</h3>
+<h4 id="表-Tables">表(Tables)</h4>
+<p>数据库的表看起来和电子表格一样，被用行列的形式存储，也因为这个好处，想要将电子表格数据导入数据库中是非常方便的。数据库表和电子表格的区别主要在与他们管理和储存数据的方式上。数据库表格中为了避免冗余，会将不同层面的信息分开为不同的表，比如一个电影票的数据库中可能有观影者信息，但每个观影者可能有多张电影票，这样如果每个电影票表中都存储同一个观影者信息就会导致冗余。这个过程被称为<code>标准化(normalization)</code>。</p>
+<p>表中的每一行都是一条<code>记录(record)</code>,每一条记录都以不同<code>字段(fields)</code>的形式储存独立的信息，字段对应表中的列。比如有一条记录是关于某个观影者，那么字段可能包括他的姓，名，性别等。每一条记录代表了一个观影者在不同字段上的信息。</p>
+<p>关于<code>表</code>的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-tables-78ff21ea-2f76-4fb0-8af6-c318d1ee0ea7" title="Introduction to tables">这里</a>。</p>
+<h4 id="表单-Forms">表单(Forms)</h4>
+<p>表单是一个允许用户<code>输入</code>和<code>编辑数据</code>的用户界面。表单里面除了数据的展示，还会有一些带有<code>控制命令</code>的按钮。用户可以不使用表单而直接在表中<code>删增改</code>数据，但使用表单会让这个过程更加清晰方便。设计者可以通过<code>自定义命令按钮</code>来决定用户可以访问修改哪些数据，这也赋予了数据一定程度的安全性，来控制数据库使用者的权限。</p>
+<p>关于表单的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-forms-e8d47343-c937-44e8-a80f-b6a83a1fa3ae" title="Introduction to forms">这里</a>。</p>
+<h4 id="报表-Reports">报表(Reports)</h4>
+<p>报表是用户用来<code>整理总结</code>并<code>展示数据</code>的对象。一个报表的目的通常是某个具体的问题，比如“<code>我们今年在每部电影上的收入是多少</code>”等等，而报表可以让数据变得更加简单易读，用户可以通过报表得到这个设计好的问题在当前数据下的答案。</p>
+<p>关于报表的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-reports-in-access-e0869f59-7536-4d19-8e05-7158dcd3681c" title="Introduction to reports in Access">这里</a>。</p>
+<h4 id="查询-Queries">查询(Queries)</h4>
+<p>查询是所有数据库系统最核心的功能之一，它通过不同的函数<code>连接(JOIN)</code>不同数据库，<code>筛选(FILTER)</code>条件来获取数据库中符合特定条件的数据。查询通常有两种基本类型：<code>选择查询(select query)</code>和<code>动作查询(action query)</code>。前者可以用来获取数据，后者则是用来对数据进行特定操作，例如<code>增加新表，更新数据，删除数据</code>等。</p>
+<p>关于查询的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-queries-a9739a09-d3ff-4f36-8ac3-5760249fb65c" title="Introduction to queries">这里</a>。</p>
+<h4 id="宏-Macros">宏(Macros)</h4>
+<p>Access中的宏是一种用以给数据库<code>增加特定功能</code>的简单的<code>编程语言</code>。比如用户可以用宏编程一些可以完成提取特定数据或报表的按钮，用户点击按钮便会执行这些宏。这个主要用来将一些重复而复杂的人手工作自动化。</p>
+<h4 id="模块-Modules">模块(Modules)</h4>
+<p>与宏一样，模块是用来向数据库添加功能的对象。它们的区别在于宏中使用的方法是从宏操作列表中选择，而编写模块则是使用VBA编程语言进行编程。模块是作为一个单元存储在一起的<code>声明(declarations)</code>，<code>陈述(statements)</code>，和<code>过程(procedures)</code>的集合。</p>
+<p>关于在Access中编程的细节都可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-access-programming-92eb616b-3204-4121-9277-70649e33be4f" title="Introduction to Access programming">这里</a></p>
+<h2 id="操作流程">操作流程</h2>
+<p>熟悉了Access的基本知识，现在我们可以意识到，其实一个Access数据库文件中真正存储数据信息的就只有<code>表(Table)</code>类型，所以我们分割数据库的理论基础就是，我们可以只把需要存储的信息(即表)放在共享网络上(作为<code>后端back-end</code>)，而需求信息的用户只需要使用链接在这些共享的表格上的其他类(作为<code>前端front-end</code>)既可以实时<code>有针对性地</code>访问需求的信息而不需要将整个数据库传输来传输去了。由于用户实际占用的只有他们各自的前端副本，且通过网络传输的只有被需求的一小股信息流(而不是整个数据库)，从而实现数据库的<code>可用性</code>和<code>实时性</code>。参考微软的<a href="https://support.microsoft.com/en-us/office/split-an-access-database-3015ad18-a3a1-4e9c-a7f3-51b1d73498cc" title="Office Support: Split an Access database">官方支持</a>，我接下来就介绍我实用的详细的分割数据库的流程。</p>
+<h3 id="注意事项">注意事项</h3>
+<p>开始之前有些需要注意的点：</p>
+<ul>
+<li>分割数据库前一定要<code>先备份数据</code>，很简单，直接复制一个副本放在一边，或者直接用副本分割。因为数据是非常宝贵的东西，在很多环境下可能一旦失去就是永远失去， 所以一点风险都不应该承担。</li>
+<li>分割数据前要<code>提前通知用户</code>，否则分割时用户输入的数据可能不会被记录在分割后的数据库后端中。</li>
+<li><code>确保用户电脑中的Access版本能够支持你分割后的数据库格式</code>，比如我在分割数据库的同时就帮他们把数据库格式从<code>mdb</code>升级成了<code>accdb</code>，因为公司的Access版本都是统一控制的，而文件格式本身就是向下兼容，没有必要不用功能更多性能更好的新版本格式。</li>
+</ul>
+<h3 id="分割数据库">分割数据库</h3>
+<p>数据库分割的功能是Access自带的，只需要按照下方步骤即可完成：</p>
+<ol>
+<li>
+<p>首先在你的本地电脑中复制一份已有的Access数据库文件，确保左边<code>All Access Objects</code>栏位中没有任何被隐藏的表，如果表被隐藏是不会被自动分割的。(不要问我为什么特别提这点，第一次分割数据库发现一部分数据无法同步，DEBUG好久最后发现原来是因为那部分数据的表被隐藏，导致分割数据库没有把这些表上传至共享文件夹)</p>
+<p>在<code>All Access Objects(所有Access对象)</code>选项上右键，选择<code>Navigation Options(导航选项)</code>，这时会打开一个对话框，将<code>Show Hidden Objects(显示隐藏对象)</code>打勾并且确定。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124556871.png" alt="打开导航选项"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124707290.png" alt="勾选显示隐藏对象并确认"></p>
+<p>这时回到<code>All Access Objects栏</code>中，如果文件中有被隐藏的对象，会看到他们现在呈半透明色，右键点击他们按<code>Unhide in this Group(该组中取消隐藏)</code>即可解除隐藏。确保你要分割的文件中没有隐藏的表。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124841322.png" alt="image-20220301124841322"></p>
+</li>
+<li>
+<p>分割数据库本身就非常简单了，只需要在<code>Database Tools(数据库工具)</code>选项卡上的<code>Move Data(移动数据)</code>组中，点击<code>Access Database(Access数据库)</code>，就会出现图中这个<code>Database Splitter(数据库分割向导)</code>。现在点击<code>Split Database(分割数据库)</code>按钮。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125110106.png" alt="image-20220301125110106"></p>
+</li>
+<li>
+<p>单击<code>Split Database(分割数据库)</code>按钮后就会出现浏览文件路径的对话框，这里就是设定<code>后端</code>的所在地的地方，我们选择到我们已经准备好的共享文件夹中，确保需要使用这个数据库的用户都可以访问这个共享文件夹。数据库名称和文件类型都可以改，但没有必要(<code>除非有特别的理由</code>，否则只有坏处没有好处)。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125246928.png" alt="image-20220301125246928"></p>
+</li>
+<li>
+<p>设置完成后点击<code>Split(分割)</code>Access就会开始自动分割数据库了，原数据库中的<code>表</code>都会被复制到刚刚设定的<code>后端文件</code>中，而这时我们进行这些操作的文件就是<code>前端文件</code>了，<code>表以外的其他对象</code>就都在前端文件中了，前后端是通过网络绑定连接在一起的。数据库分割完成后会弹出<code>分割成功</code>的提示消息。</p>
+</li>
+<li>
+<p>这里加一点是微软的<code>官方教程没有提到</code>的，那就是前后端分割完成后还需要点击<code>Database Tools(数据库工具)</code>选项卡上的<code>Tools(工具)</code>组中的<code>Compact and Repair Database(压缩和修复数据库)</code>，否则前端数据库的大小可能跟分割前一样大。按照微软的说法，这是因为Access的运作方式中即使删除对象，它也不会立即将该对象曾经占用的硬盘空间释放。如果你对数据库中删改的需求很多量也很大的话，你也可以设置自动压缩和修复数据库，方法<a href="https://support.microsoft.com/en-us/office/compact-and-repair-a-database-6ee60f16-aed0-40ac-bf22-85fa9f4005b2" title="Compact and repair a database">参考这里</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125322541.png" alt="image-20220301125322541"></p>
+</li>
+<li>
+<p>最后，为了限制使用者对前后端数据的更改权限，我们把刚刚的前端文件(<code>.accdb格式</code>)保存为已编译的二进制文件(<code>.accde</code>)，既将前端中可以设计更改数据库逻辑的源代码编译保存，这样二进制文件的用户可以照常使用前端需求数据，但无法对他的功能和设计做改变。具体来说只需要在前端文件中点击<code>Save as(另存为)</code>然后按下图中选择并保存在希望的位置即可。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125353890.png" alt="image-20220301125353890"></p>
+</li>
+<li>
+<p>这时候我们已经把后端的数据库放在了共享文件夹中，并且已经有了一个可以连接后端数据库的前端文件，剩下的我们只需要把这些前端文件分发给我们的数据库用户就可以了，通过电子邮件，U盘，或者共享文件夹都可以，用户只要保存一份前端文件的副本在自己的本地硬盘中，确保他们可以通过网络访问共享文件夹，那么他们就可以像以前一样使用表以外的Access的数据提取展示等功能了。</p>
+<h3 id="更改后端数据库">更改后端数据库</h3>
+<p>如果想要更改后端数据库，或者是想把后端数据库的保存位置更改，<code>仅仅只复制粘贴是不行的</code>，因为前端中的连接还是在原来的后端数据库的位置。</p>
+<p>以移动后端数据库的位置为例，假设后端数据库中的表结构和名字都不需要变化，那么要做的就很简单：</p>
+<p><code>首先</code>把后端数据库复制并粘贴到你想要的新位置，<code>然后</code>如图所示点击<code>External Data(外部数据)</code>选项卡上<code>Import&amp;Link(导入和连接)</code>组中的<code>Linked Table Manager(链接表管理器)</code>。在<code>链接表管理器</code>中你可以分别连接当前前端数据库绑定的每一个表的位置，在我们的情况中我们只需要<code>Select All(选择全部)</code>然后点击上方<code>Relink(重新连接)</code>，然后选择到你新复制到的后端数据库位置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125452427.png" alt="image-20220301125452427"></p>
+<p>点击确定之后会有一个弹窗，如果你新的后端数据库没有做任何更改，那么这里<code>不要点Yes</code>。点<code>No</code>它就会开始自动帮你把所有的连接从旧的位置一张表一张表地连接到新位置的每一张同名表上，但如果你点了Yes，它会要求你每一张表给他提供新的名字，除非你真的有表名字的变化否则<code>千万别按错了</code>，不然会浪费很多时间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125530871.png" alt="image-20220301125530871"></p>
+<h1>最后</h1>
+<p>通过这一次帮助其他团队解决效率问题，我复习并且更加了解了MS Access的一些基本功能和结构，同时知道了中小型团队在共享数据时可以使用Access来解决数据库<code>同步性(synchronization)</code>和<code>可用性(availability)</code>问题的解决方案。</p>
+<p>[第6篇]</p>
+</li>
+</ol>
+]]></content>
+      <categories>
+        <category>MS Office</category>
+      </categories>
+      <tags>
+        <tag>Access</tag>
+        <tag>工作学习</tag>
       </tags>
   </entry>
   <entry>
@@ -4058,105 +4195,51 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
       </tags>
   </entry>
   <entry>
-    <title>[MS Office] 分割MS Access数据库为前端和后端</title>
-    <url>/2022/02/25/6-MSAccess_database_split/</url>
+    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
+    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
     <content><![CDATA[<h1>序言</h1>
-<p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
+<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
 <h1>正文</h1>
-<h2 id="背景介绍-3">背景介绍</h2>
-<p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
-<p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
-<h2 id="Access基本知识">Access基本知识</h2>
-<p>开始分割数据库前先复习一下MS Access的一些<a href="https://support.microsoft.com/en-us/office/database-basics-a849ac16-07c7-4a31-9948-3c8c94a7c204" title="Microsoft Access database Intro">基本知识</a>：</p>
-<p>数据库是用来收集和管理信息的工具。本来信息也都可以储存在一般的列表或者电子表格中，但随着数据规模不断变大，用列表或表格管理的数据可能会出现各种各样的混乱且不利于提取需要的信息。如果数据达到了这种规模，普通的方式就已经不适用于这些数据的管理，这也是像Access这样的<code>数据管理系统(DBMS)</code>出现的原因。</p>
-<p>一个数据库文件中可能有多种<code>对象(obJects)</code>，除了存储数据的<code>表(Table)</code>还有实现其他功能的<code>表单(Forms)</code>，<code>报表(Reports)</code>，<code>宏(Macros)</code>和<code>模块(Modules)</code>。这些对象在一个数据库文件中可能都不只有一个。创建格式在<code>Access 2007</code>之后的文件后缀为<code>.accdb</code>，在此之前的格式后缀都为<code>.mdb</code>，Access版本在2007之后的也可以用来创建<code>.mdb</code>格式的文件。</p>
-<p>通过Access你可以实现这些功能：</p>
-<ul>
-<li>向数据库中添加新的数据</li>
-<li>在数据库中编辑已有的数据</li>
-<li>删除数据库中的数据</li>
-<li>以不同的方式管理和查看数据</li>
-<li>通过报表，邮件，内联网，互联网等方式将数据与他人共享</li>
-</ul>
-<h3 id="数据库物件">数据库物件</h3>
-<h4 id="表-Tables">表(Tables)</h4>
-<p>数据库的表看起来和电子表格一样，被用行列的形式存储，也因为这个好处，想要将电子表格数据导入数据库中是非常方便的。数据库表和电子表格的区别主要在与他们管理和储存数据的方式上。数据库表格中为了避免冗余，会将不同层面的信息分开为不同的表，比如一个电影票的数据库中可能有观影者信息，但每个观影者可能有多张电影票，这样如果每个电影票表中都存储同一个观影者信息就会导致冗余。这个过程被称为<code>标准化(normalization)</code>。</p>
-<p>表中的每一行都是一条<code>记录(record)</code>,每一条记录都以不同<code>字段(fields)</code>的形式储存独立的信息，字段对应表中的列。比如有一条记录是关于某个观影者，那么字段可能包括他的姓，名，性别等。每一条记录代表了一个观影者在不同字段上的信息。</p>
-<p>关于<code>表</code>的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-tables-78ff21ea-2f76-4fb0-8af6-c318d1ee0ea7" title="Introduction to tables">这里</a>。</p>
-<h4 id="表单-Forms">表单(Forms)</h4>
-<p>表单是一个允许用户<code>输入</code>和<code>编辑数据</code>的用户界面。表单里面除了数据的展示，还会有一些带有<code>控制命令</code>的按钮。用户可以不使用表单而直接在表中<code>删增改</code>数据，但使用表单会让这个过程更加清晰方便。设计者可以通过<code>自定义命令按钮</code>来决定用户可以访问修改哪些数据，这也赋予了数据一定程度的安全性，来控制数据库使用者的权限。</p>
-<p>关于表单的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-forms-e8d47343-c937-44e8-a80f-b6a83a1fa3ae" title="Introduction to forms">这里</a>。</p>
-<h4 id="报表-Reports">报表(Reports)</h4>
-<p>报表是用户用来<code>整理总结</code>并<code>展示数据</code>的对象。一个报表的目的通常是某个具体的问题，比如“<code>我们今年在每部电影上的收入是多少</code>”等等，而报表可以让数据变得更加简单易读，用户可以通过报表得到这个设计好的问题在当前数据下的答案。</p>
-<p>关于报表的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-reports-in-access-e0869f59-7536-4d19-8e05-7158dcd3681c" title="Introduction to reports in Access">这里</a>。</p>
-<h4 id="查询-Queries">查询(Queries)</h4>
-<p>查询是所有数据库系统最核心的功能之一，它通过不同的函数<code>连接(JOIN)</code>不同数据库，<code>筛选(FILTER)</code>条件来获取数据库中符合特定条件的数据。查询通常有两种基本类型：<code>选择查询(select query)</code>和<code>动作查询(action query)</code>。前者可以用来获取数据，后者则是用来对数据进行特定操作，例如<code>增加新表，更新数据，删除数据</code>等。</p>
-<p>关于查询的更多细节可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-queries-a9739a09-d3ff-4f36-8ac3-5760249fb65c" title="Introduction to queries">这里</a>。</p>
-<h4 id="宏-Macros">宏(Macros)</h4>
-<p>Access中的宏是一种用以给数据库<code>增加特定功能</code>的简单的<code>编程语言</code>。比如用户可以用宏编程一些可以完成提取特定数据或报表的按钮，用户点击按钮便会执行这些宏。这个主要用来将一些重复而复杂的人手工作自动化。</p>
-<h4 id="模块-Modules">模块(Modules)</h4>
-<p>与宏一样，模块是用来向数据库添加功能的对象。它们的区别在于宏中使用的方法是从宏操作列表中选择，而编写模块则是使用VBA编程语言进行编程。模块是作为一个单元存储在一起的<code>声明(declarations)</code>，<code>陈述(statements)</code>，和<code>过程(procedures)</code>的集合。</p>
-<p>关于在Access中编程的细节都可以参考<a href="https://support.microsoft.com/en-us/office/introduction-to-access-programming-92eb616b-3204-4121-9277-70649e33be4f" title="Introduction to Access programming">这里</a></p>
-<h2 id="操作流程">操作流程</h2>
-<p>熟悉了Access的基本知识，现在我们可以意识到，其实一个Access数据库文件中真正存储数据信息的就只有<code>表(Table)</code>类型，所以我们分割数据库的理论基础就是，我们可以只把需要存储的信息(即表)放在共享网络上(作为<code>后端back-end</code>)，而需求信息的用户只需要使用链接在这些共享的表格上的其他类(作为<code>前端front-end</code>)既可以实时<code>有针对性地</code>访问需求的信息而不需要将整个数据库传输来传输去了。由于用户实际占用的只有他们各自的前端副本，且通过网络传输的只有被需求的一小股信息流(而不是整个数据库)，从而实现数据库的<code>可用性</code>和<code>实时性</code>。参考微软的<a href="https://support.microsoft.com/en-us/office/split-an-access-database-3015ad18-a3a1-4e9c-a7f3-51b1d73498cc" title="Office Support: Split an Access database">官方支持</a>，我接下来就介绍我实用的详细的分割数据库的流程。</p>
-<h3 id="注意事项">注意事项</h3>
-<p>开始之前有些需要注意的点：</p>
-<ul>
-<li>分割数据库前一定要<code>先备份数据</code>，很简单，直接复制一个副本放在一边，或者直接用副本分割。因为数据是非常宝贵的东西，在很多环境下可能一旦失去就是永远失去， 所以一点风险都不应该承担。</li>
-<li>分割数据前要<code>提前通知用户</code>，否则分割时用户输入的数据可能不会被记录在分割后的数据库后端中。</li>
-<li><code>确保用户电脑中的Access版本能够支持你分割后的数据库格式</code>，比如我在分割数据库的同时就帮他们把数据库格式从<code>mdb</code>升级成了<code>accdb</code>，因为公司的Access版本都是统一控制的，而文件格式本身就是向下兼容，没有必要不用功能更多性能更好的新版本格式。</li>
-</ul>
-<h3 id="分割数据库">分割数据库</h3>
-<p>数据库分割的功能是Access自带的，只需要按照下方步骤即可完成：</p>
-<ol>
-<li>
-<p>首先在你的本地电脑中复制一份已有的Access数据库文件，确保左边<code>All Access Objects</code>栏位中没有任何被隐藏的表，如果表被隐藏是不会被自动分割的。(不要问我为什么特别提这点，第一次分割数据库发现一部分数据无法同步，DEBUG好久最后发现原来是因为那部分数据的表被隐藏，导致分割数据库没有把这些表上传至共享文件夹)</p>
-<p>在<code>All Access Objects(所有Access对象)</code>选项上右键，选择<code>Navigation Options(导航选项)</code>，这时会打开一个对话框，将<code>Show Hidden Objects(显示隐藏对象)</code>打勾并且确定。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124556871.png" alt="打开导航选项"></p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124707290.png" alt="勾选显示隐藏对象并确认"></p>
-<p>这时回到<code>All Access Objects栏</code>中，如果文件中有被隐藏的对象，会看到他们现在呈半透明色，右键点击他们按<code>Unhide in this Group(该组中取消隐藏)</code>即可解除隐藏。确保你要分割的文件中没有隐藏的表。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124841322.png" alt="image-20220301124841322"></p>
-</li>
-<li>
-<p>分割数据库本身就非常简单了，只需要在<code>Database Tools(数据库工具)</code>选项卡上的<code>Move Data(移动数据)</code>组中，点击<code>Access Database(Access数据库)</code>，就会出现图中这个<code>Database Splitter(数据库分割向导)</code>。现在点击<code>Split Database(分割数据库)</code>按钮。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125110106.png" alt="image-20220301125110106"></p>
-</li>
-<li>
-<p>单击<code>Split Database(分割数据库)</code>按钮后就会出现浏览文件路径的对话框，这里就是设定<code>后端</code>的所在地的地方，我们选择到我们已经准备好的共享文件夹中，确保需要使用这个数据库的用户都可以访问这个共享文件夹。数据库名称和文件类型都可以改，但没有必要(<code>除非有特别的理由</code>，否则只有坏处没有好处)。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125246928.png" alt="image-20220301125246928"></p>
-</li>
-<li>
-<p>设置完成后点击<code>Split(分割)</code>Access就会开始自动分割数据库了，原数据库中的<code>表</code>都会被复制到刚刚设定的<code>后端文件</code>中，而这时我们进行这些操作的文件就是<code>前端文件</code>了，<code>表以外的其他对象</code>就都在前端文件中了，前后端是通过网络绑定连接在一起的。数据库分割完成后会弹出<code>分割成功</code>的提示消息。</p>
-</li>
-<li>
-<p>这里加一点是微软的<code>官方教程没有提到</code>的，那就是前后端分割完成后还需要点击<code>Database Tools(数据库工具)</code>选项卡上的<code>Tools(工具)</code>组中的<code>Compact and Repair Database(压缩和修复数据库)</code>，否则前端数据库的大小可能跟分割前一样大。按照微软的说法，这是因为Access的运作方式中即使删除对象，它也不会立即将该对象曾经占用的硬盘空间释放。如果你对数据库中删改的需求很多量也很大的话，你也可以设置自动压缩和修复数据库，方法<a href="https://support.microsoft.com/en-us/office/compact-and-repair-a-database-6ee60f16-aed0-40ac-bf22-85fa9f4005b2" title="Compact and repair a database">参考这里</a>。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125322541.png" alt="image-20220301125322541"></p>
-</li>
-<li>
-<p>最后，为了限制使用者对前后端数据的更改权限，我们把刚刚的前端文件(<code>.accdb格式</code>)保存为已编译的二进制文件(<code>.accde</code>)，既将前端中可以设计更改数据库逻辑的源代码编译保存，这样二进制文件的用户可以照常使用前端需求数据，但无法对他的功能和设计做改变。具体来说只需要在前端文件中点击<code>Save as(另存为)</code>然后按下图中选择并保存在希望的位置即可。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125353890.png" alt="image-20220301125353890"></p>
-</li>
-<li>
-<p>这时候我们已经把后端的数据库放在了共享文件夹中，并且已经有了一个可以连接后端数据库的前端文件，剩下的我们只需要把这些前端文件分发给我们的数据库用户就可以了，通过电子邮件，U盘，或者共享文件夹都可以，用户只要保存一份前端文件的副本在自己的本地硬盘中，确保他们可以通过网络访问共享文件夹，那么他们就可以像以前一样使用表以外的Access的数据提取展示等功能了。</p>
-<h3 id="更改后端数据库">更改后端数据库</h3>
-<p>如果想要更改后端数据库，或者是想把后端数据库的保存位置更改，<code>仅仅只复制粘贴是不行的</code>，因为前端中的连接还是在原来的后端数据库的位置。</p>
-<p>以移动后端数据库的位置为例，假设后端数据库中的表结构和名字都不需要变化，那么要做的就很简单：</p>
-<p><code>首先</code>把后端数据库复制并粘贴到你想要的新位置，<code>然后</code>如图所示点击<code>External Data(外部数据)</code>选项卡上<code>Import&amp;Link(导入和连接)</code>组中的<code>Linked Table Manager(链接表管理器)</code>。在<code>链接表管理器</code>中你可以分别连接当前前端数据库绑定的每一个表的位置，在我们的情况中我们只需要<code>Select All(选择全部)</code>然后点击上方<code>Relink(重新连接)</code>，然后选择到你新复制到的后端数据库位置。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125452427.png" alt="image-20220301125452427"></p>
-<p>点击确定之后会有一个弹窗，如果你新的后端数据库没有做任何更改，那么这里<code>不要点Yes</code>。点<code>No</code>它就会开始自动帮你把所有的连接从旧的位置一张表一张表地连接到新位置的每一张同名表上，但如果你点了Yes，它会要求你每一张表给他提供新的名字，除非你真的有表名字的变化否则<code>千万别按错了</code>，不然会浪费很多时间。</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125530871.png" alt="image-20220301125530871"></p>
+<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
+<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
+<blockquote>
+<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
+</blockquote>
+<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
+<h2 id="清除缓存">清除缓存</h2>
+<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
+<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
+<h2 id="引用版本号">引用版本号</h2>
+<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
+<blockquote>
+<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
+</blockquote>
+<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
+<blockquote>
+<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
+<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
+</blockquote>
+<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
+<h2 id="解决办法">解决办法</h2>
+<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
+<h2 id="一个疑惑">一个疑惑</h2>
+<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
+<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
+<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
+<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
 <h1>最后</h1>
-<p>通过这一次帮助其他团队解决效率问题，我复习并且更加了解了MS Access的一些基本功能和结构，同时知道了中小型团队在共享数据时可以使用Access来解决数据库<code>同步性(synchronization)</code>和<code>可用性(availability)</code>问题的解决方案。</p>
-<p>[第6篇]</p>
-</li>
-</ol>
+<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
+<p>[第9篇]</p>
 ]]></content>
       <categories>
-        <category>MS Office</category>
+        <category>博客维护</category>
       </categories>
       <tags>
-        <tag>工作学习</tag>
-        <tag>Access</tag>
+        <tag>Git</tag>
+        <tag>日常学习</tag>
+        <tag>Github</tag>
       </tags>
   </entry>
   <entry>
@@ -4211,54 +4294,6 @@ where\ b=Marginal\ propensity\ of\ consumption=\frac{C}{Y(1-t)}
         <tag>日常学习</tag>
         <tag>微信</tag>
         <tag>解码</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</title>
-    <url>/2022/03/09/9-keep-cdn-pics-updated/</url>
-    <content><![CDATA[<h1>序言</h1>
-<p>我在我的<a href="http://raylei.space/2022/02/12/2-typora_picgo_config/" title="使用 Typora 和 PicGo 简单便捷地编辑带图博文">第二篇博文</a>中曾经提到过为了加速世界各地的人访问博客图片的速度，我们需要使用<code>Jsdelivr</code>的<code>CDN</code>服务，但<code>CDN</code>在带来一些便捷的同时也带来了<code>一些问题</code>。比如如果我们对远程仓库中的某些图片做了<code>修改</code>(而不是添加一个新的图片)，这种情况下<code>Jsdelivr</code>的缓存文件却可能<code>不会马上被更新</code>，所以我们需要使用一些方法使我们修改后的图片能实时反映在我们的网站中，本篇就记录一下我尝试的方法和最终的解决方案。</p>
-<h1>正文</h1>
-<p>要搞清楚图片缓存不能按时更新的主要原因，首先先要了解一下<code>Jsdelivr</code>到底是怎么运作的。我在第二篇文章里简单地介绍过他的基本原理就是将上传的资料缓存在各地的边缘服务器中，然后每次链接被请求时直接从距离请求最近的服务器中响应请求。而从<code>JSdelivr</code>的官网中我们可以看到它具体的实现方法如下图所示：</p>
-<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/infographics.png" alt="JSdelivr工作原理图"></p>
-<p>可以注意到<code>Jsdelivr</code>除了拥有我们之前介绍的缓存服务器以外还有一项功能，是由<code>亚马逊</code>提供的<code>S3云储存服务</code>。根据其官方的介绍：</p>
-<blockquote>
-<p>We use a permanent S3 storage to ensure all files remain available even if GitHub goes down, or a repository or a release is deleted by its author. Files are fetched directly from GitHub only the first time, or when S3 goes down.</p>
-</blockquote>
-<p>可以想象他们的做法是每当<code>Github</code>中发布新的<code>release</code>之后马上将新的资产复制至<code>S3空间</code>，这样即使<code>GitHub崩溃</code>或者<code>原作者删除掉仓库或release</code>这些已经存储的文件也不会丢失，只有<code>S3崩溃</code>的时候他们才会再从<code>GitHub</code>拉数据。这个做法第一眼看就知道是利弊共存的。显然他们的做法保证了数据的可用性，但随之而来的问题就是更改数据的成本增加了，我的每次更改都要同步到S3，而似乎<code>Jsdelivr</code>在这点上做得并不好，我估计可能和他们备份和引用方式的底层逻辑有关，导致他们实时同步数据的成本非常高。</p>
-<h2 id="清除缓存">清除缓存</h2>
-<p>在网上看了一些<a href="https://www.tgee.cn/jsdelivr-cdn.html" title="Jsdelivr CDN 缓存清除">其他人的分享</a>，大多数人都会介绍使用<code>endpoint purge</code>调用<code>Jsdelivr</code>缓存清除功能的方法，来强制刷新缓存。具体用法只是在浏览器中将需要引用的<code>Jsdelivr</code>链接前的<code>cdn</code>替换为<code>purge</code>然后发送请求就会让<code>Jsdelivr</code>将该链接的缓存强制刷新。但似乎现在这个功能已经被禁用了，在<code>Jsdelivr</code>的官网上我没有看到任何类似的记录，仅仅只有<a href="https://www.jsdelivr.com/tools/purge" title="Jsdelivr Purge Tool">一个页面</a>表明<code>Jsdelivr</code>正在开发清除缓存的工具。</p>
-<p>从<a href="https://blog.juanertu.com/archives/cbcd1946.html" title="解决 jsdelivr 缓存问题的几个办法">别的博主的博文</a>中可以看到，如果要使用前面提到的<code>Purge方法</code>可能需要向-dak@prospectone.io发邮件请求，但我自己并没有在文档中找到这句话，可能是在<code>Jsdelivr</code>的<code>API文档</code>中吧。但总之<code>Purge</code>这个方法现在也是没有那么方便了，只能看有生之年能不能等到这个官方工具出炉了，先想想还有没有别的方法。</p>
-<h2 id="引用版本号">引用版本号</h2>
-<p>其实一般对文件加版本号的引用方法其实非常稳定，也即：</p>
-<blockquote>
-<p><code>https://cdn.jsdelivr.net/gh/user/repo@version/file</code></p>
-</blockquote>
-<p>但这个方法比较麻烦的地方在于，我们一般是用<code>Typora</code>来插入图片，然后使用提前设置好的<code>Jsdelivr</code>链接地址来引用图片，但<code>Typora</code>并不知道你接下来的版本号是多少，所以如果用这种方法的话你还需要在每次引用图片后再手动在每个图片链接中加入版本号，这就非常麻烦了。而<a href="https://www.jsdelivr.com/" title="Jsdelivr website">官方文档</a>提供的另一个更<code>consistent</code>的方式：</p>
-<blockquote>
-<p>Omit the version completely or use “latest” to load the latest one (not recommended for production usage)<br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery@latest/dist/jquery.min.js</code><br>
-<code>https://cdn.jsdelivr.net/gh/jquery/jquery/dist/jquery.min.js</code></p>
-</blockquote>
-<p>去掉版本号或者将版本号用<code>latest</code>替代就可以固定引用<code>最新版本的release</code>，但实际使用后发现这个方法依然不太稳定，<code>新release</code>的文件的确可以无缝访问，但如果是旧文件修改后，使用这个方法依然可能导致直接引用旧文件。<code>所以看起来Jsdelivr只从文件名判断一个文件是不是已经存在了S3空间中。</code></p>
-<h2 id="解决办法">解决办法</h2>
-<p>既然<code>Jsdelivr</code>是从<code>文件名</code>判断是否更新缓存，那么其实最直接的更新缓存的方法就是<code>改文件名</code>了。我使用的方法是把所有文件链接改成<code>@latest</code>版本，这样每次引用的版本都会是最新版本，但如果对过去已经上传过的图片要做更改，那可以在更改后的文件中加上一些更改的<code>备注信息</code>，例如<code>a_picture.png</code>改成<code>a_picture_v1.png</code>再上传，这样对文件链接的修改也仅只是增加的<code>_v1部分</code>，加上修改图片本身就是相对不常有的操作，所以这个方法已经足以解决我的问题了。</p>
-<h2 id="一个疑惑">一个疑惑</h2>
-<p>在尝试解决这个问题的中途我曾经尝试过<code>删除以前的release和tag</code>的方法，当时我对<code>Jsdelivr</code>的运作方法还不是很了解，以为删除了已经发布的<code>release</code>就可以彻底解决链接至旧文件的问题。现在虽然知道这个方法不可行，但中途出现了一个现象却开始让我对<code>Jsdelivr</code>的业务逻辑产生了一些疑惑。</p>
-<p>这个问题就是我曾经以<code>v1.0.2</code>的版本号发布过一个<code>release</code>,后来我删除了这个<code>release</code>并且以相同的<code>v1.0.2</code>这个<code>tag</code>发布了一个新的<code>release</code>，其他都非常正常，我可以在<code>新的v1.0.2</code>中访问一些<code>旧的v1.0.2</code>中没有加入过的文件，但其中有一张我修改过的图，却一直显示的是<code>旧v1.0.2</code>中的内容，即使我反复确认过<code>新的v1.0.2</code>中这张图的名称完全没有改变，而且内容也确实与旧版本不同，但如果在版本号中加入<code>@v1.0.3</code>(我已经删掉的版本)却可以找到新加的图片。</p>
-<p>而当我使用官网提供的查看<code>Jsdelivr</code>目录的方式(<code>https://cdn.jsdelivr.net/gh/jquery/jquery@3.2.1/dist/</code>)进入目录时却发现这里并<code>没有v1.0.3版本</code>，而<code>v1.0.2</code>中那张修改过的图片也确实是<code>旧版</code>。</p>
-<p>这些奇怪的现象让我确实难以理解<code>Jsdelivr</code>的逻辑究竟是如何。难道它按<code>链接</code>保存<code>单个文件</code>后储存在某个空间中作为<code>base</code>，然后从<code>新的release</code>中对比各个文件的链接然后<code>逐个更新</code>至这个<code>base</code>中？那即使是这样他也可以实现将<code>同名文件</code>用<code>新release中的版本</code>替代啊。希望以后对<code>Jsdelivr</code>的使用增加能解决我的这个疑惑。</p>
-<h1>最后</h1>
-<p>这篇文章主要是记录了<code>Jsdelivr</code>使用相关的一些知识和经过研究对这个CDN服务和逻辑的一些了解与猜测，最后更新缓存图片的解决方案其实让我有些不太满意，但想着官方清除缓存的工具都快出来了，那就再等等吧。</p>
-<p>[第9篇]</p>
-]]></content>
-      <categories>
-        <category>博客维护</category>
-      </categories>
-      <tags>
-        <tag>Git</tag>
-        <tag>日常学习</tag>
-        <tag>Github</tag>
       </tags>
   </entry>
 </search>
