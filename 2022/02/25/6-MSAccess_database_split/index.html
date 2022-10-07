@@ -1,0 +1,334 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>[MS Office] 分割MS Access数据库为前端和后端 | HideOnRubbish | RayHLei</title><meta name="keywords" content="工作学习,Access"><meta name="author" content="RayHLei"><meta name="copyright" content="RayHLei"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[第6篇]本篇介绍了为加强同事使用的Access数据库的同步性(synchronization)和可用性(availability)而使用的分割数据库前后端的方法。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[MS Office] 分割MS Access数据库为前端和后端">
+<meta property="og:url" content="http://raylei.space/2022/02/25/6-MSAccess_database_split/index.html">
+<meta property="og:site_name" content="HideOnRubbish | RayHLei">
+<meta property="og:description" content="[第6篇]本篇介绍了为加强同事使用的Access数据库的同步性(synchronization)和可用性(availability)而使用的分割数据库前后端的方法。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/6-MSAccess_database_split.jpg">
+<meta property="article:published_time" content="2022-02-25T14:36:22.000Z">
+<meta property="article:modified_time" content="2022-03-01T06:05:58.977Z">
+<meta property="article:author" content="RayHLei">
+<meta property="article:tag" content="工作学习">
+<meta property="article:tag" content="Access">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/6-MSAccess_database_split.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/logo.png"><link rel="canonical" href="http://raylei.space/2022/02/25/6-MSAccess_database_split/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0db3a3c6777e617edaf2659e819e2c15";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-BQ5ZYHEF37"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BQ5ZYHEF37');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&amp;family=Nunito:wght@200&amp;family=Quicksand:wght@300&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"Author: RayHLei","link":"Link: ","source":"Source: HideOnRubbish | RayHLei","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#888888","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[MS Office] 分割MS Access数据库为前端和后端',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-01 14:05:58'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="HideOnRubbish | RayHLei" type="application/rss+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">24</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">30</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/office.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">HideOnRubbish | RayHLei</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">[MS Office] 分割MS Access数据库为前端和后端</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-02-25T14:36:22.000Z" title="Created 2022-02-25 22:36:22">2022-02-25</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-03-01T06:05:58.977Z" title="Updated 2022-03-01 14:05:58">2022-03-01</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/MS-Office/">MS Office</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">3.8k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>11min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="[MS Office] 分割MS Access数据库为前端和后端"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>序言</h1>
+<p>这篇文章会介绍<code>Access</code>的一些<code>基本知识</code>以及我在工作中通过<code>分割Access数据库为前后端</code>，从而帮助其他团队<code>提高工作效率</code>的方法。由于Access本身对数据库分割就有专门的功能支持，所以整个过程是<code>非常简单</code>的，在这里我只是介绍一下<code>流程</code>和<code>需要注意的点</code>。</p>
+<h1>正文</h1>
+<h2 id="背景介绍-3">背景介绍</h2>
+<p>这篇文章其实源于我帮隔壁客户服务团队的一个小忙，他们团队有一个十人左右使用的小Access数据库来同步更新并记录客户电话来的一些信息，由于客户服务的<code>时效性</code>非常重要(<code>1.客户提供的信息最好马上能被其他同事访问 2.访问信息本身不应该花太多时间</code>)，但他们之前的操作是将一整个大概600M左右的数据库摆在共享文件夹中，每个同事要访问或修改数据信息时就<code>直接打开数据库</code>访问，如果有其他人正在访问那就只能等他们关闭后才能继续访问，而我们共享文件夹的服务器(我估计,因为全球同事都能访问特定共享文件夹)并不在香港本地，如果不是在澳大利亚至少也是在新加坡的地区办公室附近。因为本身在这么远的服务器上传输600M的文件就已经非常慢了，同时还不能保证文件的可用性，这导致他们之前做这部分工作几乎是非常困难的。</p>
+<p>一次会议中我介绍我的另一个VBA自动工具之后(希望之后也有机会可以说一说这个)，他们的老板就问我可不可以解决他们的这个问题，我稍微查了一下资料就找到了这个MS Access支持的<code>分割数据库(split database)</code>的方法，现在看来应该是完美解决了他们的所有问题。</p>
+<h2 id="Access基本知识">Access基本知识</h2>
+<p>开始分割数据库前先复习一下MS Access的一些<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/database-basics-a849ac16-07c7-4a31-9948-3c8c94a7c204" title="Microsoft Access database Intro">基本知识</a>：</p>
+<p>数据库是用来收集和管理信息的工具。本来信息也都可以储存在一般的列表或者电子表格中，但随着数据规模不断变大，用列表或表格管理的数据可能会出现各种各样的混乱且不利于提取需要的信息。如果数据达到了这种规模，普通的方式就已经不适用于这些数据的管理，这也是像Access这样的<code>数据管理系统(DBMS)</code>出现的原因。</p>
+<p>一个数据库文件中可能有多种<code>对象(obJects)</code>，除了存储数据的<code>表(Table)</code>还有实现其他功能的<code>表单(Forms)</code>，<code>报表(Reports)</code>，<code>宏(Macros)</code>和<code>模块(Modules)</code>。这些对象在一个数据库文件中可能都不只有一个。创建格式在<code>Access 2007</code>之后的文件后缀为<code>.accdb</code>，在此之前的格式后缀都为<code>.mdb</code>，Access版本在2007之后的也可以用来创建<code>.mdb</code>格式的文件。</p>
+<p>通过Access你可以实现这些功能：</p>
+<ul>
+<li>向数据库中添加新的数据</li>
+<li>在数据库中编辑已有的数据</li>
+<li>删除数据库中的数据</li>
+<li>以不同的方式管理和查看数据</li>
+<li>通过报表，邮件，内联网，互联网等方式将数据与他人共享</li>
+</ul>
+<h3 id="数据库物件">数据库物件</h3>
+<h4 id="表-Tables">表(Tables)</h4>
+<p>数据库的表看起来和电子表格一样，被用行列的形式存储，也因为这个好处，想要将电子表格数据导入数据库中是非常方便的。数据库表和电子表格的区别主要在与他们管理和储存数据的方式上。数据库表格中为了避免冗余，会将不同层面的信息分开为不同的表，比如一个电影票的数据库中可能有观影者信息，但每个观影者可能有多张电影票，这样如果每个电影票表中都存储同一个观影者信息就会导致冗余。这个过程被称为<code>标准化(normalization)</code>。</p>
+<p>表中的每一行都是一条<code>记录(record)</code>,每一条记录都以不同<code>字段(fields)</code>的形式储存独立的信息，字段对应表中的列。比如有一条记录是关于某个观影者，那么字段可能包括他的姓，名，性别等。每一条记录代表了一个观影者在不同字段上的信息。</p>
+<p>关于<code>表</code>的更多细节可以参考<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/introduction-to-tables-78ff21ea-2f76-4fb0-8af6-c318d1ee0ea7" title="Introduction to tables">这里</a>。</p>
+<h4 id="表单-Forms">表单(Forms)</h4>
+<p>表单是一个允许用户<code>输入</code>和<code>编辑数据</code>的用户界面。表单里面除了数据的展示，还会有一些带有<code>控制命令</code>的按钮。用户可以不使用表单而直接在表中<code>删增改</code>数据，但使用表单会让这个过程更加清晰方便。设计者可以通过<code>自定义命令按钮</code>来决定用户可以访问修改哪些数据，这也赋予了数据一定程度的安全性，来控制数据库使用者的权限。</p>
+<p>关于表单的更多细节可以参考<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/introduction-to-forms-e8d47343-c937-44e8-a80f-b6a83a1fa3ae" title="Introduction to forms">这里</a>。</p>
+<h4 id="报表-Reports">报表(Reports)</h4>
+<p>报表是用户用来<code>整理总结</code>并<code>展示数据</code>的对象。一个报表的目的通常是某个具体的问题，比如“<code>我们今年在每部电影上的收入是多少</code>”等等，而报表可以让数据变得更加简单易读，用户可以通过报表得到这个设计好的问题在当前数据下的答案。</p>
+<p>关于报表的更多细节可以参考<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/introduction-to-reports-in-access-e0869f59-7536-4d19-8e05-7158dcd3681c" title="Introduction to reports in Access">这里</a>。</p>
+<h4 id="查询-Queries">查询(Queries)</h4>
+<p>查询是所有数据库系统最核心的功能之一，它通过不同的函数<code>连接(JOIN)</code>不同数据库，<code>筛选(FILTER)</code>条件来获取数据库中符合特定条件的数据。查询通常有两种基本类型：<code>选择查询(select query)</code>和<code>动作查询(action query)</code>。前者可以用来获取数据，后者则是用来对数据进行特定操作，例如<code>增加新表，更新数据，删除数据</code>等。</p>
+<p>关于查询的更多细节可以参考<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/introduction-to-queries-a9739a09-d3ff-4f36-8ac3-5760249fb65c" title="Introduction to queries">这里</a>。</p>
+<h4 id="宏-Macros">宏(Macros)</h4>
+<p>Access中的宏是一种用以给数据库<code>增加特定功能</code>的简单的<code>编程语言</code>。比如用户可以用宏编程一些可以完成提取特定数据或报表的按钮，用户点击按钮便会执行这些宏。这个主要用来将一些重复而复杂的人手工作自动化。</p>
+<h4 id="模块-Modules">模块(Modules)</h4>
+<p>与宏一样，模块是用来向数据库添加功能的对象。它们的区别在于宏中使用的方法是从宏操作列表中选择，而编写模块则是使用VBA编程语言进行编程。模块是作为一个单元存储在一起的<code>声明(declarations)</code>，<code>陈述(statements)</code>，和<code>过程(procedures)</code>的集合。</p>
+<p>关于在Access中编程的细节都可以参考<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/introduction-to-access-programming-92eb616b-3204-4121-9277-70649e33be4f" title="Introduction to Access programming">这里</a></p>
+<h2 id="操作流程">操作流程</h2>
+<p>熟悉了Access的基本知识，现在我们可以意识到，其实一个Access数据库文件中真正存储数据信息的就只有<code>表(Table)</code>类型，所以我们分割数据库的理论基础就是，我们可以只把需要存储的信息(即表)放在共享网络上(作为<code>后端back-end</code>)，而需求信息的用户只需要使用链接在这些共享的表格上的其他类(作为<code>前端front-end</code>)既可以实时<code>有针对性地</code>访问需求的信息而不需要将整个数据库传输来传输去了。由于用户实际占用的只有他们各自的前端副本，且通过网络传输的只有被需求的一小股信息流(而不是整个数据库)，从而实现数据库的<code>可用性</code>和<code>实时性</code>。参考微软的<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/split-an-access-database-3015ad18-a3a1-4e9c-a7f3-51b1d73498cc" title="Office Support: Split an Access database">官方支持</a>，我接下来就介绍我实用的详细的分割数据库的流程。</p>
+<h3 id="注意事项">注意事项</h3>
+<p>开始之前有些需要注意的点：</p>
+<ul>
+<li>分割数据库前一定要<code>先备份数据</code>，很简单，直接复制一个副本放在一边，或者直接用副本分割。因为数据是非常宝贵的东西，在很多环境下可能一旦失去就是永远失去， 所以一点风险都不应该承担。</li>
+<li>分割数据前要<code>提前通知用户</code>，否则分割时用户输入的数据可能不会被记录在分割后的数据库后端中。</li>
+<li><code>确保用户电脑中的Access版本能够支持你分割后的数据库格式</code>，比如我在分割数据库的同时就帮他们把数据库格式从<code>mdb</code>升级成了<code>accdb</code>，因为公司的Access版本都是统一控制的，而文件格式本身就是向下兼容，没有必要不用功能更多性能更好的新版本格式。</li>
+</ul>
+<h3 id="分割数据库">分割数据库</h3>
+<p>数据库分割的功能是Access自带的，只需要按照下方步骤即可完成：</p>
+<ol>
+<li>
+<p>首先在你的本地电脑中复制一份已有的Access数据库文件，确保左边<code>All Access Objects</code>栏位中没有任何被隐藏的表，如果表被隐藏是不会被自动分割的。(不要问我为什么特别提这点，第一次分割数据库发现一部分数据无法同步，DEBUG好久最后发现原来是因为那部分数据的表被隐藏，导致分割数据库没有把这些表上传至共享文件夹)</p>
+<p>在<code>All Access Objects(所有Access对象)</code>选项上右键，选择<code>Navigation Options(导航选项)</code>，这时会打开一个对话框，将<code>Show Hidden Objects(显示隐藏对象)</code>打勾并且确定。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124556871.png" alt="打开导航选项"></p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124707290.png" alt="勾选显示隐藏对象并确认"></p>
+<p>这时回到<code>All Access Objects栏</code>中，如果文件中有被隐藏的对象，会看到他们现在呈半透明色，右键点击他们按<code>Unhide in this Group(该组中取消隐藏)</code>即可解除隐藏。确保你要分割的文件中没有隐藏的表。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301124841322.png" alt="image-20220301124841322"></p>
+</li>
+<li>
+<p>分割数据库本身就非常简单了，只需要在<code>Database Tools(数据库工具)</code>选项卡上的<code>Move Data(移动数据)</code>组中，点击<code>Access Database(Access数据库)</code>，就会出现图中这个<code>Database Splitter(数据库分割向导)</code>。现在点击<code>Split Database(分割数据库)</code>按钮。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125110106.png" alt="image-20220301125110106"></p>
+</li>
+<li>
+<p>单击<code>Split Database(分割数据库)</code>按钮后就会出现浏览文件路径的对话框，这里就是设定<code>后端</code>的所在地的地方，我们选择到我们已经准备好的共享文件夹中，确保需要使用这个数据库的用户都可以访问这个共享文件夹。数据库名称和文件类型都可以改，但没有必要(<code>除非有特别的理由</code>，否则只有坏处没有好处)。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125246928.png" alt="image-20220301125246928"></p>
+</li>
+<li>
+<p>设置完成后点击<code>Split(分割)</code>Access就会开始自动分割数据库了，原数据库中的<code>表</code>都会被复制到刚刚设定的<code>后端文件</code>中，而这时我们进行这些操作的文件就是<code>前端文件</code>了，<code>表以外的其他对象</code>就都在前端文件中了，前后端是通过网络绑定连接在一起的。数据库分割完成后会弹出<code>分割成功</code>的提示消息。</p>
+</li>
+<li>
+<p>这里加一点是微软的<code>官方教程没有提到</code>的，那就是前后端分割完成后还需要点击<code>Database Tools(数据库工具)</code>选项卡上的<code>Tools(工具)</code>组中的<code>Compact and Repair Database(压缩和修复数据库)</code>，否则前端数据库的大小可能跟分割前一样大。按照微软的说法，这是因为Access的运作方式中即使删除对象，它也不会立即将该对象曾经占用的硬盘空间释放。如果你对数据库中删改的需求很多量也很大的话，你也可以设置自动压缩和修复数据库，方法<a target="_blank" rel="noopener" href="https://support.microsoft.com/en-us/office/compact-and-repair-a-database-6ee60f16-aed0-40ac-bf22-85fa9f4005b2" title="Compact and repair a database">参考这里</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125322541.png" alt="image-20220301125322541"></p>
+</li>
+<li>
+<p>最后，为了限制使用者对前后端数据的更改权限，我们把刚刚的前端文件(<code>.accdb格式</code>)保存为已编译的二进制文件(<code>.accde</code>)，既将前端中可以设计更改数据库逻辑的源代码编译保存，这样二进制文件的用户可以照常使用前端需求数据，但无法对他的功能和设计做改变。具体来说只需要在前端文件中点击<code>Save as(另存为)</code>然后按下图中选择并保存在希望的位置即可。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125353890.png" alt="image-20220301125353890"></p>
+</li>
+<li>
+<p>这时候我们已经把后端的数据库放在了共享文件夹中，并且已经有了一个可以连接后端数据库的前端文件，剩下的我们只需要把这些前端文件分发给我们的数据库用户就可以了，通过电子邮件，U盘，或者共享文件夹都可以，用户只要保存一份前端文件的副本在自己的本地硬盘中，确保他们可以通过网络访问共享文件夹，那么他们就可以像以前一样使用表以外的Access的数据提取展示等功能了。</p>
+<h3 id="更改后端数据库">更改后端数据库</h3>
+<p>如果想要更改后端数据库，或者是想把后端数据库的保存位置更改，<code>仅仅只复制粘贴是不行的</code>，因为前端中的连接还是在原来的后端数据库的位置。</p>
+<p>以移动后端数据库的位置为例，假设后端数据库中的表结构和名字都不需要变化，那么要做的就很简单：</p>
+<p><code>首先</code>把后端数据库复制并粘贴到你想要的新位置，<code>然后</code>如图所示点击<code>External Data(外部数据)</code>选项卡上<code>Import&amp;Link(导入和连接)</code>组中的<code>Linked Table Manager(链接表管理器)</code>。在<code>链接表管理器</code>中你可以分别连接当前前端数据库绑定的每一个表的位置，在我们的情况中我们只需要<code>Select All(选择全部)</code>然后点击上方<code>Relink(重新连接)</code>，然后选择到你新复制到的后端数据库位置。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125452427.png" alt="image-20220301125452427"></p>
+<p>点击确定之后会有一个弹窗，如果你新的后端数据库没有做任何更改，那么这里<code>不要点Yes</code>。点<code>No</code>它就会开始自动帮你把所有的连接从旧的位置一张表一张表地连接到新位置的每一张同名表上，但如果你点了Yes，它会要求你每一张表给他提供新的名字，除非你真的有表名字的变化否则<code>千万别按错了</code>，不然会浪费很多时间。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics/post_img/image-20220301125530871.png" alt="image-20220301125530871"></p>
+<h1>最后</h1>
+<p>通过这一次帮助其他团队解决效率问题，我复习并且更加了解了MS Access的一些基本功能和结构，同时知道了中小型团队在共享数据时可以使用Access来解决数据库<code>同步性(synchronization)</code>和<code>可用性(availability)</code>问题的解决方案。</p>
+<p>[第6篇]</p>
+</li>
+</ol>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">RayHLei</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://raylei.space/2022/02/25/6-MSAccess_database_split/">http://raylei.space/2022/02/25/6-MSAccess_database_split/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%B7%A5%E4%BD%9C%E5%AD%A6%E4%B9%A0/">工作学习</a><a class="post-meta__tags" href="/tags/Access/">Access</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/6-MSAccess_database_split.jpg" data-sites="facebook,twitter,wechat,weibo,qq,douban"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/02/23/5-What_is_object_oriented_programming/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/5-What_is_object_oriented_programming.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">[编程算法] 到底什么是“面向对象编程(OOP)”</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/01/7-Downton_Abbey_S01E01/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/7-Downton_Abbey_S01E01.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">[英语学习]《唐顿庄园》第1季第1集学习笔记</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/03/27/11-MSAccess-documentation-tool/" title="[MS Office]使用 MS Access 开发文档管理查询工具"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/11-MSAccess-documentation-tool.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-27</div><div class="title">[MS Office]使用 MS Access 开发文档管理查询工具</div></div></a></div><div><a href="/2022/05/15/15-A_quotation_printing_tool/" title="[MS Office]Access报价出单排版打印工具开发记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/15-A_quotation_printing_tool.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-15</div><div class="title">[MS Office]Access报价出单排版打印工具开发记录</div></div></a></div><div><a href="/2022/03/09/10-introduction-to-different-db/" title="[数据分析]常用数据库类型对比介绍"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/10-introduction-to-different-db.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-09</div><div class="title">[数据分析]常用数据库类型对比介绍</div></div></a></div><div><a href="/2022/04/09/14-R-EDA-basics/" title="[数据分析] 使用R做EDA分析的基础知识"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/14-R-EDA-basics.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-09</div><div class="title">[数据分析] 使用R做EDA分析的基础知识</div></div></a></div><div><a href="/2022/06/09/17-Price_Optimization_with_Random_Forest/" title="[数据分析]基于数据挖掘分类算法的续保价格优化模型记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/17-Price_Optimization_with_Random_Forest.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-09</div><div class="title">[数据分析]基于数据挖掘分类算法的续保价格优化模型记录</div></div></a></div><div><a href="/2022/06/18/19-A-web-scraper-for-company-info/" title="[编程算法] 使用urllib和BeautifulSoup制作爬虫脚本收集公司公开信息的记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/19-A-web-scraper-for-company-info.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-18</div><div class="title">[编程算法] 使用urllib和BeautifulSoup制作爬虫脚本收集公司公开信息的记录</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Livere</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81NTQ0NC8zMTkxMQ=="></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%83%8C%E6%99%AF%E4%BB%8B%E7%BB%8D-3"><span class="toc-number">2.1.</span> <span class="toc-text">背景介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Access%E5%9F%BA%E6%9C%AC%E7%9F%A5%E8%AF%86"><span class="toc-number">2.2.</span> <span class="toc-text">Access基本知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%BA%93%E7%89%A9%E4%BB%B6"><span class="toc-number">2.2.1.</span> <span class="toc-text">数据库物件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8-Tables"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">表(Tables)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%A1%A8%E5%8D%95-Forms"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">表单(Forms)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%8A%A5%E8%A1%A8-Reports"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">报表(Reports)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2-Queries"><span class="toc-number">2.2.1.4.</span> <span class="toc-text">查询(Queries)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%8F-Macros"><span class="toc-number">2.2.1.5.</span> <span class="toc-text">宏(Macros)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%A8%A1%E5%9D%97-Modules"><span class="toc-number">2.2.1.6.</span> <span class="toc-text">模块(Modules)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">2.3.</span> <span class="toc-text">操作流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="toc-number">2.3.1.</span> <span class="toc-text">注意事项</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E5%89%B2%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.3.2.</span> <span class="toc-text">分割数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E6%94%B9%E5%90%8E%E7%AB%AF%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="toc-number">2.3.3.</span> <span class="toc-text">更改后端数据库</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">最后</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/office.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 By RayHLei</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hey! What have you learned today!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !true) {
+  if (true) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://raylei.space/2022/02/25/6-MSAccess_database_split/'
+    this.page.identifier = '2022/02/25/6-MSAccess_database_split/'
+    this.page.title = '[MS Office] 分割MS Access数据库为前端和后端'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://rayhlei.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Livere' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="canvas_nest" defer="defer" color="133,133,133" opacity="0.7" zIndex="-1" count="200" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":60,"vOffset":-40},"mobile":{"show":true,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
