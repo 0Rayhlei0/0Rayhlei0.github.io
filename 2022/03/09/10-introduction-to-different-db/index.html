@@ -1,0 +1,403 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>[数据分析]常用数据库类型对比介绍 | HideOnRubbish | RayHLei</title><meta name="keywords" content="Database,工作学习"><meta name="author" content="RayHLei"><meta name="copyright" content="RayHLei"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[第10篇] 本篇以小白视角介绍了各种常用数据库的类型及各自的特性">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[数据分析]常用数据库类型对比介绍">
+<meta property="og:url" content="http://raylei.space/2022/03/09/10-introduction-to-different-db/index.html">
+<meta property="og:site_name" content="HideOnRubbish | RayHLei">
+<meta property="og:description" content="[第10篇] 本篇以小白视角介绍了各种常用数据库的类型及各自的特性">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/10-introduction-to-different-db.jpg">
+<meta property="article:published_time" content="2022-03-09T14:21:25.000Z">
+<meta property="article:modified_time" content="2022-03-16T16:38:49.567Z">
+<meta property="article:author" content="RayHLei">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="工作学习">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/10-introduction-to-different-db.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/logo.png"><link rel="canonical" href="http://raylei.space/2022/03/09/10-introduction-to-different-db/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0db3a3c6777e617edaf2659e819e2c15";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-BQ5ZYHEF37"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BQ5ZYHEF37');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&amp;family=Nunito:wght@200&amp;family=Quicksand:wght@300&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"Author: RayHLei","link":"Link: ","source":"Source: HideOnRubbish | RayHLei","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#888888","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[数据分析]常用数据库类型对比介绍',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2022-03-17 00:38:49'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="HideOnRubbish | RayHLei" type="application/rss+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">27</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">32</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/data.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">HideOnRubbish | RayHLei</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">[数据分析]常用数据库类型对比介绍</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2022-03-09T14:21:25.000Z" title="Created 2022-03-09 22:21:25">2022-03-09</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2022-03-16T16:38:49.567Z" title="Updated 2022-03-17 00:38:49">2022-03-17</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">3.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>12min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="[数据分析]常用数据库类型对比介绍"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>序言</h1>
+<p>由于我本科并不是学的计算机，所以其实很多计算机基础的知识我都不太了解。最近在做一些数据库相关的工作的时候发现公司数据库系统使用的<code>IBM DB2</code>在操作和逻辑上似乎和之前用过的<code>Oracle</code>有一些差异，因此也发现我原来连这些不同数据库之间到底有些什么联系或者差异都不知道。所以今天想要系统地了解一下不同的数据库之间的关系和差异。</p>
+<h1>正文</h1>
+<p>接下来我会先从数据库的<code>基本特性</code>的概念开始介绍，因为正是因为这些特性很多不可以兼得，所以才衍生出各种各样不同的数据库类型。之后再看一看各个有名的数据库各自有什么特点，最后再讲讲公司用的<code>DB2数据库</code>在实际操作中与<code>Oracle</code>到底有什么细节上的区别和联系。</p>
+<h2 id="影响数据库选择的因素">影响数据库选择的因素</h2>
+<p>知乎的<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/414923789" title="[知乎] 数据库种类有哪些，各有什么特点？">民工哥</a>在他的回答中列出了几项影响数据库选择的因素，因为这些因素可能不能同时达成，或者达成有额外成本，因此不同的数据库可能为满足不同的生产需求对这些因素的实现程度和效率都有区别。他的总结是下面这些点：</p>
+<ul>
+<li><code>数据量：</code>是否海量数据，单表数据量太大会考验数据库的性能</li>
+<li><code>数据结构：</code>结构化 (每条记录的结构都一样) 还是非结构化的 (不同记录的结构可以不一样)</li>
+<li><code>是否宽表：</code>一条记录是 10 个域，还是成百上千个域</li>
+<li><code>数据属性：</code>是基本数据 (比如用户信息)、业务数据 (比如用户行为)、辅助数据 (比如日志)、缓存数据</li>
+<li><code>是否要求事务性：</code>一个事务由多个操作组成，必须全部成功或全部回滚，不允许部分成功</li>
+<li><code>实时性：</code>对写延迟，或读延迟有没有要求，比如有的业务允许写延迟高但要求读延迟低</li>
+<li><code>查询量：</code>比如有的业务要求查询大量记录的少数列，有的要求查询少数记录的所有列</li>
+<li><code>排序要求：</code>比如有的业务是针对时间序列操作的</li>
+<li><code>可靠性要求：</code>对数据丢失的容忍度</li>
+<li><code>一致性要求：</code>是否要求读到的一定是最新写入的数据</li>
+<li><code>对增删查改的要求：</code>有的业务要能快速的对单条数据做增删查改 (比如用户信息)，有的要求批量导入，有的不需要修改删除单条记录 (比如日志、用户行为)，有的要求检索少量数据 (比如日志)，有的要求快速读取大量数据 (比如展示报表)，有的要求大量读取并计算数据 (比如分析用户行为)</li>
+<li><code>是否需要支持多表操作</code></li>
+</ul>
+<h2 id="关系型数据库和非关系型数据库-参考资料">关系型数据库和非关系型数据库(<a target="_blank" rel="noopener" href="https://www.altexsoft.com/blog/business/comparing-database-management-systems-mysql-postgresql-mssql-server-mongodb-elasticsearch-and-others/" title="Comparing Database Management Systems: MySQL, PostgreSQL, MSSQL Server, MongoDB, Elasticsearch, and others">参考资料</a>)</h2>
+<p><code>关系型数据库(Relational or SQL)</code>和<code>非关系型数据库(Non-relational or NoSQL)</code>是目前数据库系统的两个大类，虽然目前工作中有机会接触到的主要都是关系型数据库，但作为新兴的大数据工具以及与关系型数据库功能互补的非关系型数据库，<code>NoSQL</code>现在在数据库业界的势头也非常之猛，因此这里也简单了解一下。</p>
+<h3 id="关系型数据库-Relational-DBMS">关系型数据库(Relational DBMS)</h3>
+<p><code>关系型数据库</code>的特点顾名思义就是用<code>相互联系的表(tables)</code>来存储数据，<code>结构化查询语言(Structured Query Language, 也即SQL)</code>是这套数据库系统的核心，人们用这套语言来管理关系型数据库，也因此这类数据库就被称为<code>SQL database</code>。关系型数据库需要提前定义<code>模式(Schema)</code>，也就是说数据库中存储的数据的<code>属性(attributes)</code>及其数据格式需要被严格定义，而每条<code>数据(records)</code>都在相应属性上有一个值，也就是说不同数据之间的关系非常明确。</p>
+<h4 id="可扩展性-Scalability">可扩展性(Scalability)</h4>
+<p>关系型数据库一般只能<code>纵向扩展</code>，也就是说在同一个服务器中增加更多算力和空间(CPU,GPU,RAM等)，而如果要将关系型数据库分布在多个服务器上的话则需要改变数据结构等复杂操作。</p>
+<h4 id="性能-Performance">性能(Performance)</h4>
+<p>关系型数据库在处理<code>中小型数据规模</code>时性能较好，如果在数据库中加入<code>索引(index)</code>还能更加增强数据库<code>查询(QUERY)</code>和<code>连接(JOIN)</code>的效率。但如果数据量和用户访问量更大时，这类数据库性能就可能不足。</p>
+<h4 id="安全性-Security">安全性(Security)</h4>
+<p>由于数据高度结构化，关系型数据库的安全性保障不需要太麻烦。由于关系型数据库拥有<code>ACID</code>四大特性，分别是<code>原子性(Atomicity)</code>，<code>一致性(Consistency)</code>，<code>隔离性(Isolation)</code>和<code>持久性(Durability)</code>。这几个特性使得储存在关系型数据库中的数据有较高的<code>完整性(Integrity)</code>，这类数据库非常适合应用在金融电商等对数据完整性要求较高的应用场景。</p>
+<h3 id="非关系型数据库-NoSQL">非关系型数据库(NoSQL)</h3>
+<p><code>非关系型数据库</code>是各种非表结构数据库的共称，这类数据库有一些代表性的模型：</p>
+<ul>
+<li><code>文档类(Document-oriented)：</code>用JSON格式的文档存储，提取，管理数据。<code>代表有MongoDB</code>。</li>
+<li><code>键值类(Key-value)：</code>这类数据库通常有一个哈希表，表中有一个特定的键和一个指针指向特定的数据，也就是说每一个值都与一个数据一一对应。代表有<code>Redis</code>。</li>
+<li><code>图形类(Graph)：</code>使用图结构存储数据，将数据以边缘节点的形式存储，其中节点(node)代表的是数据，而边缘(edge)则代表数据之间的关系，这类数据库主要用来构建数据间的关系图谱。代表有<code>Neo4J</code>。</li>
+<li><code>列存储类(Wide-column)：</code>将数据存储在非常多的列中，每一条数据都由键指向可能不同的列中，也即每条数据都可能拥有不同的属性。代表有<code>Cassandra</code>。</li>
+</ul>
+<h4 id="可扩展性-Scalability-2">可扩展性(Scalability)</h4>
+<p><code>非关系型数据库</code>在数据量和访问量增加时，可以通过<code>横向扩容</code>(即增加更多服务器)来扩展容量。这些服务器共享数据，每个服务器仅储存一部分数据，这样每个服务器需要处理的平均访问次数也会减少。由于他们没有结构性的表，因此扩展不需要额外的操作。</p>
+<h4 id="性能-Performance-2">性能(Performance)</h4>
+<p>由于<code>非关系型数据库</code>的分布式特性，其性能普遍较高。这类数据库可以无限制地储存各种类型和格式的数据，改变已有的数据格式也会比较方便。</p>
+<h4 id="安全性-Security-2">安全性(Security)</h4>
+<p>安全性是<code>非关系型数据库</code>的一个主要弱点，更高的自由度就是以数据的完整性为代价。</p>
+<h2 id="主要关系型数据库对比">主要关系型数据库对比</h2>
+<p>由于非关系型数据库目前不在我的业务范围内，我就侧重对比研究一下关系型数据库的几个代表：<code>Oracle</code>, <code>MySQL</code>, <code>MS SQL Server</code>, <code>PostgreSQL</code>和<code>IBM DB2</code>。<a target="_blank" rel="noopener" href="https://db-engines.com/en/ranking_trend" title="DB-Engines Ranking - Trend Popularity">DB-Engines网站</a>对各大数据库的流行趋势针对其在公共网络(如搜索引擎，开放职位描述，技术论坛等)上的出现频次进行打分排名：</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20220314010452079.png" alt="Oracle,MySQL,MS SQL Server, PostgreSQL,IBM DB2近年流行趋势对比"></p>
+<p>可以看到尽管有下降趋势，<code>Oracle</code>, <code>MySQL</code>和<code>MS SQL Server</code>依然有绝对的热度，而相对的<code>PostgreSQL</code>近年趋势猛升，而<code>IBM DB2</code>作为关系型数据库的开拓者，其在近年的主要客户群体仅集中在金融行业(以银行，证券，保险，基金公司等，行业代表有花旗，渣打，汇丰，摩根斯坦利以及我司等，哈哈)，因此在大众的讨论热度比其他数据库要低。</p>
+<h3 id="Oracle">Oracle</h3>
+<p>大名鼎鼎的甲骨文公司，说他们开发的数据库管理系统是业界最著名应该也不会有太多人有异议。其目前支持将各种关系型及非关系型数据库在同一个数据库中管理。基本支持所有主流操作平台，性能好，功能强，稳定性好，安全性强但价格昂贵(免费版功能有限)。目前甲骨文开发的主要关注点在云计算方面。</p>
+<p>其主要优点包括<code>创新力强，技术支持及文档资源完备，具备存储处理海量数据的能力</code>。主要缺点就是<code>贵(标准版单价17,500美元，企业版单价47,000美元)，且匹配其高性能其也需要较高的硬件和人员支持才能稳定运行</code>。</p>
+<p>如果你有数以亿计的OLTP或数据仓库数据需要储存和处理且预算充足的话，Oracle是一个可以考虑的选择。</p>
+<h3 id="MySQL">MySQL</h3>
+<p>MySQL如今也是甲骨文公司的明星产品，是现在最知名的关系型数据库之一，与Oracle不同，MySQL是开源的。MySQL由C和C++编写而成，是网页开发组合LAMP的一大组成部分，其名字<code>LAMP</code>分别指<code>Linux(操作系统)</code>, <code>Apache(网页服务器)</code>, <code>MySQL(数据库)</code>和<code>PHP(脚本语言)</code>。可以在大部分主流平台运行。</p>
+<p>其主要优点包括<code>免费安装，使用简单，结构不复杂，易于调试且支持云服务</code>。主要缺点在于<code>其底层代码逻辑不适于大型数据库，非完全开源导致一些特定功能不能被免费实现，另外有一些SQL标准操作不被MySQL支持</code>。</p>
+<p>如果你只是想做一些小型的网页数据库，或者是数据量不大，复杂度不高的数据管理系统。</p>
+<h3 id="MS-SQL-Server">MS SQL Server</h3>
+<p>MS SQL Server是微软早期为与IBM在数据库领域竞争而开发的关系型数据库产品，它的主要特点继承了微软的发家秘诀，即可视化，易操作但只能在Windows环境中运行。操作MS SQL Server数据的语言是在SQL标准上发展的<code>Transact-SQL</code>语言。</p>
+<p>其主要优点包括<code>针对不同应用场景的涵盖不同功能的各种版本，提供各种商业所需的数据相关附加服务，丰富的文档和社区支持以及云服务</code>等。主要缺点包括<code>贵，支持平台单一，调试复杂</code>。</p>
+<p>如果你的的公司订阅了微软的其他产品服务，选择MS SQL Server可能是个不错的选择，微软对其不同产品之间的互动集成做得还是不错的，有助于增强用户体验。</p>
+<h3 id="PostgreSQL">PostgreSQL</h3>
+<p>PostgreSQL是开源的对象-关系数据库(object-relational database),其相较其他普通关系数据库的差别在于用户可以在PostgreSQL中编程实现自定义对象以实现存储更复杂的数据结构。PostgreSQL与MySQL有许多共同点并在此之上加强了扩展性与合规性，也因此它可以适用于各种不同的数据规模。可以在微软, iOS, 安卓等平台上运行。</p>
+<p>其主要优点包括<code>可扩展性高，支持JSON, XML, H-Store等用户自定义的数据格式，拥有易于使用的第三方增强工具，完全开源</code>等。主要缺点在于<code>其文档没有统一标准，且数据库缺少完整性检查工具</code>。</p>
+<p>如果你希望自己的数据库存储格式可以定制化并实现一定的数据分析功能，PostgreSQL可以是较好的选择。其在金融电信行业使用较多。</p>
+<h3 id="IBM-DB2">IBM DB2</h3>
+<p>尽管现在的热度不高，但DB2被认为是关系型数据库的开山鼻祖。其由C和C++编写，可以在UNIX，Linux，Windows服务器版本等多种环境下执行。</p>
+<p>DB2的主要优点在于他<code>经过多年大量的实用测试没有出过大的问题，是一个非常值得信赖稳定的的数据库系统，其适用大规模数据且性能也较高</code>。主要缺点可能包括<code>文档和用户界面陈旧对新手不友好，操作较为复杂</code>。</p>
+<p>目前DB2的主要用户都是金融公司，这些公司创建数据库比较早，但对技术变革不敏感，且依赖数据库的安全性和稳定性，因此留存为DB2用户。</p>
+<h2 id="DB2与Oracle-SQL语法差别（参考资料）">DB2与Oracle SQL语法差别（<a target="_blank" rel="noopener" href="https://www.cnblogs.com/wuxl360/p/5563019.html" title="DB2、ORACLE SQL写法的主要区别">参考资料</a>）</h2>
+<p>由于我自己学的是Oracle的语法，但现在工作需要使用DB2的语法，因此找了一下网上大神们整理的这两者的区别汇总，发现<code>邬兴亮大神</code>的总结就是我想找的：</p>
+<h3 id="数据类型转换函数">数据类型转换函数</h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>整形转字符</th>
+<th>字符转整形</th>
+<th>字符转浮点</th>
+<th>浮点转字符</th>
+<th>字符转日期</th>
+<th>字符转时间</th>
+<th>日期转字符</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Oracle</td>
+<td>to_char(1)</td>
+<td>to_number(‘1’)</td>
+<td>to_number(‘1.1’)</td>
+<td>to_char(1.1)</td>
+<td>to_date(‘2007-04-26’,‘yyyy-mm-dd’)</td>
+<td>to_date(‘2007-04-26 08:08:08’,‘yyyy-mm-dd hh25:mi:ss’)</td>
+<td>to_char(to_date(‘2007-04-29’,‘yyyy-mm-dd’),‘yyyy-mm-dd’)</td>
+</tr>
+<tr>
+<td>DB2</td>
+<td>char(1)</td>
+<td>int(‘1’)</td>
+<td>double(‘1.1’)</td>
+<td>char(1.1)</td>
+<td>date(‘2007-04-26’)</td>
+<td>to_date(‘2007-04-26 08:08:08’,‘yyyy-mm-dd hh25:mi:ss’)</td>
+<td>char(date(‘2007-04-29’))</td>
+</tr>
+<tr>
+<td>兼容写法</td>
+<td>cast(1 as char)</td>
+<td>cast(‘1’ as int)</td>
+<td>无</td>
+<td>无</td>
+<td>无</td>
+<td>相同</td>
+<td>无</td>
+</tr>
+</tbody>
+</table>
+<h3 id="Where条件弱类型判断">Where条件弱类型判断</h3>
+<p>在<code>Oracle</code>中使用<code>&quot;Where 字符型字段 in (整型)&quot;</code>是允许的，<code>DB2</code>则会报错：</p>
+<blockquote>
+<p>SELECT ‘abc’ FROM XXX WHERE ‘1’ in (1) 在Oracle下可通过，在DB2中会报错。</p>
+</blockquote>
+<p>在<code>Oracle中</code>使用<code>&quot;Where 字符型字段=整型&quot;</code>是允许的，<code>DB2</code>则会报错：</p>
+<blockquote>
+<p>SELECT ‘abc’ FROM XXX WHERE ‘1’=1 在Oracle下可通过，在DB2中会报错。</p>
+</blockquote>
+<h3 id="DATE数据类型">DATE数据类型</h3>
+<p><code>Oracle</code>中<code>DATE型</code>带有<code>时分秒</code>，但<code>DB2</code>下<code>DATE型</code>只带有<code>年月日</code>且可以作为字符串直接操作，<code>DB2</code>中要记录<code>时分秒</code>必须使用<code>时间戳型(TIMESTAMP)</code>, DB2的日期和时间戳都可以被直接用字符串指定。</p>
+<h3 id="Decode函数">Decode函数</h3>
+<p><code>Oracle</code>中使用<code>decode()</code>函数来做判断语句：</p>
+<blockquote>
+<p>decode(sex,0,‘男’,1.‘女’) 即为将sex域中的0换为男，1换为女。</p>
+</blockquote>
+<p>在<code>DB2</code>中要实现这个功能需要用<code>CASE WHEN</code>写法：</p>
+<blockquote>
+<p>CASE sex WHEN  0 THEN ‘男’ WHEN 1 THEN ‘女’ ELSE ‘其他’ END</p>
+</blockquote>
+<h3 id="NVL函数">NVL函数</h3>
+<p>在<code>Oracle</code>中<code>NVL</code>函数主要用来处理空值，即将域中空值替换为指定值：</p>
+<blockquote>
+<p>SELECT NVL(F_AREAID,‘空’) FROM MASA_USER</p>
+</blockquote>
+<p>在<code>DB2</code>中需要使用兼容性写法<code>COALESCE</code></p>
+<blockquote>
+<p>SELECT COALESCE(F_AREAID,‘空’,F_AREAID) FROM MASA_USER</p>
+</blockquote>
+<h3 id="获取系统当前日期">获取系统当前日期</h3>
+<p>在<code>Oracle</code>中使用<code>SYSDATE</code>,而在<code>DB2</code>中使用<code>CURRENT DATE</code></p>
+<h3 id="获取特定数量的数据">获取特定数量的数据</h3>
+<p>在<code>Oracle</code>中使用<code>ROWNUM</code>:</p>
+<blockquote>
+<p>SELECT * FROM TABLE WHERE ROWNUM &lt;= 10</p>
+</blockquote>
+<p>在<code>DB2</code>中使用<code>FETCH</code>：</p>
+<blockquote>
+<p>SELECT * FROM TABLE FETCH FIRST 10 ROWS ONLY</p>
+</blockquote>
+<h1>最后</h1>
+<p>这一篇写了很久，主要是确实对数据库的理解不深，需要看的资料比较多，最后主要学到的对我来说有用的东西可能还是<code>操作层面</code>的<code>SQL语法</code>，如果以后的工作中还发现新的区别再来这里补充。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">RayHLei</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://raylei.space/2022/03/09/10-introduction-to-different-db/">http://raylei.space/2022/03/09/10-introduction-to-different-db/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Database/">Database</a><a class="post-meta__tags" href="/tags/%E5%B7%A5%E4%BD%9C%E5%AD%A6%E4%B9%A0/">工作学习</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/10-introduction-to-different-db.jpg" data-sites="facebook,twitter,wechat,weibo,qq,douban"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2022/03/09/9-keep-cdn-pics-updated/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/9-keep-cdn-pics-updated.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">[博客维护]Jsdelivr CDN的图片缓存更新的解决方案</div></div></a></div><div class="next-post pull-right"><a href="/2022/03/27/11-MSAccess-documentation-tool/"><img class="next-cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/11-MSAccess-documentation-tool.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">[MS Office]使用 MS Access 开发文档管理查询工具</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/03/27/11-MSAccess-documentation-tool/" title="[MS Office]使用 MS Access 开发文档管理查询工具"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/11-MSAccess-documentation-tool.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-27</div><div class="title">[MS Office]使用 MS Access 开发文档管理查询工具</div></div></a></div><div><a href="/2022/04/09/14-R-EDA-basics/" title="[数据分析] 使用R做EDA分析的基础知识"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/14-R-EDA-basics.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-09</div><div class="title">[数据分析] 使用R做EDA分析的基础知识</div></div></a></div><div><a href="/2022/05/15/15-A_quotation_printing_tool/" title="[MS Office]Access报价出单排版打印工具开发记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/15-A_quotation_printing_tool.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-05-15</div><div class="title">[MS Office]Access报价出单排版打印工具开发记录</div></div></a></div><div><a href="/2022/06/09/17-Price_Optimization_with_Random_Forest/" title="[数据分析]基于数据挖掘分类算法的续保价格优化模型记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/17-Price_Optimization_with_Random_Forest.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-09</div><div class="title">[数据分析]基于数据挖掘分类算法的续保价格优化模型记录</div></div></a></div><div><a href="/2022/06/18/19-A-web-scraper-for-company-info/" title="[编程算法] 使用urllib和BeautifulSoup制作爬虫脚本收集公司公开信息的记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/19-A-web-scraper-for-company-info.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-18</div><div class="title">[编程算法] 使用urllib和BeautifulSoup制作爬虫脚本收集公司公开信息的记录</div></div></a></div><div><a href="/2022/07/03/20-Data-mining-application-in-CRM/" title="[数据分析] 数据挖掘技术在销售、营销与客户关系管理中的应用概览"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/20-Data-mining-application-in-CRM.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-07-03</div><div class="title">[数据分析] 数据挖掘技术在销售、营销与客户关系管理中的应用概览</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Livere</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81NTQ0NC8zMTkxMQ=="></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BD%B1%E5%93%8D%E6%95%B0%E6%8D%AE%E5%BA%93%E9%80%89%E6%8B%A9%E7%9A%84%E5%9B%A0%E7%B4%A0"><span class="toc-number">2.1.</span> <span class="toc-text">影响数据库选择的因素</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E5%92%8C%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="toc-number">2.2.</span> <span class="toc-text">关系型数据库和非关系型数据库(参考资料)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93-Relational-DBMS"><span class="toc-number">2.2.1.</span> <span class="toc-text">关系型数据库(Relational DBMS)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7-Scalability"><span class="toc-number">2.2.1.1.</span> <span class="toc-text">可扩展性(Scalability)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD-Performance"><span class="toc-number">2.2.1.2.</span> <span class="toc-text">性能(Performance)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7-Security"><span class="toc-number">2.2.1.3.</span> <span class="toc-text">安全性(Security)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%9D%9E%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93-NoSQL"><span class="toc-number">2.2.2.</span> <span class="toc-text">非关系型数据库(NoSQL)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7-Scalability-2"><span class="toc-number">2.2.2.1.</span> <span class="toc-text">可扩展性(Scalability)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%80%A7%E8%83%BD-Performance-2"><span class="toc-number">2.2.2.2.</span> <span class="toc-text">性能(Performance)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%AE%89%E5%85%A8%E6%80%A7-Security-2"><span class="toc-number">2.2.2.3.</span> <span class="toc-text">安全性(Security)</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E8%A6%81%E5%85%B3%E7%B3%BB%E5%9E%8B%E6%95%B0%E6%8D%AE%E5%BA%93%E5%AF%B9%E6%AF%94"><span class="toc-number">2.3.</span> <span class="toc-text">主要关系型数据库对比</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Oracle"><span class="toc-number">2.3.1.</span> <span class="toc-text">Oracle</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MySQL"><span class="toc-number">2.3.2.</span> <span class="toc-text">MySQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#MS-SQL-Server"><span class="toc-number">2.3.3.</span> <span class="toc-text">MS SQL Server</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#PostgreSQL"><span class="toc-number">2.3.4.</span> <span class="toc-text">PostgreSQL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IBM-DB2"><span class="toc-number">2.3.5.</span> <span class="toc-text">IBM DB2</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DB2%E4%B8%8EOracle-SQL%E8%AF%AD%E6%B3%95%E5%B7%AE%E5%88%AB%EF%BC%88%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%EF%BC%89"><span class="toc-number">2.4.</span> <span class="toc-text">DB2与Oracle SQL语法差别（参考资料）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.1.</span> <span class="toc-text">数据类型转换函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Where%E6%9D%A1%E4%BB%B6%E5%BC%B1%E7%B1%BB%E5%9E%8B%E5%88%A4%E6%96%AD"><span class="toc-number">2.4.2.</span> <span class="toc-text">Where条件弱类型判断</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#DATE%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B"><span class="toc-number">2.4.3.</span> <span class="toc-text">DATE数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Decode%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.4.</span> <span class="toc-text">Decode函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#NVL%E5%87%BD%E6%95%B0"><span class="toc-number">2.4.5.</span> <span class="toc-text">NVL函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%B3%BB%E7%BB%9F%E5%BD%93%E5%89%8D%E6%97%A5%E6%9C%9F"><span class="toc-number">2.4.6.</span> <span class="toc-text">获取系统当前日期</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%8E%B7%E5%8F%96%E7%89%B9%E5%AE%9A%E6%95%B0%E9%87%8F%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-number">2.4.7.</span> <span class="toc-text">获取特定数量的数据</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">3.</span> <span class="toc-text">最后</span></a></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/data.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2023 By RayHLei</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hey! What have you learned today!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !true) {
+  if (true) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://raylei.space/2022/03/09/10-introduction-to-different-db/'
+    this.page.identifier = '2022/03/09/10-introduction-to-different-db/'
+    this.page.title = '[数据分析]常用数据库类型对比介绍'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://rayhlei.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Livere' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="canvas_nest" defer="defer" color="133,133,133" opacity="0.7" zIndex="-1" count="200" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":60,"vOffset":-40},"mobile":{"show":true,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
