@@ -2,16 +2,43 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://raylei.space/2022/11/23/26-Japanese_Chapter_15/</loc>
+    <loc>http://raylei.space/2023/02/17/27-Blogging_on_multiple_devices/</loc>
     
-    <lastmod>2022-12-01</lastmod>
+    <lastmod>2023-02-16</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
-    <loc>http://raylei.space/2022/11/23/27-Blogging_on_multiple_devices/</loc>
+    <loc>http://raylei.space/2022/03/09/9-keep-cdn-pics-updated/</loc>
+    
+    <lastmod>2023-02-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/03/04/8-decrypt-wechat-pics/</loc>
+    
+    <lastmod>2023-02-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/02/10/1-blog_setup_notes/</loc>
+    
+    <lastmod>2023-02-16</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/2022/11/23/26-Japanese_Chapter_15/</loc>
     
     <lastmod>2022-12-01</lastmod>
     
@@ -164,15 +191,6 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/2022/03/04/8-decrypt-wechat-pics/</loc>
-    
-    <lastmod>2022-04-26</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://raylei.space/2022/03/31/12-CFA-level-1-overview/</loc>
     
     <lastmod>2022-04-07</lastmod>
@@ -191,25 +209,7 @@
   </url>
   
   <url>
-    <loc>http://raylei.space/2022/03/09/9-keep-cdn-pics-updated/</loc>
-    
-    <lastmod>2022-03-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>http://raylei.space/2022/03/01/7-Downton_Abbey_S01E01/</loc>
-    
-    <lastmod>2022-03-10</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/2022/02/10/1-blog_setup_notes/</loc>
     
     <lastmod>2022-03-10</lastmod>
     
@@ -298,13 +298,6 @@
   
   <url>
     <loc>http://raylei.space/tags/GitHub/</loc>
-    <lastmod>2023-02-16</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>http://raylei.space/tags/Git/</loc>
     <lastmod>2023-02-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
@@ -508,6 +501,20 @@
   
   <url>
     <loc>http://raylei.space/tags/%E6%A0%87%E5%87%86%E6%97%A5%E6%9C%AC%E8%AF%AD%E4%B8%AD%E7%BA%A7/</loc>
+    <lastmod>2023-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/git/</loc>
+    <lastmod>2023-02-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>http://raylei.space/tags/GitHub%EF%BC%8C%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/</loc>
     <lastmod>2023-02-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

@@ -58,8 +58,8 @@
       <tags>
         <tag>Hexo</tag>
         <tag>GitHub</tag>
-        <tag>Git</tag>
         <tag>日常学习</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -5058,6 +5058,7 @@ Loan-to-value\ ratio=\frac{current\ mortgage\ amount}{current\ appraised\ value}
       </categories>
       <tags>
         <tag>日常学习</tag>
+        <tag>Python</tag>
         <tag>微信</tag>
         <tag>解码</tag>
       </tags>
@@ -5105,9 +5106,9 @@ Loan-to-value\ ratio=\frac{current\ mortgage\ amount}{current\ appraised\ value}
         <category>博客维护</category>
       </categories>
       <tags>
-        <tag>Git</tag>
         <tag>日常学习</tag>
         <tag>Github</tag>
+        <tag>git</tag>
       </tags>
   </entry>
   <entry>
@@ -5157,49 +5158,21 @@ Loan-to-value\ ratio=\frac{current\ mortgage\ amount}{current\ appraised\ value}
       </tags>
   </entry>
   <entry>
-    <title>[日语学习] 《标准日本语》中级第一单元学习笔记</title>
-    <url>/2022/11/23/27-Blogging_on_multiple_devices/</url>
-    <content><![CDATA[<h1>第1课</h1>
-<h2 id="生词">生词</h2>
-<h3 id="表1">表1</h3>
-<p>であい（出会い）：「名」偶遇，邂逅　<code>今朝会社への途中で昔の友人に出会いました。</code></p>
-<p>であう（出会う）：「自动1」偶遇，邂逅　<code>彼と出会ったのは5年前でした。</code></p>
-<p>たすかる（助かる）：「自动1」获得帮助，得救　<code>お医者さんのおかげで、命が助かった。</code></p>
-<p>たすける（助ける）：「他动2」帮助，救助，助长　<code>父の仕事を助ける。</code></p>
-<p>すっかり：「副词」完全，彻底　<code>故郷はすっかり変わりました。</code></p>
-<p>まち（町・街）：「名」城镇・街道　<code>渋谷は若者の街と言われている。／私の生まれた町。</code></p>
-<p>へんか（変化）：「名」变化　<code>朝晩の気温の変化が激（はげ）しい。</code></p>
-<p>ついていく：「造语」跟上　<code>どこまでもついていく！</code></p>
-<p>こうそう（高層）：「名」高层　<code>高層ビル</code></p>
-<p>へん（辺）：「名」一带，附近，就近的事物 <code>昔この辺は農地でした。／そのことはこの辺にして次の問題に入りましょう。</code></p>
-<p>かんじがします（感じがします）：感觉，觉得 <code>この景色を見ると、日本に来たという感じがします。</code></p>
-<p>てんきんになる（転勤になる）：（公司内部）调动工作 <code>東京から上海に転勤になる。</code></p>
-<h3 id="表2">表2</h3>
-<p>ちょっと：「副」喂，稍微 <code>仕事は、もうちょっとで終わる。</code></p>
-<p>めざましどけい（目覚まし時計）：「名」闹钟</p>
-<p>ふしぎ（不思議）：「名·形2」不可思议，奇怪 <code>少年漫画の主人公は大体不思議な力を持っている。</code></p>
-<p>えきべん（駅弁）：「名」 车站卖的盒饭</p>
-<p>あめ（飴）：「名」 糖</p>
-<p>なめる（舐める）：「他动2」舔，含 <code>飴を舐める。</code></p>
-<p>なみだ（涙）：「名」眼泪，泪</p>
-<p>ふた：「名」盖子 <code>ふたをする。／ふたを開ける。</code></p>
-<p>ひろげる（広げる）：「他动2」展开，扩大 <code>新聞を広げて読み始めた。／自分の視野（しや）を広げたい。</code></p>
-<p>わく（沸く）：「自动1」沸腾，烧开 <code>家に帰ると風呂が沸いている。</code></p>
-<p>わかす（沸かす）：「他动1」烧热，使…沸腾 <code>素晴らしい演奏で会場（かいじょう）を沸かした。</code></p>
-<h2 id="语法">语法</h2>
-<ul>
-<li>～ば～ほど：越…越… <code>考えれば考えるほど、腹（はら）が立（た）つ。</code></li>
-<li>「～のですか／～んですか」在知道前提的情况下 ，询问状况或事由　<code>＜发现对方没有吃饭＞どうして食べないんですか。</code></li>
-<li></li>
-</ul>
-<p>[第26篇]</p>
+    <title>[博客维护]多电脑端同步更新博客</title>
+    <url>/2023/02/17/27-Blogging_on_multiple_devices/</url>
+    <content><![CDATA[<h1>前言</h1>
+<p>本篇本是因为前段时间回内地过年，但平时博客更新是在香港的台式机上，所以网站的源文件都保存在台式机上，这导致我回内地后将不能更新博客。于是在出发前我参考这位<a href="https://blog.csdn.net/qq_30105599/article/details/118302086" title="多台电脑同步更新Hexo博客">_tourist</a>的方法将源文件都同步在GitHub的远程仓库中，然后在我带回家的笔记本上克隆了这个仓库，因此同时将Hexo生成的网站静态文件和源文件同时保存在远程仓库中，并达到随时从各种设备同步更新网站的目的。</p>
+<p>虽然我回去的两个月实际上玩得太嗨根本没有心思管网站了，但这个东西本身还是对各位博主来说非常实用的。</p>
+<h1>正文</h1>
+<p>明天再写，今天先睡了。</p>
+<p>[第27篇]</p>
 ]]></content>
       <categories>
-        <category>日语学习</category>
+        <category>博客维护</category>
       </categories>
       <tags>
-        <tag>日常学习</tag>
-        <tag>标准日本语中级</tag>
+        <tag>git</tag>
+        <tag>GitHub，日常学习</tag>
       </tags>
   </entry>
 </search>
