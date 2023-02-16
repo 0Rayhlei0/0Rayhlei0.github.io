@@ -1,7 +1,7 @@
 ---
 title: "[博客维护]Jsdelivr CDN的图片缓存更新的解决方案"
 date: 2022-03-09 22:20:36
-tags: [Git,Github,日常学习]
+tags: [git,Github,日常学习]
 categories: 博客维护
 description: "[第9篇]本篇记录一下我为了让Jsdelivr CDN能及时更新我更改过的博客图片所尝试的努力和最后的解决方案。"
 top_img: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/blog.jpg

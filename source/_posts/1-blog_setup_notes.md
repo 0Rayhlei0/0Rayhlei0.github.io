@@ -1,7 +1,7 @@
 ---
 title: "[博客维护]基于Hexo框架搭建个人网站的实现记录"
 date: 2022-02-10 22:50:59
-tags: [Hexo,GitHub,Git,日常学习]
+tags: [Hexo,GitHub,git,日常学习]
 categories: 博客维护
 description: "[第1篇]本文介绍了我跟随枫叶的详细教程成功搭建本网站的过程中的一些心得以及需要注意的点。"
 top_img: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/blog.jpg

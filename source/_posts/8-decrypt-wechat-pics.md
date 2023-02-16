@@ -1,7 +1,7 @@
 ---
 title: "[信息安全]解码微信PC版中以dat格式存储的聊天图片"
 date: 2022-03-04 22:00:09
-tags: [微信,解码,日常学习]
+tags: [微信,解码,Python,日常学习]
 categories: 信息安全
 description: "[第8篇]本篇中我稍微深入了解了一下微信存储聊天图片的方式(.dat文件)以及相应的解码方式。"
 top_img: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/security.jpg
