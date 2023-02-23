@@ -9,7 +9,7 @@
     <atom:link href="http://raylei.space/rss2.xml" rel="self" type="application/rss+xml"/>
     
     <description>一个给保险公司做数据分析的人</description>
-    <pubDate>Thu, 16 Feb 2023 16:34:03 GMT</pubDate>
+    <pubDate>Thu, 23 Feb 2023 15:14:35 GMT</pubDate>
     <generator>http://hexo.io/</generator>
     
     <item>
@@ -22,7 +22,7 @@
       
       
       
-      <content:encoded><![CDATA[<h1>前言</h1><p>本篇是因为前段时间回内地过年，而平时博客更新是在香港的台式机上，所以网站的源文件都保存在台式机上，这导致我离开香港后将不能更新博客。于是在出发前我参考这位<a href="https://blog.csdn.net/qq_30105599/article/details/118302086" title="多台电脑同步更新Hexo博客">_tourist</a>的方法将源文件都同步在GitHub的远程仓库中，然后在我带回家的笔记本上克隆了这个仓库。以同时将Hexo生成的网站静态文件和源文件保存在GitHub远程仓库中的方法达到随时从各种设备同步更新网站的目的。</p><p>虽然我回去的两个月实际上玩得太嗨根本没有心思管网站，但这个东西本身还是对各位博主来说非常实用的。</p><h1>正文</h1><p>明天再写，今天先睡了。</p><p>[第27篇]</p>]]></content:encoded>
+      <content:encoded><![CDATA[<h1>前言</h1><p>本篇是因为前段时间回内地过年，而平时博客更新是在香港的台式机上，所以网站的源文件都保存在台式机上，这导致我离开香港后将不能更新博客。于是在出发前我参考这位<a href="https://blog.csdn.net/qq_30105599/article/details/118302086" title="多台电脑同步更新Hexo博客">_tourist</a>的方法将源文件都同步在GitHub的远程仓库中，然后在我带回家的笔记本上克隆了这个仓库。以同时将Hexo生成的网站静态文件和源文件保存在GitHub远程仓库中的方法达到随时从各种设备同步更新网站的目的。</p><p>虽然我回去的两个月实际上玩得太嗨根本没有心思管网站，但这个东西本身还是对各位博主来说非常实用的。</p><h1>正文</h1><h2 id="同步原理">同步原理</h2><p><a href="https://blog.csdn.net/qq_30105599/article/details/118302086" title="多台电脑同步更新Hexo博客">_tourist</a>对网站同步更新的原理和方法讲得非常细致透彻，整个博客的文件夹就是当初安装hexo的文件夹，每次大家在该文件夹下使用<code>hexo g -d</code>指令，hexo就会将该文件夹中的文件各类文件用于生成网站的静态文件并存在<code>public</code>文件夹中推送到<code>Github Page</code>中，从而达到更新网站内容的结果。也就是说hexo文件夹中储存的就是网站的源文件，而推送到<code>Github</code>上的只有已经渲染过的网站结果。</p><p>那么我们想要达成多设备同时更新网站的目的，其实只需要将网站的源文件夹通过<code>git</code>推到远程仓库，每次需要更新时只需要从远程仓库把更新<code>pull</code>回来就可以接着另一台设备上的进度继续更新了。</p><p>操作上，我们初次创建网站的时候是将网站部署在<code>GitHub</code>仓库的<code>main</code>分支上，而这个设定是通过hexo的配置文件设置，因此我们其实可以再创建一个新的默认分支来存放网站的源文件，而同时在这个仓库中使用<code>hexo g -d</code>又可以把静态文件部署到<code>main</code>分支中。</p><p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20230223212047386.png" alt="_config.yml中设置的网站部署路径"></p><p>将远程仓库弄好之后，每次拿到新的设备都可以直接从这个仓库中<code>clone</code>一个新的本地仓库，而我们只需要按照之前的方法安装好hexo就可以在新设备上部署网页了。</p><h2 id="具体操作">具体操作</h2><p>_tourist把操作的具体步骤整理得非常详细，我就只简单记录一下：</p><h3 id="老电脑端">老电脑端</h3><ul><li>创建新的<code>Github分支</code>并且将其设置为默认分支。</li><li>将新建的分支仓库使用<code>git clone</code>命令克隆到本地。</li><li>克隆到本地的文件夹中只保留<code>.git</code>文件夹，然后将原本hexo文件夹中除了.deploy_git以外的文件都复制到克隆的本地仓库中。</li><li>需要注意的是<code>theme</code>文件夹需要特别注意，要将里面的<code>.git</code>删除，否则推去远程仓库的时候这个文件夹会是空的。</li><li>在上面的两个操作是在本地仓库中完成的，修改完成后使用下面的命令将文件推送到远程仓库的新分支中。</li></ul><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">git add *</span><br><span class="line">git commit -m <span class="string">&quot;add_branch&quot;</span></span><br><span class="line">git push</span><br></pre></td></tr></table></figure><h3 id="新电脑端">新电脑端</h3><ul><li>按当时建网站的步骤，先新电脑生成的ssh key添加到GitHub账号上。</li><li>新电脑装好Node.js和git，找一个合适的位置把远程仓库克隆到新电脑上。</li><li>在克隆的文件夹下执行<code>npm install hexo, npm install, npm install hexo-deployer-git</code>指令来下载hexo和所需的依赖。</li><li>往后需要更新前建议先用git pull将远程仓库的最新修改同步到本地，然后再编辑。</li></ul><h1>最后</h1><p>到这里我们就完成了网站源代码通过<code>GitHub远程仓库</code>同步的操作，每次需要编辑更新网站的时候只需要随便找到一台设备，按上面新电脑端的操作将源文件下载到本地，然后更新后推送回远程仓库，同时使用hexo命令将更新的网站内容部署到原来的GitHub Page的分支上。</p><p>[第27篇]</p>]]></content:encoded>
       
       
       <category domain="http://raylei.space/categories/%E5%8D%9A%E5%AE%A2%E7%BB%B4%E6%8A%A4/">博客维护</category>
