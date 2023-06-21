@@ -5251,6 +5251,24 @@ Loan-to-value\ ratio=\frac{current\ mortgage\ amount}{current\ appraised\ value}
 </li>
 </ul>
 <h2 id="例句-2">例句</h2>
+<ol>
+<li>今年的马拉松大会，从年轻人到老年人，有1万人以上的市民参加。<code>今年のマラソン大会には、若者からお年寄りまで、1万人以上の市民が参加しました。</code></li>
+<li>我认为时不时转换一下心情，工作更能进展顺利。 <code>時々気分転換をしたほうが、仕事が進むと思います。</code></li>
+<li>不管你再怎么爱对方，要是总是那样任性的话，对方也是会累的。 <code>いくら相手を愛していても、いつもそんなにわがままでは、相手もつかれるでしょう。</code></li>
+<li>小孩子就是对所有事情都会表现出兴趣。  <code>子どもはあらゆることに興味を示すものです。</code></li>
+<li>不能说别人的坏话。 <code>人の悪口を言うものではない。</code></li>
+<li>记得大学时代经常跟前辈一起去喝酒。 <code>大学の時、よく先輩と一緒に飲みに行ったものです。</code></li>
+</ol>
+<h1>第3课</h1>
+<h2 id="生词-3">生词</h2>
+<h3 id="表1-3">表1</h3>
+<p>ししゃ（支社）　[名] 分公司，分社</p>
+<p>ふくめる（含める）　[他动2] 包括，含有 <code>参加者は彼を含めて8人だ。/これは、消費税を含めた値段です。</code></p>
+<p>おも（主）　[形2] 主要的 <code>主なメンバー/大学では主に経済を勉強した。</code></p>
+<p>ふう（風）　[専] 风 <code>台風（たいふう）</code></p>
+<p>くわわる（加わる）　[自动1] 参加，加入，添加，增添 <code>定価に消費税が加わると、ちょうど一万円になります。/李さんは、四月から開発チームに加わることになった。/暑さが加わるにつれて、体がだんだん弱くなっていった。</code></p>
+<p>いまでも（今でも）　至今 <code>いまでもあの人を愛している。</code></p>
+<h2 id="语法-3">语法</h2>
 <p>[第26篇]</p>
 ]]></content>
       <categories>
@@ -5311,7 +5329,7 @@ Loan-to-value\ ratio=\frac{current\ mortgage\ amount}{current\ appraised\ value}
 <p>年初回家后到现在一篇新文章都没写，非常惭愧。最近面试发现对方问的最基本的算法问题都只能答上来个大概的思路，一操作就卡壳，意识到不刷刷算法题熟悉一下编程的基本功是很难找到工作了。所以打算在继续日语学习的同时每天抽点时间刷刷LeetCode算法题，&quot;程序员&quot;就得有点&quot;程序员&quot;的样子。</p>
 <p>学习的目标是熟悉一下各种经典算法的Python解法，尤其是熟悉一下各种算法的基础写法，避免以后写出一些脱裤子放屁的代码贻笑大方。第一篇就以最经典的数组相关算法开始吧。</p>
 <h1>正文</h1>
-<h2 id="两数之和-font-color-00dd00-简单-font">两数之和(<font color="#00dd00">简单</font>)</h2>
+<h2 id="1-两数之和-font-color-00dd00-简单-font">1. 两数之和(<font color="#00dd00">简单</font>)</h2>
 <p><strong>题目要求：</strong></p>
 <p>给定一个整数数组 nums 和一个整数目标值 target，请你在该数组中找出 和为目标值 target  的那 两个 整数，并返回它们的数组下标。你可以假设每种输入只会对应一个答案。但是，数组中同一个元素在答案里不能重复出现。你可以按任意顺序返回答案。</p>
 <p><strong>示例 1：</strong></p>
@@ -5328,6 +5346,28 @@ Loan-to-value\ ratio=\frac{current\ mortgage\ amount}{current\ appraised\ value}
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">twoSum</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>], target: <span class="built_in">int</span></span>) -&gt; <span class="type">List</span>[<span class="built_in">int</span>]:</span><br><span class="line">    hashtable = <span class="built_in">dict</span>()</span><br><span class="line">    <span class="keyword">for</span> i, num <span class="keyword">in</span> <span class="built_in">enumerate</span>(nums):</span><br><span class="line">        <span class="keyword">if</span> target - num <span class="keyword">in</span> hashtable:</span><br><span class="line">            <span class="keyword">return</span> [hashtable[target - num], i]</span><br><span class="line">        hashtable[nums[i]] = i <span class="comment"># 如果哈希表中没有结果，则将i的下标作为值存进这个键中</span></span><br><span class="line">    <span class="keyword">return</span> []</span><br></pre></td></tr></table></figure>
 <p>执行用时：48 ms, 在所有 Python3 提交中击败了63.32%的用户</p>
 <p>内存消耗：17.5 MB, 在所有 Python3 提交中击败了5.09%的用户</p>
+<h2 id="26-删除有序数组中的重复项-font-color-00dd00-简单-font">26. 删除有序数组中的重复项(<font color="#00dd00">简单</font>)</h2>
+<p><strong>题目要求：</strong></p>
+<p>给你一个 升序排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：</p>
+<ul>
+<li>更改数组 nums ，使 nums 的前 k 个元素包含唯一元素，并按照它们最初在 nums 中出现的顺序排列。nums 的其余元素与 nums 的大小不重要。</li>
+<li>返回 k 。</li>
+</ul>
+<p><strong>示例 1：</strong></p>
+<p>输入：nums = [1,1,2]<br>
+输出：2, nums = [1,2,_]<br>
+解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。</p>
+<p><strong>我的解答思路：</strong></p>
+<p>因为题目给定不需要考虑数组长度和k后面的元素，且数组为升序，因此只需要将数组遍历一次，依次将大于前数的元素放在数组的前k项即可。因为数组本身是升序排列，即使数组完全没有重复元素也不会出现大于当前元素的元素被提前覆盖的情况。时间复杂度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>， 空间复杂度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">removeDuplicates</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    last_num = -inf</span><br><span class="line">    k = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> num <span class="keyword">in</span> nums:</span><br><span class="line">        <span class="keyword">if</span> num &gt; last_num:</span><br><span class="line">            nums[k] = num</span><br><span class="line">            last_num = num</span><br><span class="line">            k += <span class="number">1</span>     </span><br><span class="line">    <span class="keyword">return</span> k</span><br></pre></td></tr></table></figure>
+<p>执行用时：52 ms, 在所有 Python3 提交中击败了35%的用户</p>
+<p>内存消耗：17.3 MB, 在所有 Python3 提交中击败了28%的用户</p>
+<p><strong>官方解法：(双指针)</strong></p>
+<p>所谓的双指针就是用一快一慢两个指针记录上一个改变前的数和下一个要被比较的数，如果两数不同就给慢指针下一格赋上快指针的值，然后继续用快指针遍历数组。时间复杂度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mi>N</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(N)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord mathnormal" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span>， 空间复杂度<span class="katex"><span class="katex-mathml"><math xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>O</mi><mo stretchy="false">(</mo><mn>1</mn><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">O(1)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathnormal" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord">1</span><span class="mclose">)</span></span></span></span>。</p>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">removeDuplicates</span>(<span class="params">self, nums: <span class="type">List</span>[<span class="built_in">int</span>]</span>) -&gt; <span class="built_in">int</span>:</span><br><span class="line">    slow, fast = <span class="number">0</span>, <span class="number">1</span></span><br><span class="line">    <span class="keyword">while</span> fast &lt; <span class="built_in">len</span>(nums):</span><br><span class="line">        <span class="keyword">if</span> nums[fast] != nums[slow]:</span><br><span class="line">            slow = slow + <span class="number">1</span></span><br><span class="line">            nums[slow] = nums[fast]</span><br><span class="line">        fast = fast + <span class="number">1</span></span><br><span class="line">    <span class="keyword">return</span> slow + <span class="number">1</span></span><br></pre></td></tr></table></figure>
+<p>执行用时：40 ms, 在所有 Python3 提交中击败了84.28%的用户</p>
+<p>内存消耗：17.4 MB, 在所有 Python3 提交中击败了9.49%的用户</p>
+<p><strong>对比研究之后发现我的解法和官方的双指针解法的主要速度差距在于<code>for循环</code>和<code>while循环</code>，在将<code>num</code>换成用<code>nums[i]</code>表示后，算法的表现就与双指针一致了。</strong></p>
 <p>[第28篇]</p>
 ]]></content>
       <categories>
