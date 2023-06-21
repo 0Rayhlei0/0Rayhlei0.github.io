@@ -17,7 +17,7 @@ katex: true
 
 # 正文
 
-## 两数之和(<font color="#00dd00">简单</font>)
+## 1. 两数之和(<font color="#00dd00">简单</font>)
 
 **题目要求：**
 
@@ -62,6 +62,62 @@ def twoSum(self, nums: List[int], target: int) -> List[int]:
 执行用时：48 ms, 在所有 Python3 提交中击败了63.32%的用户
 
 内存消耗：17.5 MB, 在所有 Python3 提交中击败了5.09%的用户
+
+## 26. 删除有序数组中的重复项(<font color="#00dd00">简单</font>)
+
+**题目要求：**
+
+给你一个 升序排列 的数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。元素的 相对顺序 应该保持 一致 。然后返回 nums 中唯一元素的个数。考虑 nums 的唯一元素的数量为 k ，你需要做以下事情确保你的题解可以被通过：
+
+- 更改数组 nums ，使 nums 的前 k 个元素包含唯一元素，并按照它们最初在 nums 中出现的顺序排列。nums 的其余元素与 nums 的大小不重要。
+- 返回 k 。
+
+**示例 1：**
+
+输入：nums = [1,1,2]
+输出：2, nums = [1,2,_]
+解释：函数应该返回新的长度 2 ，并且原数组 nums 的前两个元素被修改为 1, 2 。不需要考虑数组中超出新长度后面的元素。
+
+**我的解答思路：**
+
+因为题目给定不需要考虑数组长度和k后面的元素，且数组为升序，因此只需要将数组遍历一次，依次将大于前数的元素放在数组的前k项即可。因为数组本身是升序排列，即使数组完全没有重复元素也不会出现大于当前元素的元素被提前覆盖的情况。时间复杂度$O(N)$， 空间复杂度$O(1)$。
+
+```python
+def removeDuplicates(self, nums: List[int]) -> int:
+    last_num = -inf
+    k = 0
+    for num in nums:
+        if num > last_num:
+            nums[k] = num
+            last_num = num
+            k += 1     
+    return k
+```
+
+执行用时：52 ms, 在所有 Python3 提交中击败了35%的用户
+
+内存消耗：17.3 MB, 在所有 Python3 提交中击败了28%的用户
+
+**官方解法：(双指针)**
+
+所谓的双指针就是用一快一慢两个指针记录上一个改变前的数和下一个要被比较的数，如果两数不同就给慢指针下一格赋上快指针的值，然后继续用快指针遍历数组。时间复杂度$O(N)$， 空间复杂度$O(1)$。
+
+```python
+def removeDuplicates(self, nums: List[int]) -> int:
+    slow, fast = 0, 1
+    while fast < len(nums):
+        if nums[fast] != nums[slow]:
+            slow = slow + 1
+            nums[slow] = nums[fast]
+        fast = fast + 1
+    return slow + 1
+```
+
+执行用时：40 ms, 在所有 Python3 提交中击败了84.28%的用户
+
+内存消耗：17.4 MB, 在所有 Python3 提交中击败了9.49%的用户
+
+**对比研究之后发现我的解法和官方的双指针解法的主要速度差距在于`for循环`和`while循环`，在将`num`换成用`nums[i]`表示后，算法的表现就与双指针一致了。**
 
 [第28篇]
 
