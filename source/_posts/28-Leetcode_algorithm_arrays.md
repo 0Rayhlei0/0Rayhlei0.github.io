@@ -119,5 +119,68 @@ def removeDuplicates(self, nums: List[int]) -> int:
 
 **对比研究之后发现我的解法和官方的双指针解法的主要速度差距在于`for循环`和`while循环`，在将`num`换成用`nums[i]`表示后，算法的表现就与双指针一致了。**
 
+## 35. 搜索插入位置(<font color="#00dd00">简单</font>)
+
+**题目要求：**
+
+给定一个排序数组和一个目标值，在数组中找到目标值，并返回其索引。如果目标值不存在于数组中，返回它将会被按顺序插入的位置。请必须使用时间复杂度为$O(\log N)$的算法。
+
+**示例 :**
+
+```
+输入: nums = [1,3,5,6], target = 5
+输出: 2
+输入: nums = [1,3,5,6], target = 2
+输出: 1
+输入: nums = [1,3,5,6], target = 7
+输出: 4
+```
+
+**我的解答思路：**
+
+对于已经排序的数组，找到插入位置非常简单，但我不知道什么样的算法算是$O(\log N)$的时间复杂度，因此我做题的时候没有管这个要求，也能通过。时间复杂度$O(N)$， 空间复杂度$O(1)$。
+
+```python
+# 用while循环 执行40ms 超过60%
+def searchInsert(self, nums: List[int], target: int) -> int:
+    i = 0
+    if nums[-1] < target:
+        return len(nums)
+    else:
+        while nums[i] < target:
+            i += 1
+        return i
+# 用for循环 执行48ms 超过20%
+def searchInsert(self, nums: List[int], target: int) -> int:
+    for i, num in enumerate(nums):
+        if num >= target:
+            return i
+    return len(nums)
+```
+
+**官方解法：(二分法)**
+
+看了官方题解才知道二分法可以更快找到插入位置，也是所谓的时间复杂度为$O(\log N)$的算法。
+
+```python
+    def searchInsert(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1 # 将左右下标定义到列表的两端
+        while left <= right: 
+            middle = left + (right - left) // 2 # 找到左右中间偏左的元素
+            if nums[middle] == target: 
+                return middle
+            elif nums[middle] > target: # 如果中间元素大于目标值，说明目标在左半边
+                right = middle - 1 # 中间值不是目标，因此可以把右边界-1
+            else:
+                left = middle + 1
+        # 如果nums[middle] > target，元素应插入的位置是 middle，而循环结束时 left = middle
+        # 如果nums[middle] < target，元素应插入的位置是 middle+1，而循环结束时 left = middle +1
+        return left 
+```
+
+执行用时：36 ms, 在所有 Python3 提交中击败了80.35%的用户
+
+内存消耗：16.7 MB, 在所有 Python3 提交中击败了24.41%的用户
+
 [第28篇]
 
