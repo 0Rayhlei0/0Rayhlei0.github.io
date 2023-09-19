@@ -3,10 +3,9 @@ title: "[MS Office] 升级Excel报告一键自动化更新数据"
 date: 2023-08-06 21:44:12
 tags: [Excel, VBA, 工作学习]
 categories: "MS Office"
-sticky: 2
 description: "[第31篇]记录此前工作中将部门每月保费预测的报告配合使用公式和VBA实现一键更新。"
 top_img: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/office.jpg
-cover: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/30-Japanese_Chapter_16.jpg
+cover: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/31-excel-tool-develop-2.jpg
 ---
 
 # 序言
