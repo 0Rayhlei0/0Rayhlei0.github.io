@@ -20,19 +20,19 @@ sticky: 100
 
 ## NLP模型发展历史
 
-人类对自然语言模型的研究从上世纪50年代开始，当时人们对机器处理自然语言的主流研究方向是认为机器应该像人类理解语义那样，通过输入处理各种单词语法规则，将人类语言转换为机器可使用的语言来完成自然语言任务([Noam Chomsky, 1957][1])。直到70年代初Fred Jelinek首次提出使用统计方法解决自然语言处理问题的`统计语言模型(statistical language models)`，早年主流的统计语言模型有`隐马可夫模型(hidden Markov model)`、`n元语义模型(n-gram model)`、`最大熵模型(maximum entropy model)`，这些模型与早年`语义学(Lexicalism)`推崇基于规则的语言模型不同，他们使用已有的数据基于统计模型来计算词语在当前上下文中出现的概率并以此预测自然语言结果，这也是后来神经网络语言模型的基础。
+人类对自然语言模型的研究从上世纪50年代开始，当时人们对机器处理自然语言的主流研究方向是认为机器应该像人类理解语义那样，通过输入处理各种单词语法规则，将人类语言转换为机器可使用的语言来完成自然语言任务([Noam Chomsky, 1957][1])。直到70年代初Fred Jelinek首次提出了使用统计方法解决自然语言处理问题的`统计语言模型(statistical language models)`，当年主流的统计语言模型有`隐马可夫模型(hidden Markov model)`、`n元语义模型(n-gram model)`、`最大熵模型(maximum entropy model)`等，这些模型与早年`语义学(Lexicalism)`推崇基于规则的语言模型不同，他们使用已有的数据基于统计模型来计算词语在当前上下文中出现的概率并以此预测自然语言结果，而这也是后来神经网络语言模型的基础。
 
-所谓`语言模型(Language model)`就是给定前词预测后词的任务模型，第一个神经语言模型([Bengio, 2000][2])首次使用`词嵌入(word embeding)`与`多层神经网络(Multi-layer Neural Networks)`来解决n元语义模型面临的短上下文, 维数灾难等问题。此后涌现的新技术如`多任务学习(Multi-task learning)`([Collobert and Weston， 2008][3])，`Word2Vec(CBoW & Skip-gram)`([Mikolov et al., 2013][4])为深度学习模型在自然语言处理领域发力奠定了基础。
+所谓`语言模型(Language model)`就是给定前词预测后词的一种自然语言任务，人类第一个神经语言模型([Bengio, 2000][2])就首次使用了`词嵌入(word embeding)`与`多层神经网络(Multi-layer Neural Networks)`等技术来解决当时流行的n元语义模型面临的短上下文, 维数灾难等问题。此后涌现的新技术如`多任务学习(Multi-task learning)`([Collobert and Weston， 2008][3])，`Word2Vec(CBoW & Skip-gram)`([Mikolov et al., 2013][4])也都为深度学习模型在自然语言处理领域发力奠定了基础。
 
-从2013年开始，研究者开始大量使用深度学习网络构建NLP模型，最早被用来处理序列数据的RNN([Elman, 1990][5])以及为消除经典RNN模型梯度消失和梯度爆炸问题而出现的LSTM([Hochreiter & Schmidhuber, 1997][6])和GRU([Kyunghyun Cho et al., 2014][7])，他们的基本原理都是通过将前文特征按顺序输入下一个单元从而实现依次输入处理序列信息的功能，具体参见[这篇博文][8]。除此之外还有CNN网络([Kalchbrenner et al., 2014][9])和另一种Recursive neural networks([Socher et al., 2013][10])在自然语言处理上的应用。
+从2013年开始，研究者开始大量使用深度学习网络构建NLP模型，最早被用来处理序列数据的RNN([Elman, 1990][5])以及为消除经典RNN模型梯度消失和梯度爆炸问题而出现的LSTM([Hochreiter & Schmidhuber, 1997][6])和GRU([Kyunghyun Cho et al., 2014][7])，它们的基本原理都是通过将前文特征按顺序输入下一个单元从而实现依次输入处理序列信息的功能，具体参见[这篇博文][8]。除此之外还有CNN网络([Kalchbrenner et al., 2014][9])和Recursive neural networks([Socher et al., 2013][10])也都在自然语言处理上有所应用。
 
 ![Vanilla RNN, h_t表示在t位置的输出，x_t表示输入。也即在每个时间点除了输入当时的数据x以外还输入上一个时间点的输出h_（t-1）](https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/RNN-unrolled.png)
 
-2014年，谷歌的三位学者将提出Seq2Seq模型([Sutskever et al., 2014][11])，其原理是使用一个RNN结构作为Encoder将输入的序列编码为一个含有序列信息的`语境矢量(Context vector)`然后用这个输出的矢量输入另一个RNN的Decoder中从而输出另一个序列信息。顾名思义，Seq2Seq的出现使得序列数据可以用于生成另一个序列，这弥补了深度学习网络此前只能进行语言模型或情感分析等简单任务的短板。但Seq2Seq结构本身并没有解决Encoder的输入序列过长时神经网络模型很难在一个单一的语境矢量中有效抓住所有信息的弊病，为解决这个问题，Transformer结构中最关键的`注意力机制(Attention)`被提出([Bahdanau et al., 2015][12])，其原理是在Seq2Seq模型的基础上在Decode每一个目标单元时同时加入用来强调与该单元相关的Encoder单元语境的注意力模块，从而达到翻译每个目标位置时给予原文中单词不同权重的目的。
+2014年，谷歌的三位学者提出Seq2Seq模型([Sutskever et al., 2014][11])，其原理是使用一个RNN结构作为Encoder将输入的序列编码为一个含有序列信息的`语境矢量(Context vector)`然后用这个输出的矢量输入另一个RNN的Decoder中从而输出另一个序列信息。顾名思义，Seq2Seq的出现使得序列数据可以用于生成另一个序列，这弥补了深度学习网络此前只能进行语言模型或情感分析等简单任务的短板。但Seq2Seq结构本身并没有解决Encoder的输入序列过长时神经网络模型很难在一个单一的语境矢量中有效抓住所有有效信息的弊病，为解决这个问题，Transformer结构中最关键的`注意力机制(Attention)`被提出([Bahdanau et al., 2015][12])，其原理是在Seq2Seq模型的基础上在Decode每一个目标单元时同时加入用来强调与该单元相关的Encoder单元语境的注意力模块，从而达到翻译每个目标位置时给予原文中单词不同权重的目的。
 
 ![t时刻的attention模块示意图，s^(t-1)表示decoder模块上一个时刻的隐藏状态，a^t表示encoder模块中每个时刻的输出结果，最终的context向量则是将每个时刻的a^t加权加总后的语境向量，包含了需要在该时刻关注的输入信息。](https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/v2-bb14e7491f244b7e553e816d046cd985_720w.webp)
 
-最终在2017年，谷歌机器翻译团队决定彻底抛弃RNN和CNN等传统结构，直接使用Attention机制架构多层自注意结构来完成机器翻译任务，并取得很好的效果([Vaswani et al., 2017][13])。到这里我们终于可以看看这篇文章到底讲了什么了, 本篇内容参考了很多著名大佬对Transformer的解读，包括[Andrew Ng][14], [Michael Phi][15],  [Jay Alammar][16], [Sebastian Raschka][17]， [Prafulla Dalvi][17]等，其中Jay Alamar的博客将各种内容讲得非常细致，适合新手，推荐阅读；Sebastian Raschka和Prafulla Dalvi分别通过代码实现和数字实例解释抽象的结构，也可辅助理解,。
+最终在2017年，谷歌机器翻译团队决定彻底抛弃RNN和CNN等传统结构，直接使用Attention机制架构多层自注意结构来完成机器翻译任务，并取得很好的效果([Vaswani et al., 2017][13])。到这里我们终于可以看看这篇文章到底讲了什么了, 本篇内容参考了很多著名大佬对Transformer的解读，包括[Andrew Ng][14], [Michael Phi][15],  [Jay Alammar][16], [Sebastian Raschka][17]， [Prafulla Dalvi][17]等，其中Andrew Ng和Michael Phi通过视频讲解或动画演示来介绍Transformer的大致概念和原理；Jay Alamar的博客将各种内容讲得非常细致，适合新手，推荐阅读；Sebastian Raschka和Prafulla Dalvi分别通过代码实现和数字实例解释抽象的结构，也可辅助理解,。
 
 ## 前置知识(Building Blocks)
 
@@ -40,7 +40,7 @@ sticky: 100
 
 Transformer结构中介绍的最重要的一个机制就是自注意机制，与RNN中的注意力只计算当前词与其他词的关联性不同，Transformer中的注意力为每一个可能的词引入了三个向量`q(query)`，`k(Keyword)`，和`v(Value)`，每个可能的词都有独特的qkv三向量，而这三个向量分别由该词的`词嵌入向量(word embedding vector)`乘以从文本中训练而来的`权重矩阵(Weight matrix)` Wq，Wk, 和Wv计算得到。原文中词嵌入的维度是512，而权重矩阵的维度是512x64，因此两者相乘，每个词将得到维度为64的qkv三个向量。
 
-如何理解这三个向量的作用呢？你可以将Query代表你要查询的词，Keyword代表输入中的其他词，对比q和k在向量空间中的相似度就可以知道两个词之间的关联有多大，将每个k(k1, k2, k3 ...)与某个q(例如q1)的相似度使用softmax取最大的那一个，就可以知道每个k对于理解这个q1的权重有多少，然后将每个v分别乘以这个对应的权重取和就可以得到这个词在当前输入中的Attention值(在原文的例子里也是一个64维的向量)。原文中给出的公式是：
+如何理解这三个向量的作用呢？你可以将Query代表你要查询的词，Keyword代表输入中的其他词，对比q和k在向量空间中的相似度就可以知道两个词之间的关联有多大，将每个k(k1, k2, k3 ...)与某个q(例如q1)的相似度使用softmax取最大的那一个，就可以知道每个k对于理解这个q1的权重有多少，然后将每个v分别乘以这个对应的权重取和就可以得到这个词在当前输入中的Attention值(在原文的例子里也是一个64维的向量)。而比较两个向量相似度最简单的方法就是使用点乘，越相似的两个向量相乘结果越大。原文中给出的公式是：
 $$
 Attention(Q,K,V)=softmax(\frac{QK^T}{\sqrt{d_k}})V
 $$
@@ -48,7 +48,7 @@ $$
 
 ![原文中图示Attention的计算方式，其中mask只有Decoder部分有，Encoder部分没有，mask的作用后面再解释](https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20230827154436081.png)
 
-因此上图中第一步$QK^T$的结果会是一个行代表query列代表key的3x3矩阵，其中的数字大小代表了每个qk pairs在64维空间上的相似度；第二步Scale是为了减小点乘的梯度波动而将上面3x3矩阵中的每个数字都除以空间维度的开方，在本例中也就是$\sqrt{64}=8$；第三步softmax归一函数将每行的结果进行归一，大的增大，小的减少，经过这一步后3x3矩阵的每行的加和都会变成1，而每列就是该k对应q的在其他所有其他词中应占的权重，例如第1行第2列代表的就是"I"的query向量相对于"love"的k向量在“I love you”三个k向量中的权重，以机器翻译举例就是翻译"I"时应该对"love"分配的注意力权重；第四步将针对该q向量的每一个k向量的权重乘以其对应的v向量以重新获得针对每个输入词在64维向量空间上的重点分布，以矩阵来表示就是将此前3x3的权重矩阵乘以3x64的V矩阵，结果应该为3x64的矩阵，每一行都是一个q对应分配的注意力，也就是该自注意模块的输出结果。
+因此上图中第一步$QK^T$的结果会是一个行代表query列代表key的3x3矩阵，其中的数字大小代表了每个qk pairs在64维空间上的相似度；第二步Scale是为了减小点乘的梯度波动而将上面3x3矩阵中的每个数字都除以空间维度的开方，因为点乘的结果可能使某个数字过大，这样后期计算softmax可能使这个结果的权重变成1其他都是0，所以这步操作也可以说是在分散注意力，在本例中这个值是$\sqrt{64}=8$；第三步softmax归一函数将每行的结果进行归一，大的增大，小的减少，经过这一步后3x3矩阵的每行的加和都会变成1，而每列就是该k对应q的在其他所有其他词中应占的权重，例如第1行第2列代表的就是"I"的query向量相对于"love"的k向量在“I love you”三个k向量中的权重，以机器翻译举例就是翻译"I"时应该对"love"分配的注意力权重；第四步将针对该q向量的每一个k向量的权重乘以其对应的v向量以重新获得针对每个输入词在64维向量空间上的重点分布，以矩阵来表示就是将此前3x3的权重矩阵乘以3x64的V矩阵，结果应该为3x64的矩阵，每一行都是一个q对应分配的注意力，也就是该自注意模块的输出结果。
 
 ### 多头注意力(Multi-Head Attention)
 
