@@ -1,0 +1,355 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"><title>[编程算法] DevOps和MLOps介绍 | HideOnRubbish | RayHLei</title><meta name="keywords" content="日常学习,DevOps,MLOps"><meta name="author" content="RayHLei"><meta name="copyright" content="RayHLei"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="[第42篇] 本章为通过DataCamp学习的DevOps和MLOps的基本知识学习笔记。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="[编程算法] DevOps和MLOps介绍">
+<meta property="og:url" content="http://raylei.space/2024/08/04/42-DevOps_MLOps_Data_Ops_intro/index.html">
+<meta property="og:site_name" content="HideOnRubbish | RayHLei">
+<meta property="og:description" content="[第42篇] 本章为通过DataCamp学习的DevOps和MLOps的基本知识学习笔记。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/42-DevOps_MLOps_Data_Ops_intro.jpg">
+<meta property="article:published_time" content="2024-08-04T03:41:54.000Z">
+<meta property="article:modified_time" content="2024-09-10T16:43:20.613Z">
+<meta property="article:author" content="RayHLei">
+<meta property="article:tag" content="日常学习">
+<meta property="article:tag" content="DevOps">
+<meta property="article:tag" content="MLOps">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/42-DevOps_MLOps_Data_Ops_intro.jpg"><link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/logo.png"><link rel="canonical" href="http://raylei.space/2024/08/04/42-DevOps_MLOps_Data_Ops_intro/"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//www.google-analytics.com" crossorigin=""/><link rel="preconnect" href="//hm.baidu.com"/><link rel="preconnect" href="//fonts.googleapis.com" crossorigin=""/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" media="print" onload="this.media='all'"><script>var _hmt = _hmt || [];
+(function() {
+  var hm = document.createElement("script");
+  hm.src = "https://hm.baidu.com/hm.js?0db3a3c6777e617edaf2659e819e2c15";
+  var s = document.getElementsByTagName("script")[0]; 
+  s.parentNode.insertBefore(hm, s);
+})();
+</script><script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-BQ5ZYHEF37"></script><script>window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-BQ5ZYHEF37');
+</script><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@300&amp;family=Nunito:wght@200&amp;family=Quicksand:wght@300&amp;display=swap" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  translate: {"defaultEncoding":2,"translateDelay":0,"msgToTraditionalChinese":"繁","msgToSimplifiedChinese":"简"},
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":200},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: 'days',
+  date_suffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: {"limitCount":100,"languages":{"author":"Author: RayHLei","link":"Link: ","source":"Source: HideOnRubbish | RayHLei","info":"Copyright is owned by the author. For commercial reprints, please contact the author for authorization. For non-commercial reprints, please indicate the source."}},
+  lightbox: 'fancybox',
+  Snackbar: {"chs_to_cht":"Traditional Chinese Activated Manually","cht_to_chs":"Simplified Chinese Activated Manually","day_to_night":"Dark Mode Activated Manually","night_to_day":"Light Mode Activated Manually","bgLight":"#888888","bgDark":"#121212","position":"bottom-left"},
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery@2/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '[编程算法] DevOps和MLOps介绍',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2024-09-11 00:43:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.0.0"><link rel="alternate" href="/rss2.xml" title="HideOnRubbish | RayHLei" type="application/rss+xml">
+</head><body><div id="loading-box"><div class="loading-left-bg"></div><div class="loading-right-bg"></div><div class="spinner-box"><div class="configure-border-1"><div class="configure-core"></div></div><div class="configure-border-2"><div class="configure-core"></div></div><div class="loading-word">Loading...</div></div></div><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/logo.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data is-center"><div class="data-item"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">42</div></a></div><div class="data-item"><a href="/tags/"><div class="headline">Tags</div><div class="length-num">42</div></a></div><div class="data-item"><a href="/categories/"><div class="headline">Categories</div><div class="length-num">8</div></a></div></div><hr/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/algorithm.jpg')"><nav id="nav"><span id="blog_name"><a id="site-name" href="/">HideOnRubbish | RayHLei</a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> Search</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><span> Home</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><span> Categories</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><span> Tags</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><span> Timeline</span></a></div><div class="menus_item"><a class="site-page" href="/MsgBoard/"><span> MsgBoard</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><span> About</span></a></div></div><div id="toggle-menu"><a class="site-page"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">[编程算法] DevOps和MLOps介绍</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2024-08-04T03:41:54.000Z" title="Created 2024-08-04 11:41:54">2024-08-04</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2024-09-10T16:43:20.613Z" title="Updated 2024-09-11 00:43:20">2024-09-11</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E7%AE%97%E6%B3%95/">编程算法</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">Word count:</span><span class="word-count">5.9k</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">Reading time:</span><span>17min</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="[编程算法] DevOps和MLOps介绍"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1>序言</h1>
+<p><code>DevOps</code>是Development和Operation的组合词，也即开发&amp;运营，顾名思义<code>DevOps</code>是一门如何促进软件开发过程中协同和产出效率的运营哲学，其涵盖内容包括开发高质量软件所需的文化哲学，操作范例，工具等。MLOps`则是DevOps在机器学习领域的延伸，是将Machine learning与Operation完美结合的理论方法。要达到这个目的，我们需要了解一些项目管理，软件架构和持续集成/持续部署(CI/CD)的知识与概念。</p>
+<h1>正文</h1>
+<h2 id="1-DevOps的概念介绍">1. DevOps的概念介绍</h2>
+<p><code>DevOps</code>概念的产生源于现代软件的需求与复杂程度的提升。由于软件开发越来越复杂， 开发人员的技术水平，背景知识，以及编程习惯都会有一些区别，因此从企业的角度来看，如何高效统一地使用某种方法或工具来更好地使所有参与人员协作就变得尤为关键，而<code>DevOps</code>就是对企业来说优化软件开发和维护成本的最佳解决方案。</p>
+<p><code>DevOps</code>与传统开发模式的最大区别就是其不像传统开发模式那样不同团队完全独立分工运行(例如IT系统和软件开发团队分开)，它会增加不同团队间的协作和交流。除此之外，<code>DevOps</code>与传统模式不同的是其发布和反馈模式，传统模式由软件开发团队负责从计划到最终产品发布的开发周期中的所有步骤，因此知道完整的产品被投放在市场中后才能知晓市场对产品的反应；而<code>DevOps</code>则会使用<code>Minimum Viable Product(MVP)</code>，即基础功能产品来首先测试市场反馈，如果市场反馈较好，再增加功能和投资，开始新的开发周期，而如果某次更新的市场反馈较差，开发团队也可以更容易分析原因，用较小的成本对产品回调或改进。且由于<code>DevOps</code>会在开发过程中考虑用户反馈，而且MVP的开发时间会明显短于最终产品，这会使<code>DevOps</code>开发的产品于质于量都优于传统开发模式。</p>
+<h3 id="1-1-DataOps-和-MLOps">1.1 DataOps 和 MLOps</h3>
+<p>就像我们文初提到的，<code>DevOps</code>除了在常规的软件开发项目中协调基础IT设施与产品开发的操作以外，它的概念还能应用于数据工程或机器学习等项目中，不过由于开发产品性质和维护周期都不一样，他们使用的方法流程甚至工具也都不尽相同，也因此在数据工程中的<code>DevOps</code>被称为<code>DataOps</code>，而机器学习项目的<code>DevOps</code>则被称为<code>MLOps</code>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20240804202004330.png" alt="DevOps vs DataOps vs MLOps"></p>
+<p><code>DataOps</code>主要应用在数据工程领域，用于优化数据管道的创建和维护，主要流程是<code>ETL(Etract, Transform, Load)</code>；<code>MLOps</code>则是注重机器学习模型的训练，测试，部署和维护。</p>
+<h3 id="1-2项目管理方法">1.2项目管理方法</h3>
+<p><code>项目管理</code>的定义就是使用特定知识、技巧、工具、和技术来像人们提供有价值的结果。任何团队无论其最终目标是何，都需要一套提前规定的规则和框架来规范。项目管理对<code>DevOps</code>来说非常重要的原因是其定义了不同团队协同按时完成某个共同目标的方法方式。这里介绍两个常见不同的项目管理方式：</p>
+<p><code>瀑布开发(Waterfall)</code>：使用线性的流程从计划到开发到生产，一旦某个阶段的成果达成就进入下一个阶段而不再回头，最后阶段的产物将是集成所有功能的最终产品。</p>
+<p><code>敏捷开发(Agile)</code>：该方式由一系列的开发周期组成，每个周期都有一个较小的目标成果，例如完成一个MVP，添加某些功能，或更改某些设计等，团队间针对不同的周期灵活互动，最后每个周期的结果如果未得到市场认可，则可以回到早期阶段重新调试。</p>
+<p>不同的项目管理方法可能适用于不同的情况，但近年来Agile方式开始被越来越多的软件管理团队使用。而Agile本身也有很多种不同的操作方式，这里介绍两种最重要的：<code>Scrum</code>和<code>Kanban</code>。Scrum和Kanban的主要区别在于Scrum有一个2-4周的开发目标的<code>冲刺阶段(Sprint)</code>，在每个冲刺结束时检查开发成果；而Kanban则是使用可视化工具等方法持续跟踪开发进度。另外的区别还有Scrum中不同的人员有不同的分工例如Scrum master和Product owner等，而Kanban则使用分布式的责任划分。需要注意的是这两种操作方式都是敏捷开发的一种，将其应用在适用的场景下非常重要。</p>
+<h3 id="1-3-DevOps的变革管理模型">1.3 DevOps的变革管理模型</h3>
+<p>DevOps的<code>变革管理模型(Change management model)</code>包括多个阶段：需求，设计，开发，测试，部署，检讨，上市。</p>
+<ol>
+<li><code>需求(requirements)</code>通常是组织的领导决定，为了实现商业期望和成果，产品专家决定产品需求。</li>
+<li>需求决定后进入<code>设计(Design)</code>阶段，产品工程师开始设计产品的软件架构，也就是决定产品的各个构成要件之间如何互动，基础设施工程师也要开始设计他们如何从系统层面支持新产品，数据工程师需要决定新产品的数据需求，例如需要何种数据，并且设计数据管道等。</li>
+<li>设计结束后，产品进入<code>开发(Develop)</code>和<code>测试(Test)</code>阶段，DevOps模型中，产品工程师和基础设施工程师将会一同工作以快速达成最好结果：产品工程师以客户交互体验为目标开发，而基础设施工程师则对产品运行的系统负责，开发完成后数据工程师提供一些测试数据来模仿真实用户，以测试产品功能。最佳实践是测试与开发同步进行，在进入下一阶段之前，产品应该就多种可能遇到的情况进行周全的测试以确保用户体验。</li>
+<li>开发完成后，新产品可以被<code>部署(Deploy)</code>至小部分用户以获得反馈，该过程称为<code>实验(experiment)</code>，产品或软件若在这个阶段被用户反馈较差，则可以重新回到设计阶段重复开发周期。</li>
+</ol>
+<p><code>循环开发(Cyclical development)</code>是DevOps的一个重要原则，其中心思想就是通过不断吸取反馈而不断优化产品，一个产品发布后其表现会被持续监控优化。</p>
+<h4 id="1-3-1-基础设施-Infrastructure-engineering">1.3.1 基础设施(Infrastructure engineering)</h4>
+<p>接下来我们看看软件开发的基础设施有些什么：</p>
+<ul>
+<li><code>开发者平台(Developer Platform)</code>：开发者平台为开发者提供开发所学的工具和系统，保证代码开发的体验。</li>
+<li><code>代码库和版本控制(Codebase &amp; version control)</code>：开发者在其电脑上开发完代码后需要将其代码与公司正在使用的其他代码合并，代码库也就是存放代码的仓库(repository)，如Github repository。而版本控制则是使用Git等工具来确保每次代码的提交都能被记录处理，从而确保代码安全更新。Git中有一条<code>主分支(main branch)</code>是生产中使用的代码，开发者不直接在主分支上修改代码，而是创建其自己的版本分支，每次开发者完成其开发部分之后，由其他开发者检查代码并测试通过之后这些变革再被合并至主分支。</li>
+<li><code>持续集成/持续交付管道(CI/CD pipeline)</code>：其实上条提到的版本控制也是CI/CD的重要组成部分，CI/CD的主要功能是自动化管理并集成代码变化至软件的代码主体，确保各个开发者提交的代码在合并至代码主题前被完整测试过。</li>
+<li><code>部署平台(Deployment platform)</code>：部署就是将软件投入使用，此时软件开会时与用户互动，并提供功能服务。</li>
+</ul>
+<h3 id="1-4-DevOps分析与报告">1.4 DevOps分析与报告</h3>
+<p>对DevOps的分析报告让我们对软件和数据的进度状态掌控了解，DevOps的每个阶段都会产生不同种类的各种数据供我们分析。在需求阶段，我们的工作主要从商业角度出发，因此这个阶段可以追踪创新节奏和开发的产品功能数量等；在设计开发和测试阶段，分析报告的主要侧重点是追踪“计划”，“开发”，“组建”， “测试”等每个阶段的耗时，产出质量等。产出质量可以用代码通过的测试数量，CI/CD管道的稳定性等界定；在部署和反馈阶段，开发者可以通过对实验做A/B testing来确定新版本的软件是否比旧版本更受用户欢迎；在产品实际上市后，它还需被维护并监控，以确保产品一直如预期运行，监控过程中会产生许多log文件，而这些logs也都可以作为报告数据来源。</p>
+<h3 id="1-5-DevOps相关工具">1.5 DevOps相关工具</h3>
+<p>DevOps开发周期的各个阶段都有各种专门的工具辅助开发流程，这里介绍其中一些比较有名的工具：</p>
+<p>需求阶段：这个阶段需要开发人员与业务人员交流较多，因此这个阶段使用较多的工具也都是以加强交流为主，例如便于产品管理的<code>JIRA</code>，便于交流的<code>Slack</code>或<code>Discord</code>。</p>
+<p>设计，开发，测试阶段：软件变革管理阶段可以使用的工具选项非常之多，但其中最为重要的一个就是作为版本控制软件的<code>Git</code>，而与之配合使用的平台有<code>GitLab</code>或者<code>Github</code>。源代码完成后需要进入<code>组建阶段(build)</code>用以生成可执行文件，最常见的组建系统有<a target="_blank" rel="noopener" href="https://maven.apache.org/" title="Maven">Maven</a>和<a target="_blank" rel="noopener" href="https://gradle.com/brand/" title="Gradle">Gradle</a>。CI/CD pipeline是DevOps的根本之一，也就是自动化组建, 测试与部署，CI/CD pipeline的主要工具有<a target="_blank" rel="noopener" href="https://www.jenkins.io/press/" title="Jenkins">Jenkins</a>和<a target="_blank" rel="noopener" href="https://circleci.com/legal/trademark-guidelines/" title="Circle CI">Circle CI</a>。</p>
+<p>部署阶段：微服务(Microservices)架构中，每个微服务都被独立开发部署，其使用容器化方法来保持其独立性，每一个容器都是一个软件运行的环境，因此一个服务器中可能同时运行成百上千个容器，使用容器的主要软件有<a target="_blank" rel="noopener" href="https://www.docker.com/company/newsroom/media-resources/" title="Docker">Docker</a>和<a target="_blank" rel="noopener" href="https://podman.io/" title="Podman">Podman</a>，而<a target="_blank" rel="noopener" href="https://kubernetes.io/" title="Kubernetes">Kubernetes</a>则是管理多个Docker容器的工具。</p>
+<p>监控工具：产品部署并发布到市场上后需要被严密监控，这样我们才知道软件的表现如何，是否有任何质量问题等。主要的软件监控工具有SignalFx和App Dynamics。</p>
+<p>数据管理工具：<a target="_blank" rel="noopener" href="https://kafka.apache.org/trademark" title="Kafka">Apache Kafka</a>是最广泛使用的微服务架构数据管理软件，微服务在Kafka上发布其log文件，其他服务在Kafka上监听，因此微服务通过Kafka交流信息。</p>
+<p>数据管道管理工具：数据管道管理工具可以用来管理Batch process或者streaming数据，主要工具有<a target="_blank" rel="noopener" href="https://cwiki.apache.org/confluence/display/AIRFLOW/Airflow+logos" title="Apache Airflow">Apache Airflow</a>, <a target="_blank" rel="noopener" href="https://design.hevodata.com/" title="Hevo Data">Hevo Data</a>, <a target="_blank" rel="noopener" href="https://www.prefect.io/" title="Prefect">Prefect</a>。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20240805235942120.png" alt="DevOps周期相关工具"></p>
+<h3 id="1-6-DevOps文化">1.6 DevOps文化</h3>
+<ul>
+<li><code>协作(Collaboration)</code>：协作是DevOps的核心思想，DevOps就是为了开发和运营团队的协作而存在的。</li>
+<li><code>自主化团队(Autonomous teams)</code>：自主化团队的意思就是团队内部具备开发所需的所有技能，也就是说团队自己就可以运行。</li>
+<li><code>责任分担(Shared responsibilities)</code>：自主化团队通常对软件的某个部分负责，例如他们可能负责开发和维护某个微服务，因此团队是自主的，因此他们可能要负责从开发到运营维护的所有责任，也即&quot;you build it, you run it&quot;。</li>
+<li><code>自动化(Automation)</code>：自动化是DevOps的关键，尤其是CI/CD pipeline让我们可以把变革管理，测试和部署自动化，为团队省下大量时间做更有意义的工作。</li>
+<li><code>事后反思(Post-mortem)</code>：错误不可避免，再好的软件也会出现错误，关键在于当出现并解决问题之后，如何将问题记录并分析从而避免下次出现类似问题，团队应该有事后反思会议用来复盘出现的问题，需要注意的是事后反思不是找人背锅，而是从团队的角度系统化地控制问题。</li>
+</ul>
+<h2 id="2-MLOps">2. MLOps</h2>
+<p>如前文提到的<code>MLOps</code>就是<code>DevOps</code>的精神在机器学习领域的应用，也即机器学习运营。我们需要<code>MLOps</code>来保证数据质量、特征工程、模型表现、模型部署、和持续监控等机器学习的应用过程中各个步骤之间准确无缝高效的衔接。通常来说<code>MLOps</code>的过程可以分为三个阶段：<code>设计(Design)</code>、<code>开发(Development)</code>、<code>部署(Deployment)</code>。</p>
+<h3 id="2-1-设计阶段">2.1 设计阶段</h3>
+<p>在设计阶段，我们通常首先要明确要<strong>解决的问题(Context of the problem)<strong>并且评估使用机器学习的</strong>附加价值(Added value)</strong>，收集如何定义成功的<strong>业务需求(Business requirement)<strong>和用于追踪进度的</strong>关键指标(Key Metrics)</strong>，最后保证高质量的**数据处理(Data processing)**也是获得稳定模型的关键。在这个阶段，我们需要与关键的业务部门对接来评估项目可行性并且做出有效决定。</p>
+<ul>
+<li>价值附加：通常对机器学习项目来说，其附加价值可以用时间或金钱来衡量，要么是因为机器学习节省的时间，要么是因为项目结果多获得/少付出的钱。</li>
+<li>业务需求：除了附加价值外，我们还要考虑业务的需求，尤其需要考虑终端用户需要如何使用我们的机器学习模型。比如我们要考虑预测的频率和速度，准确性以及可解释性。除了用户外还需要考虑法律法规，预算和团队大小等因素。</li>
+<li>关键指标：针对不同的环境和对象我们可以设计不同的指标。例如对于数据科学家来说，我们的指标是算法模型是否足够准确；对于业务人员来说他们的指标则是我们的模型对解决他们的业务问题提供了多少帮助，例如增加多少客户满意度，增加多少收入。</li>
+<li>数据处理：数据收集也是设计阶段的一部分，在这个部分中我们需要调查数据质量并且提取所需的数据。根据数据管理框架DAMA-DMBOK的指引，数据质量既包括高质量数据本身，也包括衡量和改进数据质量的过程。数据质量是所有机器学习的根基，其中有4个维度评判数据的质量：准确性(数据是否可以信赖)，完备性(数据是否足以反映手中问题)，一致性(数据定义是否一致)，和时效性(数据需要多长时间备好)。</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>问题示例</th>
+<th>维度质量示例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>准确性(Accuracy)</td>
+<td>我们的数据是否正确描述顾客？</td>
+<td>数据中客户年龄为18但实际是32</td>
+</tr>
+<tr>
+<td>完备性(Completeness)</td>
+<td>客户数据是否有缺失？</td>
+<td>80%的客户没有姓氏资料</td>
+</tr>
+<tr>
+<td>一致性(Consistency)</td>
+<td>客户的资料状态是否全公司同步？</td>
+<td>客户状态在一个数据库中为激活，另一个显示未激活</td>
+</tr>
+<tr>
+<td>时效性(Timeliness)</td>
+<td>客户的下单指示数据何时可用？</td>
+<td>客户下单数据只能在每天晚上同步而非实时</td>
+</tr>
+</tbody>
+</table>
+<h3 id="2-2-开发阶段">2.2 开发阶段</h3>
+<p>在开发阶段，我们需要创建我们的<strong>机器学习模型(ML model)</strong>，用各种不同的数据、算法、或者参数来做<strong>实验(Experiment)<strong>并找到最适合我们问题的解决方法，实验中我们需要不断训练多个模型并评估它们的表现并根据实验结果调整设计。我们的最终目的是要找到一个不仅可以满足关键指标而且可以</strong>部署用以解决现实问题的模型(Model ready for deployment)</strong>。</p>
+<p>特征工程(Feature engineering)：特征工程就是把原始数据处理成具有一定预测能力的变量的过程。例如我们原始数据中有客户的消费金额和单量，这时我们可以计算出客户的平均单价(消费金额/单量)，用来衡量客户的消费能力，这时我们就创建了一个特征。当机器学习项目数量增加时，特征工程的成本可能会增加，因此将一些常用的特征储层在一个专用的<code>特征库(Feature store)</code>中可以较大增加机器学习的效率。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20240908234242840.png" alt="Feature store"></p>
+<p>实验追踪(Experiment tracking)：在机器学习中，我们通过实验来训练并评估多个模型的表现从而选取最好的模型，而在每个实验中我们也需要测试不同的参数配置来选取最好的配置。在每次实验中我们都需要配置不同的模型，不同的参数，不同的数据版本，不同的代码甚至不同的环境，因此这些配置文件会非常巨大以至于我们需要保存每个做过的实验配置参数，这也就是所谓的实验追踪。</p>
+<h3 id="2-3-部署阶段">2.3 部署阶段</h3>
+<p>在部署阶段，我们需要将我们的模型部署到业务生产中，确保它和其他系统无缝连接并交互，我们甚至可以把模型布置成微服务来方便使用。此外我们还需要设置**监测系统(Monitoring system)**来监测模型表现，发现数据偏移，在模型预测表现降低时及时警报。持续监测才可以保证我们的模型一直有效运行且能持续带来价值。</p>
+<p>运行环境(runtime environment)：由于我们训练模型时的模型运行环境和实际生产中的运行环境会有区别，因此我们可以使用容器(Container)来承载运行环境，将机器学习模型部署成容器是目前主流的MLOps方式。</p>
+<p>模型部署架构(deployment architecture)：单一架构(Monolithic architecture)对比微服务架构(Microservices architecture)的开发成本低，但维护成本更高，因此单一架构适合一些较为简单的小项目，而相对的微服务架构则适合一些复杂且预算充足的项目。我们可以将机器学习模型部署为微服务，并让其他服务通过API调用模型输入输出来使用模型。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20240909230834990.png" alt="Monolithic architecture v.s. Microservices architecture"></p>
+<p>CI/CD pipeline：如第一单元所讲，所谓CI/CD就是持续集成和持续开发。其中<code>持续集成(continuous integration)</code>的思想是指代码改动可以持续快速高效地被集成至主体，每个改动都可以在提交并入主代码前被自动测试，以此来确保不同的开发者可以在同一代码上共同协作；<code>持续交付(continuous deployment)</code>则是自动发布CI阶段验证过的代码至生产环境。简单来讲CI是编写代码时的操作，CD则是代码编写完成后的操作。</p>
+<p>部署策略(deployment strategy)：部署策略是指模型换新的方式，常见的部署策略有三个：<code>基本部署策略(basic deployment strategy)</code>是简单地直接将生产环境中的旧模型换成新模型，所有的新数据都直接发送给新的模型；<code>影子部署策略(shadow deployment strategy)</code>是将新数据同时发送给新模型和旧模型，生产中依然使用旧模型但同时对比两个模型的结果来测试新模型的表现；<code>金丝雀部署策略(canary deployment strategy)</code>是在生产环境中使用新模型，但只在小部分新数据上使用，这样如果新模型有问题也只会影响这小部分用户。不同的部署策略就是在新模型风险和计算资源中权衡利弊。</p>
+<p>模型监测(monitoring)：<code>统计监测(Statistical monitoring)</code>主要关注包括预测在内的输入和输出的数据；<code>计算监测(computational monitoring)</code>主要关注运行相关的技术指标；模型部署运行一段时间后我们可以获知此前预测案件的实际结果，这些结果我们称之为<code>基本真相(ground truth)</code>。通过对比模型预测结果与基本真相，我们可以测量模型的表现变化，这个过程我们成为<code>反馈回路(feedback loop)</code>，通过反馈回路我们可以分析模型错误的时间和原因，包括是否在某些特定类群上出现错误等。</p>
+<p>模型重训练：现实世界在时刻变化，历史数据并不总是能反映未来，因此我们训练好某个预测模型后还是要常常重新训练模型以适应现实世界中新出现的规律。通常来讲世界规律的变化在数据的世界中会体现在两个方面，一个是<code>数据漂移(data drift)</code>，一个是<code>概念漂移(concept drift)</code>。前者是指输入数据结构的变化，例如过去我们的数据以年轻人为主，而现在的盘面中有了更多的老年人，数据漂移有可能导致模型表现下降，但也不是必然；而后者的概念漂移则是指输入数据与目标标签的关系发生改变，例如我们的客户购买习惯可能发生了变化，导致以前同样的情况下客户会购买某个商品，但现在却不再会购买，这种情况下模型的表现会受到严重影响。模型重训练的频率取决于业务性质(是否市场环境易变)，训练成本，对模型表现的需求等。</p>
+<h3 id="2-4-MLOps成熟度">2.4 MLOps成熟度</h3>
+<p>根据自动化，协作，以及监测的程度，我们可以定义MLOps的成熟度，需要了解的是MLOps的成熟度并不是越高越好，因为更高的成熟度意味着更高的复杂度和成本。第一阶段的MLOps开发和部署都是手动完成，ML和operation分开完成，没有团队协作，开发没有版本和变更记录，部署后无监测；第二阶段有自动化的开发管道，模型部署依然手动完成，模型开发完成后团队协作部署模型，会记录ML实验和特征，模型部署后有较低程度的监测；第三阶段开发和部署都可自动化完成，团队间紧密协作，开发和部署过程完整监测，自动化触发模型重训练等。</p>
+<p><img src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/post_img/image-20240911000146902.png" alt="Levels of MLOps maturity"></p>
+<p>[第42篇]</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">RayHLei</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://raylei.space/2024/08/04/42-DevOps_MLOps_Data_Ops_intro/">http://raylei.space/2024/08/04/42-DevOps_MLOps_Data_Ops_intro/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%97%A5%E5%B8%B8%E5%AD%A6%E4%B9%A0/">日常学习</a><a class="post-meta__tags" href="/tags/DevOps/">DevOps</a><a class="post-meta__tags" href="/tags/MLOps/">MLOps</a></div><div class="post_share"><div class="social-share" data-image="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/42-DevOps_MLOps_Data_Ops_intro.jpg" data-sites="facebook,twitter,wechat,weibo,qq,douban"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/social-share.js/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/social-share.js/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-full"><a href="/2024/04/27/41-Azure_fundamental/"><img class="prev-cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/41-Azure_fundamental.jpg" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="pagination-info"><div class="label">Previous Post</div><div class="prev_info">[数据分析] Azure基础知识</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2022/02/10/1-blog_setup_notes/" title="[博客维护]基于Hexo框架搭建个人网站的实现记录"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/1-blogsetupnotes.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-10</div><div class="title">[博客维护]基于Hexo框架搭建个人网站的实现记录</div></div></a></div><div><a href="/2022/03/31/12-CFA-level-1-overview/" title="[金融分析] CFA一级考试学习计划"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/12-CFA-level-1-overview.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-03-31</div><div class="title">[金融分析] CFA一级考试学习计划</div></div></a></div><div><a href="/2022/04/06/13-CFA-level1-financial-statement-analysis/" title="[金融分析] CFA一级《财务报表分析》学习笔记"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/13-CFA-level1-financial-statement-analysis.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-04-06</div><div class="title">[金融分析] CFA一级《财务报表分析》学习笔记</div></div></a></div><div><a href="/2022/06/02/16-CFA-level1-Corporate-Issuers/" title="[金融分析] CFA一级《公司金融》学习笔记"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/16-CFA-level1-Corporate-Issuers.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-02</div><div class="title">[金融分析] CFA一级《公司金融》学习笔记</div></div></a></div><div><a href="/2022/06/18/18-CFA-level1-Economics/" title="[金融分析] CFA一级《经济学》学习笔记"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/18-CFA-level1-Economics.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-06-18</div><div class="title">[金融分析] CFA一级《经济学》学习笔记</div></div></a></div><div><a href="/2022/02/12/2-typora_picgo_config/" title="[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文"><img class="cover" src="https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/cover_img/2-typora_picgo_config.jpg" alt="cover"><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2022-02-12</div><div class="title">[博客维护] 使用Typora和PicGo简单便捷地编辑带图博文</div></div></a></div></div></div><hr/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> Comment</span></div><div id="comment-switch"><span class="first-comment">Livere</span><span class="switch-btn"></span><span class="second-comment">Disqus</span></div></div><div class="comment-wrap"><div><div id="lv-container" data-id="city" data-uid="MTAyMC81NTQ0NC8zMTkxMQ=="></div></div><div><div id="disqus_thread"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">1.</span> <span class="toc-text">序言</span></a></li><li class="toc-item toc-level-1"><a class="toc-link"><span class="toc-number">2.</span> <span class="toc-text">正文</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-DevOps%E7%9A%84%E6%A6%82%E5%BF%B5%E4%BB%8B%E7%BB%8D"><span class="toc-number">2.1.</span> <span class="toc-text">1. DevOps的概念介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-DataOps-%E5%92%8C-MLOps"><span class="toc-number">2.1.1.</span> <span class="toc-text">1.1 DataOps 和 MLOps</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2%E9%A1%B9%E7%9B%AE%E7%AE%A1%E7%90%86%E6%96%B9%E6%B3%95"><span class="toc-number">2.1.2.</span> <span class="toc-text">1.2项目管理方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-DevOps%E7%9A%84%E5%8F%98%E9%9D%A9%E7%AE%A1%E7%90%86%E6%A8%A1%E5%9E%8B"><span class="toc-number">2.1.3.</span> <span class="toc-text">1.3 DevOps的变革管理模型</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3-1-%E5%9F%BA%E7%A1%80%E8%AE%BE%E6%96%BD-Infrastructure-engineering"><span class="toc-number">2.1.3.1.</span> <span class="toc-text">1.3.1 基础设施(Infrastructure engineering)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-DevOps%E5%88%86%E6%9E%90%E4%B8%8E%E6%8A%A5%E5%91%8A"><span class="toc-number">2.1.4.</span> <span class="toc-text">1.4 DevOps分析与报告</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-DevOps%E7%9B%B8%E5%85%B3%E5%B7%A5%E5%85%B7"><span class="toc-number">2.1.5.</span> <span class="toc-text">1.5 DevOps相关工具</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-DevOps%E6%96%87%E5%8C%96"><span class="toc-number">2.1.6.</span> <span class="toc-text">1.6 DevOps文化</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-MLOps"><span class="toc-number">2.2.</span> <span class="toc-text">2. MLOps</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E8%AE%BE%E8%AE%A1%E9%98%B6%E6%AE%B5"><span class="toc-number">2.2.1.</span> <span class="toc-text">2.1 设计阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%BC%80%E5%8F%91%E9%98%B6%E6%AE%B5"><span class="toc-number">2.2.2.</span> <span class="toc-text">2.2 开发阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E9%83%A8%E7%BD%B2%E9%98%B6%E6%AE%B5"><span class="toc-number">2.2.3.</span> <span class="toc-text">2.3 部署阶段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-4-MLOps%E6%88%90%E7%86%9F%E5%BA%A6"><span class="toc-number">2.2.4.</span> <span class="toc-text">2.4 MLOps成熟度</span></a></li></ol></li></ol></li></ol></div></div></div></div></main><footer id="footer" style="background-image: url('https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/algorithm.jpg')"><div id="footer-wrap"><div class="copyright">&copy;2022 - 2024 By RayHLei</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div><div class="footer_custom_text">Hey! What have you learned today!</div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="translateLink" type="button" title="Switch Between Traditional Chinese And Simplified Chinese">繁</button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="Scroll To Comments"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="Back To Top"><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">Local search</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  Loading the Database</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts" type="text"/></div></div><hr/><div id="local-search-results"></div></div></div><div id="search-mask"></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="/js/tw_cn.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script><script src="https://cdn.jsdelivr.net/npm/instant.page/instantpage.min.js" type="module"></script><script src="https://cdn.jsdelivr.net/npm/node-snackbar/dist/snackbar.min.js"></script><script>function panguFn () {
+  if (typeof pangu === 'object') pangu.autoSpacingPage()
+  else {
+    getScript('https://cdn.jsdelivr.net/npm/pangu/dist/browser/pangu.min.js')
+      .then(() => {
+        pangu.autoSpacingPage()
+      })
+  }
+}
+
+function panguInit () {
+  if (false){
+    GLOBAL_CONFIG_SITE.isPost && panguFn()
+  } else {
+    panguFn()
+  }
+}
+
+document.addEventListener('DOMContentLoaded', panguInit)</script><script src="/js/search/local-search.js"></script><script>var preloader = {
+  endLoading: () => {
+    document.body.style.overflow = 'auto';
+    document.getElementById('loading-box').classList.add("loaded")
+  },
+  initLoading: () => {
+    document.body.style.overflow = '';
+    document.getElementById('loading-box').classList.remove("loaded")
+
+  }
+}
+window.addEventListener('load',preloader.endLoading())</script><div class="js-pjax"><script>function loadLivere () {
+  if (typeof LivereTower === 'object') {
+    window.LivereTower.init()
+  }
+  else {
+    (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+    })(document, 'script');
+  }
+}
+
+if ('Livere' === 'Livere' || !true) {
+  if (true) btf.loadComment(document.getElementById('lv-container'), loadLivere)
+  else loadLivere()
+}
+else {
+  function loadOtherComment () {
+    loadLivere()
+  }
+}</script><script>function loadDisqus () {
+  var disqus_config = function () {
+    this.page.url = 'http://raylei.space/2024/08/04/42-DevOps_MLOps_Data_Ops_intro/'
+    this.page.identifier = '2024/08/04/42-DevOps_MLOps_Data_Ops_intro/'
+    this.page.title = '[编程算法] DevOps和MLOps介绍'
+  };
+
+  window.disqusReset = () => {
+    DISQUS.reset({
+      reload: true,
+      config: disqus_config
+    })
+  }
+
+  if (window.DISQUS) disqusReset()
+  else {
+    (function() { 
+      var d = document, s = d.createElement('script');
+      s.src = 'https://rayhlei.disqus.com/embed.js';
+      s.setAttribute('data-timestamp', +new Date());
+      (d.head || d.body).appendChild(s);
+    })();
+  }
+}
+
+if ('Livere' === 'Disqus' || !true) {
+  if (true) btf.loadComment(document.getElementById('disqus_thread'), loadDisqus)
+  else loadDisqus()
+} else {
+  function loadOtherComment () {
+    loadDisqus()
+  }
+}
+</script></div><script id="canvas_nest" defer="defer" color="133,133,133" opacity="0.7" zIndex="-1" count="200" mobile="true" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc@1/dist/canvas-nest.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"model":{"scale":1,"hHeadPos":0.5,"vHeadPos":0.618,"jsonPath":"/live2dw/assets/tororo.model.json"},"display":{"superSample":2,"width":150,"height":300,"position":"right","hOffset":60,"vOffset":-40},"mobile":{"show":true,"scale":0.5},"log":false,"pluginJsPath":"lib/","pluginModelPath":"assets/","pluginRootPath":"live2dw/","tagMode":false});</script></body></html>
