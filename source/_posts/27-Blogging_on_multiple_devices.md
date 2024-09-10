@@ -1,7 +1,7 @@
 ---
 title: "[博客维护]多电脑端同步更新博客"
 date: 2023-2-17 23:58:16
-tags: [git, GitHub，日常学习]
+tags: [git, GitHub, 日常学习]
 categories: 博客维护
 description: "[第27篇] 本章为实现在多电脑端同步更新博客内容的实现方法。"
 top_img: https://cdn.jsdelivr.net/gh/0Rayhlei0/Pics@latest/blog_img/blog.jpg
